@@ -26,7 +26,7 @@ public class Elevator extends SubsystemBase{
     InvertedValue m_talonFXInverted = InvertedValue.CounterClockwise_Positive;
 
 
-    
+
     public Elevator(){
         
         m_talonFX.setControl(m_talonFXOut);
