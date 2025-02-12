@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
@@ -30,7 +31,19 @@ public class Elevator extends SubsystemBase{
     public Elevator(){
         
         m_talonFX.setControl(m_talonFXOut);
-    }
+        // motor configuration section
 
+    }
+    
+
+    public void set_elevator_position(Double posision){
+        //motor contolling section
+        // motor.set_position(position)
+
+    }
+       
+    public Command get_posiCommand(Double position ){
+        return run(()->set_elevator_position(position));
+    }
 
 }
