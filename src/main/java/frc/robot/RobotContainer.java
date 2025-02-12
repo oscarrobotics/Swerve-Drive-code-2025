@@ -42,7 +42,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    public final Elevator elevator = new Elevator();
+    //public final Elevator elevator = new Elevator();
 
 
     private final SendableChooser<Command> autoChooser;
@@ -85,13 +85,14 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
-        controlstick.y().onTrue(elevator.get_posiCommand(25.0));
+       //controlstick.y().onTrue(elevator.get_posiCommand(25.0));
             
 
 
     }
 
     public Command getAutonomousCommand() {
+        /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
     }
 }
