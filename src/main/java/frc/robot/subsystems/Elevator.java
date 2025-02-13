@@ -36,7 +36,7 @@ public class Elevator extends SubsystemBase{
     }
     
 
-    public void set_elevator_position(Double posision){
+    public void set_elevator_position(Double position){
         //motor contolling section
         // motor.set_position(position)
 

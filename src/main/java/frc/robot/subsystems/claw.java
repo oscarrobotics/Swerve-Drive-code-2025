@@ -12,23 +12,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class clawintake extends SubsystemBase{
+public class claw extends SubsystemBase{
      // All hardware classes already have WPILib integration
-     final TalonFX m_talonFX = new TalonFX(0);
-     final CANcoder m_cancoder = new CANcoder(0);
+     final TalonFX m_intake = new TalonFX(31);
+     final TalonFX m_mount = new TalonFX(32);
+     
  
-     final TalonFXSimState m_talonFXSim = m_talonFX.getSimState();
+     final TalonFXSimState m_intakeSim = m_intake.getSimState();
+     final TalonFXSimState m_mountSim = m_mount.getSimState();
  
-     final DutyCycleOut m_talonFXOut = new DutyCycleOut(0);
+     final DutyCycleOut m_intakeFXOut = new DutyCycleOut(0);
+     final DutyCycleOut m_mountFXOut = new DutyCycleOut(0);
  
-     final TalonFXConfiguration m_talonFXConfig = new TalonFXConfiguration();
-     final CANcoderConfiguration m_cancoderConfig = new CANcoderConfiguration();
- 
-     InvertedValue m_talonFXInverted = InvertedValue.CounterClockwise_Positive;
+     final TalonFXConfiguration m_intakeConfig = new TalonFXConfiguration();
+     final TalonFXConfiguration m_mountConfig = new TalonFXConfiguration();
+     
 
 
-
-     public clawintake(){
+     
+     public claw(){
 
         m_talonFX.setControl(m_talonFXOut);
         // motor configuartion section
