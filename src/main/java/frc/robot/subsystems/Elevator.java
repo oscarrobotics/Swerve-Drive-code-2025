@@ -31,9 +31,9 @@ public class Elevator extends SubsystemBase{
 
     
     public Elevator(){
-        m_elevator_motorConfig.Slot0(
-            //PID
-        )
+        // m_elevator_motorConfig.Slot0(
+        //     //PID
+        // );
         
         
         // motor configuration section
@@ -43,14 +43,16 @@ public class Elevator extends SubsystemBase{
     }
     
 
-    public void set_elevator_position(Double posision){
-        
+    private void set_elevator_position(Double posision){
+      
            
-            }
+        m_elevator_motor.setControl(m_elevator_motorOut.withPosition(posision));
+        }
         
         
     public Command get_posiCommand(Double position ){
         return run(()->set_elevator_position(position));
+        
     }
 
 }
