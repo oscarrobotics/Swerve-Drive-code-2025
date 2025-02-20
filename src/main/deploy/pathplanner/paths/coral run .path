@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.821960227274513,
-        "y": 4.1147443181824475
+        "x": 2.6723863636363636,
+        "y": 4.214460227272727
       },
       "prevControl": {
-        "x": 2.143892045456331,
-        "y": 5.111903409091538
+        "x": 1.9743750000000002,
+        "y": 5.421022727272727
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "coral "
+      "linkedName": "c stop"
     }
   ],
   "rotationTargets": [
@@ -62,13 +62,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -7.236600986861128e-11
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "coral auto 1 ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -132.97863505964395
+    "rotation": -133.33166255170676
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

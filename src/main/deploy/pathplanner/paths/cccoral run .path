@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.219431818181818,
+        "y": 0.96372159090909
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.980263348074604,
+        "y": 1.0365119948547652
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.225113636363636,
+        "y": 2.3796875
+      },
+      "prevControl": {
+        "x": 5.424545454545454,
+        "y": 2.1702840909090915
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "cccoraldrop"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 122.57405713457254
+  },
+  "reversed": false,
+  "folder": "coral auto 3 ",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -93.65222278030627
+  },
+  "useDefaultConstraints": true
+}
