@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Claw;
 
 
 public class RobotContainer {
@@ -43,6 +44,7 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
     //public final Elevator elevator = new Elevator();
+    public final Claw claw = new Claw();
 
 
     private final SendableChooser<Command> autoChooser;
@@ -86,6 +88,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
     //    controlstick.y().onTrue(elevator.get_posiCommand(25.0));
+        controlstick.leftBumper().onTrue(claw.get_position_command(claw.k_load_coral_position));
             
 
 
