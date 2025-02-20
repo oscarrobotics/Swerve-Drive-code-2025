@@ -55,7 +55,7 @@ public class Example_Subsystem extends SubsystemBase {
     // this is an alternative to guessing/estaimateing the parameters
 
     // Sysid Code For charaterizing the velocity based mechanism
-    private final VelocityTorqueCurrentFOC m_positionFOC_sysid_out = new VelocityTorqueCurrentFOC(0);\
+    private final VelocityTorqueCurrentFOC m_positionFOC_sysid_out = new VelocityTorqueCurrentFOC(0);
     
 
 
@@ -151,7 +151,7 @@ public class Example_Subsystem extends SubsystemBase {
     }
 
     // internal methond to set the positon using a unit aware object
-    private void set_turntable_positon(Angle posision){
+    private void set_turntable_positon(Distance posision){
 
            // gt is greater than 
         if (posision.gt( k_max_angle)){
@@ -167,7 +167,7 @@ public class Example_Subsystem extends SubsystemBase {
 
         }
 
-        m_positionFOC.setControl(m_positionFOC_out.withPosition(posision));
+        m_positionFOC.setControl(m_positionFOC_out.withPosition(1));
 
 
     }
