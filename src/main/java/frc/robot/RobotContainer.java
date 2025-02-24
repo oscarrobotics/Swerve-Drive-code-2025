@@ -23,7 +23,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Claw;
-
+import frc.robot.subsystems.Eleclaw;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)/1.75; // kSpeedAt12Volts desired top speed
@@ -43,8 +43,11 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     
-    //public final Elevator elevator = new Elevator();
+    public final Elevator elevator = new Elevator();
     public final Claw claw = new Claw();
+
+    // public final Eleclaw eleclaw = new Eleclaw(elevator, claw);
+
 
 
     private final SendableChooser<Command> autoChooser;
@@ -88,7 +91,7 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
     //    controlstick.y().onTrue(elevator.get_posiCommand(25.0));
-        controlstick.leftBumper().onTrue(claw.get_position_command(claw.k_load_coral_position));
+        controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
             
 
 
