@@ -52,7 +52,7 @@ public class Claw extends SubsystemBase {
     final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
     final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
  
-    final CANcoder m_mount_encoder = new CANcoder(3);
+    final CANcoder m_mount_encoder = new CANcoder(36);
 
 
      

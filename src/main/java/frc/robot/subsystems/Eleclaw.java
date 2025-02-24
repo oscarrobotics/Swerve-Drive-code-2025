@@ -52,10 +52,10 @@ public class Eleclaw extends SubsystemBase{
     }
 
 
-    public Command score_alge_1(){
+    // public Command score_alge_1(){
 
-        return run();
-    }
+    //     return run();
+    // }
 
 
 }

@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+import com.fasterxml.jackson.databind.deser.impl.FailingDeserializer;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.XboxController;
@@ -38,12 +39,18 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class Elevator extends SubsystemBase{
     // All hardware classes already have WPILib integration
     final TalonFX m_elevator_motor = new TalonFX(21);
 
-    final CANcoder m_elevator_CANcoder = new CANcoder(22);
+    final CANcoder m_elevator_CANcoder = new CANcoder(26);
     
 
     final TalonFXSimState m_elevator_motorSim = m_elevator_motor.getSimState();
@@ -64,7 +71,7 @@ public class Elevator extends SubsystemBase{
     public final Angle k_elevator_min_rot = Rotations.of(0);
     public final Angle k_elevator_max_rot = Rotations.of(4.7);
 
-    public final Distance k_min_dDistance =  Meters.of(0);
+    public final Distance k_min_Distance =  Meters.of(0);
     public final Distance k_max_Distance = Meter.of(3);
     public final Distance k_stowed =  Meters.of(0);
 
@@ -73,6 +80,13 @@ public class Elevator extends SubsystemBase{
     // physical Characteristics of robot
     public final Distance min_axel_height = Inches.of(12);
     public final Distance max_axel_height = Inches.of(78);
+
+    public final Mass k_carrage_mass = Kilogram.of(13);
+
+    public final Distance k_windlass_radius = Inches.of(2.4);
+
+
+    //goal heights
     
     public final Distance k_coral_level_1 = Meters.of(0.48);
     public final Distance k_coral_level_2 = Meters.of(0.81);
@@ -89,7 +103,24 @@ public class Elevator extends SubsystemBase{
     public final Distance k_processor_height = Meters.of(0);
 
 
+    private final ElevatorSim m_elevatorSim = new ElevatorSim(
+        DCMotor.getKrakenX60(2), 
+        3, 
+        k_carrage_mass.in(Kilograms), 
+        k_windlass_radius.in(Meters),
+        min_axel_height.in(Meters), 
+        max_axel_height.in(Meters), 
+        false, 
+        min_axel_height.in(Meters));
 
+    private final Mechanism2d m_mech2d =
+        new Mechanism2d(6, max_axel_height.in(Meters));
+    private final MechanismRoot2d m_mech2dRoot =
+        m_mech2d.getRoot("Elevator Root", 3, 0.0);
+    private final MechanismLigament2d m_elevatorMech2d =
+        m_mech2dRoot.append(
+            new MechanismLigament2d("Elevator", m_elevatorSim.getPositionMeters(), 90, 6, new Color8Bit(Color.kRed))
+        );
 
 
 
@@ -128,6 +159,8 @@ public class Elevator extends SubsystemBase{
 
         m_elevator_motor.setPosition(0);
 
+        SmartDashboard.putData("Elevator Sim", m_mech2d);
+
 
     }
 
@@ -159,15 +192,15 @@ public class Elevator extends SubsystemBase{
             posision = k_max_Distance;
 
         }
-        else if (posision.lt(k_min_dDistance)){
+        else if (posision.lt(k_min_Distance)){
 
             //logger.log(position + " requested is less than the minimum position");
-            posision = k_min_dDistance;
+            posision = k_min_Distance;
 
         }
 
         //calucaulate the conversion from meters to rotations
-        double ratio = (posision.minus(k_min_dDistance)).div(k_max_Distance.minus(k_min_dDistance)).baseUnitMagnitude();
+        double ratio = (posision.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
     
         Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
@@ -188,15 +221,15 @@ public class Elevator extends SubsystemBase{
             posision = k_max_Distance;
 
         }
-        else if (posision.lt(k_min_dDistance)){
+        else if (posision.lt(k_min_Distance)){
 
             //logger.log(position + " requested is less than the minimum position");
-            posision = k_min_dDistance;
+            posision = k_min_Distance;
 
         }
 
         //calucaulate the conversion from meters to rotations
-        double ratio = (posision.minus(k_min_dDistance)).div(k_max_Distance.minus(k_min_dDistance)).baseUnitMagnitude();
+        double ratio = (posision.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
     
         Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
@@ -211,6 +244,23 @@ public class Elevator extends SubsystemBase{
     public Command set_position_command(Distance position ){
         return run(()->set_elevator_position(position));
         
+    }
+
+    @Override
+    public void simulationPeriodic() {
+        
+        m_elevatorSim.setInput(m_elevator_motorSim.getMotorVoltage());
+
+        m_elevatorSim.update(0.020);
+
+        
+        var elevatorVelocity = 
+            (m_elevatorSim.getVelocityMetersPerSecond()/k_windlass_radius.in(Meter));
+
+        m_elevator_motorSim.setRawRotorPosition(m_elevatorSim.getPositionMeters());
+        m_elevator_motorSim.setRotorVelocity(elevatorVelocity);
+
+        m_elevatorMech2d.setLength(m_elevatorSim.getPositionMeters());
     }
 }
 
