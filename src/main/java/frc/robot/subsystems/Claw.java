@@ -39,8 +39,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class Claw extends SubsystemBase {
      // All hardware classes already have WPILib integration
-    final TalonFX m_intake = new TalonFX(31);
-    final TalonFX m_mount = new TalonFX(32);
+    final TalonFX m_intake = new TalonFX(61);
+    final TalonFX m_mount = new TalonFX(62);
      
     //only a single neutral motor request is required for the system as it is always the same value
     private final NeutralOut m_brake = new NeutralOut();
@@ -52,7 +52,7 @@ public class Claw extends SubsystemBase {
     final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
     final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
  
-    final CANcoder m_mount_encoder = new CANcoder(36);
+    final CANcoder m_mount_encoder = new CANcoder(69);
 
 
      
