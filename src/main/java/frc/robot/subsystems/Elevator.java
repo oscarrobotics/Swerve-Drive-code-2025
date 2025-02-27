@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -48,9 +49,10 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 
 public class Elevator extends SubsystemBase{
     // All hardware classes already have WPILib integration
-    final TalonFX m_elevator_motor = new TalonFX(21);
+    final TalonFX m_elevator_motor = new TalonFX(51);
+    final TalonFX m_elevator_motor_follower = new TalonFX(52);
 
-    final CANcoder m_elevator_CANcoder = new CANcoder(26);
+    final CANcoder m_elevator_CANcoder = new CANcoder(59);
     
 
     final TalonFXSimState m_elevator_motorSim = m_elevator_motor.getSimState();
@@ -157,6 +159,8 @@ public class Elevator extends SubsystemBase{
         System.out.println("Could not apply configs, error code: " + status.toString());
         }
 
+        m_elevator_motor_follower.setControl(new Follower(m_elevator_motor.getDeviceID(), false));
+
         m_elevator_motor.setPosition(0);
 
         SmartDashboard.putData("Elevator Sim", m_mech2d);
@@ -164,7 +168,7 @@ public class Elevator extends SubsystemBase{
 
     }
 
-    private Angle validate_and_convert(Distance claw_heigt){
+    private Angle validate_and_convert(Distance claw_height){
 
         // Takes in a value of Distance representing the claws center axel height from the groung
         // Validates the input to make sure that the hieght is within range 
