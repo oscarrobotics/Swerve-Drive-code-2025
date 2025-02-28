@@ -182,6 +182,10 @@ public class Elevator extends SubsystemBase{
 
     }
     
+    public boolean is_stowed(){
+
+        return m_elevator_CANcoder.getAbsolutePosition().getValue().lt(Rotation.of(0.2));
+    }
 
         
         
