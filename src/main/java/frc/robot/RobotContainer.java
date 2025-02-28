@@ -92,6 +92,9 @@ public class RobotContainer {
 
     //    controlstick.y().onTrue(elevator.get_posiCommand(25.0));
         controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
+
+        elevator.setDefaultCommand(elevator.set_position_command(elevator.k_stowed));
+        claw.setDefaultCommand(claw.set_position_command(claw.k_stowed));
             
 
 
