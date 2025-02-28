@@ -91,7 +91,12 @@ public class RobotContainer {
         drivetrain.registerTelemetry(logger::telemeterize);
 
     //    controlstick.y().onTrue(elevator.get_posiCommand(25.0));
-        controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
+        // controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
+        controlstick.a().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1));
+        controlstick.b().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2));
+        controlstick.x().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3));
+        controlstick.y().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4));
+
             
 
 

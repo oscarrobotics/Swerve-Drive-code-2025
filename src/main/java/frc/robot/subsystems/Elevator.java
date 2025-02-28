@@ -8,8 +8,10 @@ import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.fasterxml.jackson.databind.deser.impl.FailingDeserializer;
 
@@ -64,18 +66,24 @@ public class Elevator extends SubsystemBase{
 
     private final NeutralOut m_brake = new NeutralOut();
 
-    final TalonFXConfiguration m_elevator_motorConfig = new TalonFXConfiguration();
+
 
     //if external cancoder isnt used
-    public final double k_elevator_rotations = 4.7;
+    public final double k_elevator_rotations = 3.7;
     public final double k_elevator_ratio = k_elevator_rotations*1;
 
     public final Angle k_elevator_min_rot = Rotations.of(0);
-    public final Angle k_elevator_max_rot = Rotations.of(4.7);
+    public final Angle k_elevator_max_rot = Rotations.of(0.663);
 
     public final Distance k_min_Distance =  Meters.of(0);
     public final Distance k_max_Distance = Meter.of(3);
     public final Distance k_stowed =  Meters.of(0);
+
+    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.18);
+    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.21);
+    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.41);
+    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.63);
+
 
 
 
@@ -145,14 +153,28 @@ public class Elevator extends SubsystemBase{
         .withPeakReverseTorqueCurrent(Amps.of(-5));
 
         //for motion magic controls
-        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = 10;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kV = 1;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kA = 1;
+        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = 1;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kV = 100;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kA = 100;
 
+
+        // bind the remote encoder to the mount motor
+
+        CANcoderConfiguration m_elevator_CANcoder_config = new CANcoderConfiguration();
+        m_elevator_CANcoder_config .MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(1));
+        m_elevator_CANcoder_config .MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+       
+        
+
+        
+        m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
+        m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;
+        m_elevator_config.Feedback.RotorToSensorRatio = -11.71/5.5;
         
         StatusCode status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
-        status = m_elevator_motor.getConfigurator().apply(m_elevator_motorConfig);
+        status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
         if (status.isOK()) break;
         }
         if (!status.isOK()) {
@@ -161,7 +183,7 @@ public class Elevator extends SubsystemBase{
 
         m_elevator_motor_follower.setControl(new Follower(m_elevator_motor.getDeviceID(), false));
 
-        m_elevator_motor.setPosition(0);
+        // m_elevator_motor.setPosition(0);
 
         SmartDashboard.putData("Elevator Sim", m_mech2d);
 
@@ -216,37 +238,42 @@ public class Elevator extends SubsystemBase{
 
     }
 
-    private void set_elevator_position_mm(Distance posision){
+    private void set_elevator_position_mm(Angle posision){
 
-        // gt is greater than 
-        if (posision.gt( k_max_Distance)){
+        // // gt is greater than 
+        // if (posision.gt( k_max_Distance)){
          
-            // logger.log(position + " requested is greater than the max position ");
-            posision = k_max_Distance;
+        //     // logger.log(position + " requested is greater than the max position ");
+        //     posision = k_max_Distance;
 
-        }
-        else if (posision.lt(k_min_Distance)){
+        // }
+        // else if (posision.lt(k_min_Distance)){
 
-            //logger.log(position + " requested is less than the minimum position");
-            posision = k_min_Distance;
+        //     //logger.log(position + " requested is less than the minimum position");
+        //     posision = k_min_Distance;
 
-        }
+        // }
 
-        //calucaulate the conversion from meters to rotations
-        double ratio = (posision.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
+        // //calucaulate the conversion from meters to rotations
+        // double ratio = (posision.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
     
-        Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
+        // Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
-        output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
+        // output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
 
 
-        m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(output.in(Rotations)));
+        m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)));
         
 
     }
 
     public Command set_position_command(Distance position ){
         return run(()->set_elevator_position(position));
+        
+    }
+
+    public Command set_position_command_angle(Angle position ){
+        return run(()->set_elevator_position_mm(position));
         
     }
 

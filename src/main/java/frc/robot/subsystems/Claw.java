@@ -52,7 +52,7 @@ public class Claw extends SubsystemBase {
     final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
     final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
  
-    final CANcoder m_mount_encoder = new CANcoder(69);
+    final CANcoder m_mount_encoder = new CANcoder(17);
 
 
      
@@ -147,9 +147,9 @@ public class Claw extends SubsystemBase {
         // bind the remote encoder to the mount motor
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration();
-        m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.5));
-        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        m_mount_encoder_config.MagnetSensor.withMagnetOffset(Rotations.of(0.4));
+        m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6));
+        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        
         
 
         
