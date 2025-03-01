@@ -14,6 +14,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.MotionMagicExpoTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.MotionMagicVelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.PositionVoltage;
@@ -51,9 +53,12 @@ public class Claw extends SubsystemBase {
  
     final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
     final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
- 
-    final CANcoder m_mount_encoder = new CANcoder(17);
+    
 
+    final MotionMagicVelocityTorqueCurrentFOC m_intakeFXOut_mm = new MotionMagicVelocityTorqueCurrentFOC(0).withSlot(0);
+    final MotionMagicExpoTorqueCurrentFOC m_mountFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
+    final CANcoder m_mount_encoder = new CANcoder(17);
+    
 
      
     //
@@ -78,18 +83,21 @@ public class Claw extends SubsystemBase {
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
-    public final Angle k_coral_position_1 = Degrees.of(0);
-    public final Angle k_coral_position_2 = Degrees.of(0);
-    public final Angle k_coral_position_3 = Degrees.of(0);
-    public final Angle k_coral_position_4 = Degrees.of(0);
+    public final Angle k_stowed = Rotation.of(0);
+    
 
-    public final Angle k_alge_position_1 = Degrees.of(0);
-    public final Angle k_alge_position_2 = Degrees.of(0);
-    public final Angle k_alge_position_3 = Degrees.of(0);
-    public final Angle k_alge_position_4 = Degrees.of(0);
+    public final Angle k_coral_position_1 = Rotation.of(0);
+    public final Angle k_coral_position_2 = Rotation.of(0.1);
+    public final Angle k_coral_position_3 = Rotation.of(0.3);
+    public final Angle k_coral_position_4 = Rotation.of(0.5);
 
-    public final Angle k_process_alge_position = Degrees.of(0);
-    public final Angle k_barge_alge_position = Degrees.of(0);
+    public final Angle k_alge_position_1 = Rotation.of(0);
+    public final Angle k_alge_position_2 = Rotation.of(0);
+    public final Angle k_alge_position_3 = Rotation.of(0);
+    public final Angle k_alge_position_4 = Rotation.of(0);
+
+    public final Angle k_process_alge_position = Rotation.of(0);
+    public final Angle k_barge_alge_position = Rotation.of(0);
 
     public boolean s_has_coral = false;
     
@@ -105,15 +113,14 @@ public class Claw extends SubsystemBase {
         m_intake_config.Slot0.kI = 0; // No output for integrated error
         m_intake_config.Slot0.kD = 0; // No output for error derivative
         m_intake_config.Slot0.kP = 5; // An error of 1 rotation per second results in 5 A output
-        m_intake_config.Slot0.kG = 0.1;
-        m_intake_config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+        
         // Peak output of 5 A
         m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(5))
         .withPeakReverseTorqueCurrent(Amps.of(-5));
 
         //motion magic settings
-        m_intake_config.MotionMagic.MotionMagicAcceleration = 10;
-        m_intake_config.MotionMagic.MotionMagicJerk = 100;
+        m_intake_config.MotionMagic.MotionMagicAcceleration = 3;
+        m_intake_config.MotionMagic.MotionMagicJerk = 30;
 
        
 
@@ -135,10 +142,12 @@ public class Claw extends SubsystemBase {
         m_mount_config.Slot0.kP = 60; // An error of 1 rotation results in 60 A output
         m_mount_config.Slot0.kI = 0; // No output for integrated error
         m_mount_config.Slot0.kD = 6; // A velocity of 1 rps results in 6 A output
+        m_mount_config.Slot0.kG = 0.1;
+        m_mount_config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         
         // Peak output of 5 A
-        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(5))
-        .withPeakReverseTorqueCurrent(Amps.of(-5));
+        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(10))
+        .withPeakReverseTorqueCurrent(Amps.of(-10));
 
         
         
@@ -159,7 +168,7 @@ public class Claw extends SubsystemBase {
         m_mount_config.Feedback.RotorToSensorRatio = 100;
         
         //for motion magic controls
-        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = 10;
+        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = 1;
         m_mount_config.MotionMagic.MotionMagicExpo_kV = 1;
         m_mount_config.MotionMagic.MotionMagicExpo_kA = 1;
 
@@ -196,7 +205,7 @@ public class Claw extends SubsystemBase {
 
 
     // internal methond to set the positon using a unit aware object
-    private void set_mount_angle(Angle position){
+    private void set_mount_angle_mm(Angle position){
 
            // gt is greater than 
         if (position.gt( k_max_angle)){
@@ -212,7 +221,7 @@ public class Claw extends SubsystemBase {
 
         }
 
-        m_mount.setControl(m_mountFXOut.withPosition(position));
+        m_mount.setControl(m_mountFXOut_mm.withPosition(position));
 
 
     }
@@ -229,7 +238,7 @@ public class Claw extends SubsystemBase {
             speed = k_max_wheel_speed.unaryMinus();
         }
 
-        m_intake.setControl(m_intakeFXOut.withVelocity(speed));
+        m_intake.setControl(m_intakeFXOut_mm.withVelocity(speed));
 
     }
 
@@ -275,10 +284,10 @@ public class Claw extends SubsystemBase {
     // call methdods
 
     //note that this method returns a command and is no a command itself
-    public Command position_command(Angle position){
+    public Command set_position_command_mm(Angle position){
 
         //  \/ run command template returns a run command that does the thing insided      
-        return run(()-> set_mount_angle(position));
+        return run(()-> set_mount_angle_mm(position));
 
     }
 
@@ -297,7 +306,7 @@ public class Claw extends SubsystemBase {
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-300, RPM));})
             .withTimeout(4)
             .andThen(this::stop_intake
-            );
+            ).andThen(this::has_coral_false);
     }
 
     
