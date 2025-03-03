@@ -1,0 +1,82 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.231758679567445,
+        "y": 4.064954467842913
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.362749003984064,
+        "y": 4.1049089356858275
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.1529880478087655,
+        "y": 4.1848178713716555
+      },
+      "prevControl": {
+        "x": 6.083931667865127,
+        "y": 3.3285187600705552
+      },
+      "nextControl": {
+        "x": 6.202931132612409,
+        "y": 4.804112122936824
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.0319863403528755,
+        "y": 4.953941377347752
+      },
+      "prevControl": {
+        "x": 6.26286283437678,
+        "y": 4.434533295389868
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.9606928714190517,
+      "rotationDegrees": -89.26185926931868
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "EjectCoral",
+      "waypointRelativePos": 0.8148734177215248,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "reversed": false,
+  "folder": "StraigtCoral",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 180.0
+  },
+  "useDefaultConstraints": true
+}

@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "dropcoral",
+      "name": "EjectCoral",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": null

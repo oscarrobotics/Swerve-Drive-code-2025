@@ -3,9 +3,11 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
+    "StraigtCoral",
     "coral auto 1 ",
     "coral auto 2 ",
     "coral auto 3 ",
+    "sidecoral",
     "straight"
   ],
   "autoFolders": [],
@@ -34,6 +36,6 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.43,\"y\":0.2},\"end\":{\"x\":0.43,\"y\":0.2},\"strokeWidth\":0.02}}"
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":-0.43,\"y\":-0.3},\"end\":{\"x\":0.43,\"y\":-0.3},\"strokeWidth\":0.02}}"
   ]
 }

@@ -41,9 +41,9 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class Claw extends SubsystemBase {
      // All hardware classes already have WPILib integration
-    final TalonFX m_intake = new TalonFX(61);
-    final TalonFX m_mount = new TalonFX(62);
-     
+    
+    final TalonFX m_mount = new TalonFX(61);
+    final TalonFX m_intake = new TalonFX(62); 
     //only a single neutral motor request is required for the system as it is always the same value
     private final NeutralOut m_brake = new NeutralOut();
 
@@ -78,13 +78,14 @@ public class Claw extends SubsystemBase {
     public final Distance k_algehook_center_length = Inches.of(20);
 
 
-    public final Angle k_min_angle =  Degrees.of(0);
-    public final Angle k_max_angle = Degrees.of(90);
+    public final Angle k_min_angle =  Rotation.of(-0.317);
+    public final Angle k_max_angle = Degrees.of(0.115);
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
     public final Angle k_stowed = Rotation.of(0);
     
+
 
     public final Angle k_coral_position_1 = Rotation.of(0);
     public final Angle k_coral_position_2 = Rotation.of(0.1);
@@ -112,15 +113,15 @@ public class Claw extends SubsystemBase {
         m_intake_config.Slot0.kS = 2.5; // To account for friction, add 2.5 A of static feedforward
         m_intake_config.Slot0.kI = 0; // No output for integrated error
         m_intake_config.Slot0.kD = 0; // No output for error derivative
-        m_intake_config.Slot0.kP = 5; // An error of 1 rotation per second results in 5 A output
+        m_intake_config.Slot0.kP = 20; // An error of 1 rotation per second results in 5 A output
         
         // Peak output of 5 A
-        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(5))
-        .withPeakReverseTorqueCurrent(Amps.of(-5));
+        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(30))
+        .withPeakReverseTorqueCurrent(Amps.of(-30));
 
         //motion magic settings
-        m_intake_config.MotionMagic.MotionMagicAcceleration = 3;
-        m_intake_config.MotionMagic.MotionMagicJerk = 30;
+        m_intake_config.MotionMagic.MotionMagicAcceleration = 300;
+        m_intake_config.MotionMagic.MotionMagicJerk = 3000;
 
        
 
@@ -228,15 +229,15 @@ public class Claw extends SubsystemBase {
 
     private void set_intake_speed(AngularVelocity speed){
 
-        if (speed.gt(k_max_wheel_speed)){
-            //logger.log("max wheel speed exceeded")
-            speed = k_max_wheel_speed;
+        // if (speed.gt(k_max_wheel_speed)){
+        //     //logger.log("max wheel speed exceeded")
+        //     speed = k_max_wheel_speed;
 
-        }
-        else if(speed.lt(k_max_wheel_speed.unaryMinus())){//unary Minus is negate
-            //logger.log("negativce max wheel speed exceeded")
-            speed = k_max_wheel_speed.unaryMinus();
-        }
+        // }
+        // else if(speed.lt(k_max_wheel_speed.unaryMinus())){//unary Minus is negate
+        //     //logger.log("negativce max wheel speed exceeded")
+        //     speed = k_max_wheel_speed.unaryMinus();
+        // }
 
         m_intake.setControl(m_intakeFXOut_mm.withVelocity(speed));
 
@@ -294,20 +295,22 @@ public class Claw extends SubsystemBase {
     public Command intake_coral_command(){
 
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
-            .until(intake_curent_exceeded(Amp.of(10)))
+            .until(intake_curent_exceeded(Amp.of(30)))
             .beforeStarting(this::has_coral_true)
-            .withTimeout(10)
+            .withTimeout(4)
             .andThen(this::stop_intake
             );
     }
 
     public Command outtake_coral_command(){
 
-        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-300, RPM));})
-            .withTimeout(4)
+        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
+            .withTimeout(2)
             .andThen(this::stop_intake
             ).andThen(this::has_coral_false);
     }
+
+    
 
     
     

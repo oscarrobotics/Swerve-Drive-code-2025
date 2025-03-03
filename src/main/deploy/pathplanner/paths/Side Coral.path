@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.225113636363636,
-        "y": 2.3796875
+        "x": 7.279261363636363,
+        "y": 6.208778409090908
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.065568181818182,
-        "y": 1.9708522727272726
+        "x": 6.341931818181817,
+        "y": 5.580568181818181
       },
       "isLocked": false,
-      "linkedName": "cccoraldrop"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2065624999999998,
-        "y": 1.0534659090909075
+        "x": 4.856164772727273,
+        "y": 5.7101988636363625
       },
       "prevControl": {
-        "x": 1.4415108558721088,
-        "y": 1.1389016748625842
+        "x": 5.344772727272727,
+        "y": 6.33840909090909
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "cccoralrelease"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -33,22 +33,22 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 300.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -126.60707481260762
+    "rotation": -30.173520029644187
   },
   "reversed": false,
-  "folder": "coral auto 3 ",
+  "folder": "sidecoral",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 122.57405713457254
+    "rotation": 180.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }
