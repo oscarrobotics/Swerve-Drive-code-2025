@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6723863636363636,
-        "y": 4.214460227272727
+        "x": 5.24804292929293,
+        "y": 5.4988005050505055
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.532784090909091,
-        "y": 5.710198863636362
+        "x": 5.108440656565657,
+        "y": 6.9945391414141405
       },
       "isLocked": false,
       "linkedName": "c stop"
@@ -33,10 +33,15 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "stationcoral",
+      "name": "PickCoral",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
-      "command": null
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PickCoral"
+        }
+      }
     }
   ],
   "globalConstraints": {
@@ -52,10 +57,10 @@
     "rotation": 125.75388725443673
   },
   "reversed": false,
-  "folder": "coral auto 1 ",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -119.1974860460644
   },
   "useDefaultConstraints": false
 }
