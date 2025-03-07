@@ -3,6 +3,7 @@
   "robotLength": 0.8128,
   "holonomicMode": true,
   "pathFolders": [
+    "auto align",
     "StraigtCoral",
     "1st auto position",
     "2nd auto position",
