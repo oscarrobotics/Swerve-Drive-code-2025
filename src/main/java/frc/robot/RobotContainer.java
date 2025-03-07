@@ -80,6 +80,7 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("EjectCoral", claw.outtake_coral_command());
         
+        NamedCommands.registerCommand("PickCoral", claw.intake_coral_command());
         autoChooser = AutoBuilder.buildAutoChooser("tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
