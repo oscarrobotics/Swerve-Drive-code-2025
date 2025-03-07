@@ -84,6 +84,8 @@ public class RobotContainer {
         autoChooser = AutoBuilder.buildAutoChooser("tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
+        //code used for both intake and outake of coral from the claw during auto and teleop 
+
         configureBindings();
     }
 

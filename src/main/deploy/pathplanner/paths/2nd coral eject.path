@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.24804292929293,
-        "y": 5.4988005050505055
+        "x": 7.402840909090909,
+        "y": 4.218118686868687
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.108440656565657,
-        "y": 6.9945391414141405
+        "x": 7.240214646464648,
+        "y": 3.8623737373737366
       },
       "isLocked": false,
-      "linkedName": "c stop"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.2840277777777778,
-        "y": 7.125063131313132
+        "x": 5.268371212121212,
+        "y": 2.5715277777777783
       },
       "prevControl": {
-        "x": 1.8646874999999996,
-        "y": 6.817045454545454
+        "x": 6.782828282828283,
+        "y": 2.032828282828282
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "coral station"
+      "linkedName": "ccoraldrop"
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,13 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "PickCoral",
+      "name": "EjectCoral",
       "waypointRelativePos": 1.0,
       "endWaypointRelativePos": null,
       "command": {
         "type": "named",
         "data": {
-          "name": "PickCoral"
+          "name": "EjectCoral"
         }
       }
     }
@@ -54,13 +54,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 125.75388725443673
+    "rotation": 119.42745640318972
   },
   "reversed": false,
-  "folder": null,
+  "folder": "2nd auto position",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -119.1974860460644
+    "rotation": -136.00971638795343
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

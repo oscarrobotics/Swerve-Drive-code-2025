@@ -4,9 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "StraigtCoral",
-    "coral auto 1 ",
-    "coral auto 2 ",
-    "coral auto 3 ",
+    "1st auto position",
+    "2nd auto position",
+    "3rd auto position ",
     "sidecoral",
     "straight"
   ],

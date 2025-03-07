@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 5.268371212121212,
+        "y": 2.5715277777777783
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 5.349684343434343,
+        "y": 2.3275883838383833
+      },
+      "isLocked": false,
+      "linkedName": "ccoraldrop"
+    },
+    {
+      "anchor": {
+        "x": 5.0650883838383844,
+        "y": 1.21969696969697
+      },
+      "prevControl": {
+        "x": 6.000189393939394,
+        "y": 1.4670486111111098
+      },
+      "nextControl": {
+        "x": 4.153368297030309,
+        "y": 0.9785300181631893
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.2535353535353533,
+        "y": 0.9655934343434341
+      },
+      "prevControl": {
+        "x": 1.4873106060606056,
+        "y": 1.595770202020201
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ccoralstation"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.1157894736842138,
+      "rotationDegrees": -176.44352096298914
+    },
+    {
+      "waypointRelativePos": 1.3859649122807038,
+      "rotationDegrees": 166.14230594027057
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "PickCoral",
+      "waypointRelativePos": 2.0,
+      "endWaypointRelativePos": null,
+      "command": {
+        "type": "named",
+        "data": {
+          "name": "PickCoral"
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -126.38435181583579
+  },
+  "reversed": false,
+  "folder": "2nd auto position",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.42745640318972
+  },
+  "useDefaultConstraints": true
+}

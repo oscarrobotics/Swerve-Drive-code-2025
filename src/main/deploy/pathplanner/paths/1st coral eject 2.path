@@ -3,35 +3,42 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.6723863636363636,
-        "y": 4.234403409090909
+        "x": 1.2941919191919191,
+        "y": 7.11489898989899
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.6012373737373737,
-        "y": 6.429857954545455
+        "x": 2.59520202020202,
+        "y": 6.3932449494949495
       },
       "isLocked": false,
-      "linkedName": "coral release "
+      "linkedName": "coral station"
     },
     {
       "anchor": {
-        "x": 4.75,
-        "y": 6.596527777777777
+        "x": 2.8086489898989897,
+        "y": 4.0554924242424235
       },
       "prevControl": {
-        "x": 3.75,
-        "y": 6.596527777777777
+        "x": 2.837859301790839,
+        "y": 4.303780075323143
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "coral release "
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "EjectCoral",
+      "waypointRelativePos": 1.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -42,13 +49,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
-  },
-  "reversed": false,
-  "folder": "coral auto 1 ",
-  "idealStartingState": {
-    "velocity": 0,
     "rotation": 0.0
   },
-  "useDefaultConstraints": true
+  "reversed": false,
+  "folder": "1st auto position",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 125.75388725443673
+  },
+  "useDefaultConstraints": false
 }

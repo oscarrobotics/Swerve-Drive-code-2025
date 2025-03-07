@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.195198863636364,
-        "y": 2.3697159090909086
+        "x": 3.67260101010101,
+        "y": 2.5715277777777783
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.294914772727273,
-        "y": 2.1403693181818175
+        "x": 3.5303030303030307,
+        "y": 2.195454545454545
       },
       "isLocked": false,
-      "linkedName": "cccoralend"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.661022727272727,
-        "y": 0.7742613636363649
+        "x": 4.357585227272727,
+        "y": 0.6944886363636351
       },
       "prevControl": {
-        "x": 6.4915056818181816,
-        "y": 1.571988636363635
+        "x": 3.1745580808080813,
+        "y": 0.528535353535352
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,10 +45,10 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "coral auto 3 ",
+  "folder": "2nd auto position",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 123.36636600105963
+    "rotation": 57.03059609653794
   },
   "useDefaultConstraints": true
 }
