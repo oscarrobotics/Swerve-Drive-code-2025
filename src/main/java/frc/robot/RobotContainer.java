@@ -107,7 +107,7 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-
+      
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control

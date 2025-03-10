@@ -299,15 +299,13 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     // Path Finding
     public Command getPathfind_command(Pose2d pose){
-
-        // rotation component of this pose represents goal holonomic rotation
-        Pose2d targetPose = new Pose2d(10, 5, Rotation2d.fromDegrees(180));
+       
        
         // constraints to use while pathfinding, values subject to change
         PathConstraints constraints = new PathConstraints(3.0, 4.0, Units.degreesToRadians(540), Units.degreesToRadians(720));
        
         // since autobuilder is configured, we can use it to build pathfinding! :)
-        Command pathfindingCommand = AutoBuilder.pathfindToPose(targetPose, constraints, 0.0);
+        Command pathfindingCommand = AutoBuilder.pathfindToPose(pose, constraints, 0.0);
                
             return pathfindingCommand;
 

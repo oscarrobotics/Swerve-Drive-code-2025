@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 import edu.wpi.first.units.VelocityUnit;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -51,12 +52,15 @@ public class Claw extends SubsystemBase {
     final TalonFXSimState m_intakeSim = m_intake.getSimState();
     final TalonFXSimState m_mountSim = m_mount.getSimState();
  
-    final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
-    final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
-    
 
-    final MotionMagicVelocityTorqueCurrentFOC m_intakeFXOut_mm = new MotionMagicVelocityTorqueCurrentFOC(0).withSlot(0);
+
+    final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
+    final MotionMagicVelocityTorqueCurrentFOC m_intakeFXOut_v_mm = new MotionMagicVelocityTorqueCurrentFOC(0).withSlot(0);
+    final MotionMagicExpoTorqueCurrentFOC m_intakeFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
+
+    final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
     final MotionMagicExpoTorqueCurrentFOC m_mountFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
+    
     final CANcoder m_mount_encoder = new CANcoder(17);
     
 
@@ -78,8 +82,8 @@ public class Claw extends SubsystemBase {
     public final Distance k_algehook_center_length = Inches.of(20);
 
 
-    public final Angle k_min_angle =  Rotation.of(-0.317);
-    public final Angle k_max_angle = Degrees.of(0.115);
+    public final Angle k_max_angle =  Rotation.of(0.3);
+    public final Angle k_min_angle = Degrees.of(-0.15);
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
@@ -87,10 +91,10 @@ public class Claw extends SubsystemBase {
     
 
 
-    public final Angle k_coral_position_1 = Rotation.of(0);
+    public final Angle k_coral_position_1 = Rotation.of(0.25);
     public final Angle k_coral_position_2 = Rotation.of(0.1);
-    public final Angle k_coral_position_3 = Rotation.of(0.3);
-    public final Angle k_coral_position_4 = Rotation.of(0.5);
+    public final Angle k_coral_position_3 = Rotation.of(0.0);
+    public final Angle k_coral_position_4 = Rotation.of(-0.15);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
     public final Angle k_alge_position_2 = Rotation.of(0);
@@ -158,7 +162,7 @@ public class Claw extends SubsystemBase {
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration();
         m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6));
-        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         
         
 
@@ -239,9 +243,44 @@ public class Claw extends SubsystemBase {
         //     speed = k_max_wheel_speed.unaryMinus();
         // }
 
-        m_intake.setControl(m_intakeFXOut_mm.withVelocity(speed));
+        m_intake.setControl(m_intakeFXOut_v_mm.withVelocity(speed));
 
     }
+    
+
+
+    private void advance_intake(Distance delta){
+
+        double gear_ratio = 2;
+        Distance intake_diameter = Inches.of(4);
+
+        Angle delta_rev = Rotation.of(delta.div(intake_diameter.times(Math.PI)).magnitude());
+
+        Angle cur_position = m_intake.getPosition().getValue();
+
+        m_intake.setPosition(cur_position.plus(delta_rev));
+
+
+
+
+    }
+
+
+    public BooleanSupplier at_position(double tolerance){
+        
+        BooleanSupplier position_trigger = ()-> Math.abs(m_mount.getClosedLoopError().getValueAsDouble())<tolerance;
+        
+        return position_trigger;
+    }
+
+    public BooleanSupplier at_position(){
+
+        return at_position(0.005);
+    }
+        
+
+
+
 
     private void stop_intake(){
         m_intake.setControl(m_brake);
@@ -308,6 +347,17 @@ public class Claw extends SubsystemBase {
             .withTimeout(2)
             .andThen(this::stop_intake
             ).andThen(this::has_coral_false);
+
+        
+    }
+
+    public Command launch_coral_command(){
+
+        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
+            .withTimeout(2)
+            .andThen(this::stop_intake
+            ).andThen(this::has_coral_false);
+
     }
 
     
