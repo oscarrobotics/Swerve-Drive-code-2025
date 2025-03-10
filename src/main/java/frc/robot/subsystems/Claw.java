@@ -26,6 +26,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.MotorOutputStatusValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.fasterxml.jackson.databind.ser.std.BooleanSerializer;
@@ -42,7 +45,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 public class Claw extends SubsystemBase {
      // All hardware classes already have WPILib integration
     
-    final TalonFX m_mount = new TalonFX(61);
+    final TalonFX m_mount = new TalonFX(61); 
     final TalonFX m_intake = new TalonFX(62); 
     //only a single neutral motor request is required for the system as it is always the same value
     private final NeutralOut m_brake = new NeutralOut();
@@ -78,8 +81,8 @@ public class Claw extends SubsystemBase {
     public final Distance k_algehook_center_length = Inches.of(20);
 
 
-    public final Angle k_min_angle =  Rotation.of(-0.317);
-    public final Angle k_max_angle = Degrees.of(0.115);
+    public final Angle k_min_angle =  Rotation.of(-.15);
+    public final Angle k_max_angle = Degrees.of(0.3);
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
@@ -87,10 +90,10 @@ public class Claw extends SubsystemBase {
     
 
 
-    public final Angle k_coral_position_1 = Rotation.of(0);
+    public final Angle k_coral_position_1 = Rotation.of(0.28);
     public final Angle k_coral_position_2 = Rotation.of(0.1);
-    public final Angle k_coral_position_3 = Rotation.of(0.3);
-    public final Angle k_coral_position_4 = Rotation.of(0.5);
+    public final Angle k_coral_position_3 = Rotation.of(0.0);
+    public final Angle k_coral_position_4 = Rotation.of(-0.07);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
     public final Angle k_alge_position_2 = Rotation.of(0);
@@ -124,7 +127,7 @@ public class Claw extends SubsystemBase {
         m_intake_config.MotionMagic.MotionMagicJerk = 3000;
 
        
-
+        
        
         /* Retry config apply up to 5 times, report if failure */
         StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -140,25 +143,27 @@ public class Claw extends SubsystemBase {
 
         TalonFXConfiguration  m_mount_config = new TalonFXConfiguration();
        
-        m_mount_config.Slot0.kP = 60; // An error of 1 rotation results in 60 A output
+        m_mount_config.Slot0.kP = 40; // An error of 1 rotation results in 60 A output
         m_mount_config.Slot0.kI = 0; // No output for integrated error
         m_mount_config.Slot0.kD = 6; // A velocity of 1 rps results in 6 A output
-        m_mount_config.Slot0.kG = 0.1;
+        m_mount_config.Slot0.kG = 5;
         m_mount_config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         
         // Peak output of 5 A
-        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(10))
-        .withPeakReverseTorqueCurrent(Amps.of(-10));
+        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(20))
+        .withPeakReverseTorqueCurrent(Amps.of(-20));
 
-        
-        
+        m_mount_config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        m_mount_config.MotorOutput.NeutralMode=NeutralModeValue.Brake;
+            
 
 
         // bind the remote encoder to the mount motor
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration();
         m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6));
-        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.339844);
+        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         
         
 
@@ -169,7 +174,7 @@ public class Claw extends SubsystemBase {
         m_mount_config.Feedback.RotorToSensorRatio = 100;
         
         //for motion magic controls
-        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = 1;
+        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = 30;
         m_mount_config.MotionMagic.MotionMagicExpo_kV = 1;
         m_mount_config.MotionMagic.MotionMagicExpo_kA = 1;
 
@@ -198,7 +203,7 @@ public class Claw extends SubsystemBase {
         }
         
         //set the position of the mechanism to 0, this is not a control but a delclaration that the position it is in is 0
-        m_mount.setPosition(0);
+        // m_mount.setPosition(0);
 
 
     }
@@ -208,7 +213,7 @@ public class Claw extends SubsystemBase {
     // internal methond to set the positon using a unit aware object
     private void set_mount_angle_mm(Angle position){
 
-           // gt is greater than 
+        //    gt is greater than 
         if (position.gt( k_max_angle)){
             
             // logger.log(position + " requested is greater than the max position ");

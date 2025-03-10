@@ -99,8 +99,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY() * MaxSpeed*forward_dir *  (elevator.is_stowed() ? 1:0.3)) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed *side_dir* (elevator.is_stowed() ? 1:0.3)) // Drive left with negative X (left)
+                drive.withVelocityX(joystick.getLeftY() * MaxSpeed*forward_dir *  (elevator.is_stowed()||!joystick.rightBumper().getAsBoolean() ? 1:0.3)) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed *side_dir* (elevator.is_stowed()||!joystick.rightBumper().getAsBoolean() ? 1:0.3)) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
@@ -139,7 +139,7 @@ public class RobotContainer {
         // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        // joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -151,6 +151,12 @@ public class RobotContainer {
         controlstick.x().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3));
         controlstick.y().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4));
 
+        controlstick.povUp().onTrue(claw.set_position_command_mm(claw.k_coral_position_1));
+        controlstick.povLeft().onTrue(claw.set_position_command_mm(claw.k_coral_position_2));
+        controlstick.povDown().onTrue(claw.set_position_command_mm(claw.k_coral_position_3));
+        controlstick.povRight().onTrue(claw.set_position_command_mm(claw.k_coral_position_4));
+
+
         //binds buttons to intake and outtake commands
         controlstick.leftBumper().onTrue(claw.outtake_coral_command());
         controlstick.rightBumper().onTrue(claw.intake_coral_command());
@@ -160,11 +166,7 @@ public class RobotContainer {
         
         System.out.println("bindings configured");
 
-        // controlstick.povUp().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1));
-        // controlstick.povLeft().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2));
-        // controlstick.povDown().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3));
-        // controlstick.povRight().onTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4));
-
+        
         // controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
 
         // elevator.setDefaultCommand(elevator.set_position_command_angle(elevator.k_stowed));

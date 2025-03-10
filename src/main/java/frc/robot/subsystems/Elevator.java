@@ -62,10 +62,11 @@ public class Elevator extends SubsystemBase{
 
     final PositionTorqueCurrentFOC m_elevator_motorOut = new PositionTorqueCurrentFOC(0);
 
-    // final MotionMagicExpoTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
+    final MotionMagicExpoTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
     // used normal motion magic for to try and get it to work, but elevator was secretly mechnaically bad 
     // so probably will revert back to expo when fixed
-    final MotionMagicTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicTorqueCurrentFOC(0);
+    // final MotionMagicTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicTorqueCurrentFOC(0);
+    // final PositionTorqueCurrentFOC m_elevator_motorOut_mm = new PositionTorqueCurrentFOC(0);
     
     private final NeutralOut m_brake = new NeutralOut();
 
@@ -84,10 +85,10 @@ public class Elevator extends SubsystemBase{
     public final Distance k_max_Distance = Meter.of(3);
     public final Angle k_stowed =  Rotation.of(0.02);
 
-    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.1);
-    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.2);
-    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.31);
-    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.43);
+    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.15);
+    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.35);
+    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.551);
+    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.615);
 
 
 
@@ -141,20 +142,21 @@ public class Elevator extends SubsystemBase{
     // stings just shink back down intead of the springs, making the elevator easy to lift from the carrace but not from the first
     // stage where the motor attaches, atleast for the first few inches concelling the issue.  
     private final double k_default_ks = 0;
-    private final double k_default_kp = 130;
+    private final double k_default_kp = 50;
     private final double k_default_ki = 0;
-    private final double k_default_kd = 7;
-    private final double k_default_kg = 0;
+    private final double k_default_kd = 3;
+    private final double k_default_kg = 5;
+    private final double k_default_kff = 15;
     // mm_expo gains
     private final double k_default_kV = 1;
     private final double k_default_kA = 1;
-    private final double k_default_cVelocity = 300; // used for both mm and mm_expo
+    private final double k_default_cVelocity = 10; // used for both mm and mm_expo
     
     // "normal" motion magic gains
-    private final double k_default_Acceleration =3000; //noma
-    private final double k_default_jerk = 4000;
+    private final double k_default_Acceleration =10; //noma
+    private final double k_default_jerk = 10;
 
-    private final double k_current_limit = 420;
+    private final double k_current_limit = 30;
 
 
     private final ElevatorSim m_elevatorSim = new ElevatorSim(
@@ -195,7 +197,7 @@ public class Elevator extends SubsystemBase{
         // Peak output of 20 A
         m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_current_limit))
         .withPeakReverseTorqueCurrent(Amps.of(-k_current_limit));
-        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(300).withSupplyCurrentLimit(75);
+        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(k_current_limit).withSupplyCurrentLimit(k_current_limit);
 
 
 
@@ -228,7 +230,7 @@ public class Elevator extends SubsystemBase{
         m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;
-        m_elevator_config.Feedback.RotorToSensorRatio = 11.71/5.5;
+        m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
         
         status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -336,10 +338,13 @@ public class Elevator extends SubsystemBase{
         // Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
         // output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
+        double ff_factor = posision.div(k_max_Distance).magnitude()-0;
+
+        Current ffCurrent = Amps.of(k_default_kff).times(ff_factor);
 
         System.out.println("position set "+ posision.in(Rotation) );
 
-        m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)));
+        m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)).withFeedForward(ffCurrent));
         
 
     }
