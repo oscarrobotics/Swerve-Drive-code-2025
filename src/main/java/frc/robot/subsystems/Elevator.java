@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.*;
 
@@ -62,6 +64,7 @@ public class Elevator extends SubsystemBase{
 
     final PositionTorqueCurrentFOC m_elevator_motorOut = new PositionTorqueCurrentFOC(0);
 
+    final MotionMagicExpoTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
     final MotionMagicExpoTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
     // used normal motion magic for to try and get it to work, but elevator was secretly mechnaically bad 
     // so probably will revert back to expo when fixed
@@ -231,6 +234,7 @@ public class Elevator extends SubsystemBase{
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;
         m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
+        m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
         
         status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -349,8 +353,34 @@ public class Elevator extends SubsystemBase{
 
     }
 
+    public BooleanSupplier at_position(double tolerance){
+        
+        BooleanSupplier position_trigger = ()-> Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance;
+        
+        return position_trigger;
+    }
+
+    public BooleanSupplier at_position(){
+
+        return at_position(0.005);
+    }
+        
+
+    public BooleanSupplier at_position(double tolerance){
+        
+        BooleanSupplier position_trigger = ()-> Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance;
+        
+        return position_trigger;
+    }
+
+    public BooleanSupplier at_position(){
+
+        return at_position(0.005);
+    }
+        
+
     public Command set_position_command(Distance position ){
-        return run(()->set_elevator_position(position));
+        return run(()->set_elevator_position_mm(position));
         
     }
 

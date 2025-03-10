@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.3404829545454544,
-        "y": 2.6688636363636364
+        "x": 3.67260101010101,
+        "y": 2.5715277777777783
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3404829545454544,
-        "y": 2.3697159090909086
+        "x": 3.5303030303030307,
+        "y": 2.195454545454545
       },
       "isLocked": false,
-      "linkedName": "ccoralrelease"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +20,8 @@
         "y": 0.6944886363636351
       },
       "prevControl": {
-        "x": 3.357585227272727,
-        "y": 0.6944886363636352
+        "x": 3.1745580808080813,
+        "y": 0.528535353535352
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,10 +45,10 @@
     "rotation": -90.0
   },
   "reversed": false,
-  "folder": "coral auto 2 ",
+  "folder": "2nd auto position",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 57.994616791916464
+    "rotation": 57.03059609653794
   },
   "useDefaultConstraints": true
 }

@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.195198863636364,
-        "y": 2.3697159090909086
+        "x": 7.219431818181818,
+        "y": 0.96372159090909
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.294914772727273,
-        "y": 2.1403693181818175
+        "x": 6.980263348074604,
+        "y": 1.0365119948547656
       },
       "isLocked": false,
-      "linkedName": "cccoralend"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.661022727272727,
-        "y": 0.7742613636363649
+        "x": 5.225113636363636,
+        "y": 2.3796875
       },
       "prevControl": {
-        "x": 6.4915056818181816,
-        "y": 1.571988636363635
+        "x": 5.424545454545454,
+        "y": 2.1702840909090915
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "cccoraldrop"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -90.0
+    "rotation": 122.57405713457254
   },
   "reversed": false,
-  "folder": "coral auto 3 ",
+  "folder": "3rd auto position ",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 123.36636600105963
+    "rotation": -93.65222278030627
   },
   "useDefaultConstraints": true
 }

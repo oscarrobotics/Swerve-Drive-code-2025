@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "cccoral run "
+            "pathName": "3rd coral eject"
           }
         },
         {
@@ -19,7 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "cccoral pick "
+            "pathName": "3rd coral pick "
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "cccoral drop "
+            "pathName": "3rd coral eject 2 "
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "cccoral final "
+            "pathName": "3rd coral finish"
           }
         }
       ]

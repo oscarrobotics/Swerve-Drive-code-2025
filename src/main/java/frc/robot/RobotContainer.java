@@ -36,7 +36,7 @@ public class RobotContainer {
 
 
 
-    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond)/1.50; // kSpeedAt12Volts desired top speed
+    private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
@@ -80,8 +80,11 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("EjectCoral", claw.outtake_coral_command());
         
+        NamedCommands.registerCommand("PickCoral", claw.intake_coral_command());
         autoChooser = AutoBuilder.buildAutoChooser("tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
+
+        //code used for both intake and outake of coral from the claw during auto and teleop 
 
         configureBindings();
     }
@@ -104,7 +107,7 @@ public class RobotContainer {
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-
+      
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control

@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ccoral run "
+            "pathName": "1st coral eject"
           }
         },
         {
@@ -17,9 +17,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "ccoral pick "
+            "pathName": "1st coral pick"
           }
         },
         {
@@ -29,9 +35,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "PickCoral"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "ccoral release "
+            "pathName": "1st coral eject 2"
           }
         },
         {
@@ -41,9 +53,15 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "ccoral final "
+            "pathName": "1st coral finish"
           }
         }
       ]
