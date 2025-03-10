@@ -104,7 +104,7 @@ public class Claw extends SubsystemBase {
     public final Angle k_process_alge_position = Rotation.of(0);
     public final Angle k_barge_alge_position = Rotation.of(0);
 
-    public boolean s_has_coral = false;
+    public boolean m_has_coral = false;
     
 
 
@@ -277,6 +277,12 @@ public class Claw extends SubsystemBase {
 
         return at_position(0.005);
     }
+
+
+    public BooleanSupplier has_coral(){
+
+        return ()-> m_has_coral;
+    }
         
 
 
@@ -300,11 +306,11 @@ public class Claw extends SubsystemBase {
     }
 
     private void has_coral_true(){
-        s_has_coral = true;
+        m_has_coral = true;
     }
 
     private void has_coral_false(){
-        s_has_coral = false;
+        m_has_coral = false;
     }
  
     // roboto container(or other commands) can call this methond to get acces to a

@@ -16,6 +16,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.*;
 
@@ -28,6 +31,13 @@ import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.Waypoint;
 
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
@@ -45,6 +55,8 @@ public class Eleclaw extends SubsystemBase{
     private Elevator elevator;
     private Claw claw;
     private CommandSwerveDrivetrain drivetrain;
+
+    HashMap<String, Waypoint> named_waypoints; 
 
 
     public Eleclaw(Elevator elevator, Claw claw, CommandSwerveDrivetrain drivetrain){
@@ -76,6 +88,38 @@ public class Eleclaw extends SubsystemBase{
 /// 
 /// 
 /// 
+///
+   
+    
+
+    public void load_linked_waypoint(){
+
+        //create list to hold all paths
+        //find all paths
+        //
+        //
+        //load all paths
+
+
+    }
+
+
+    public Command retry_intake_coral(Time timeout){
+        
+        
+
+        return claw.intake_coral_command().until(claw.has_coral()).withTimeout(timeout);
+
+    }
+
+    public Command retry_intake_coral(){
+        
+        Time timeout = Seconds.of(13);
+        return claw.intake_coral_command().until(claw.has_coral()).withTimeout(timeout);
+
+    }
+
+
     public Command score_coral_1(){
 
         
