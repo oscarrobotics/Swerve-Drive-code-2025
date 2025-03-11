@@ -19,13 +19,14 @@ public class Robot extends TimedRobot {
 
   public Robot() {
     m_robotContainer = new RobotContainer();
+    FollowPathCommand.warmupCommand().schedule();
     enableLiveWindowInTest(true);
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
-    FollowPathCommand.warmupCommand().schedule();
+    
 
     /*
      * This example of adding Limelight is very simple and may not be sufficient for on-field use.
