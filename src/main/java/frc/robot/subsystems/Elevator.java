@@ -287,24 +287,24 @@ public class Elevator extends SubsystemBase{
         
 
     
-    private void set_elevator_position(Distance posision){
+    private void set_elevator_position(Distance position){
 
         // gt is greater than 
-        if (posision.gt( k_max_Distance)){
+        if (position.gt( k_max_Distance)){
          
             // logger.log(position + " requested is greater than the max position ");
-            posision = k_max_Distance;
+            position = k_max_Distance;
 
         }
-        else if (posision.lt(k_min_Distance)){
+        else if (position.lt(k_min_Distance)){
 
             //logger.log(position + " requested is less than the minimum position");
-            posision = k_min_Distance;
+            position = k_min_Distance;
 
         }
 
         //calucaulate the conversion from meters to rotations
-        double ratio = (posision.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
+        double ratio = (position.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
     
         Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
@@ -359,10 +359,10 @@ public class Elevator extends SubsystemBase{
     }
         
 
-    public Command set_position_command(Distance position ){
-        return run(()->set_elevator_position_mm(position));
+    // public Command set_position_command(Distance position ){
+    //     return run(()->set_elevator_position_mm(position));
         
-    }
+    // }
 
     public Command set_position_command_angle(Angle position ){
         return run(()->set_elevator_position_mm(position));
