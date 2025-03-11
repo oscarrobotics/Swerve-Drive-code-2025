@@ -42,6 +42,10 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
+import edu.wpi.first.networktables.GenericEntry;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -106,7 +110,7 @@ public class Elevator extends SubsystemBase{
 
     public final Mass k_carrage_mass = Kilogram.of(13);
 
-    public final Distance k_windlass_radius = Inches.of(2.4);
+    public final Distance k_windlass_radius = Inches.of(1);
 
 
     //goal heights
@@ -169,7 +173,7 @@ public class Elevator extends SubsystemBase{
 
     private final ElevatorSim m_elevatorSim = new ElevatorSim(
         DCMotor.getKrakenX60(2), 
-        3, 
+        11.7/3, 
         k_carrage_mass.in(Kilograms), 
         k_windlass_radius.in(Meters),
         min_axel_height.in(Meters), 
@@ -187,6 +191,31 @@ public class Elevator extends SubsystemBase{
         );
 
     private final TalonFXConfiguration m_elevator_config = new TalonFXConfiguration();
+
+
+
+    ///shuffleboard 
+    /// 
+        
+    private ShuffleboardTab  m_tab = Shuffleboard.getTab("Elevator Tuning");
+
+    // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
+    private GenericEntry sh_kp = m_tab.add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry(); 
+    private GenericEntry sh_ki = m_tab.add("Elevator kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_kd = m_tab.add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_kg = m_tab.add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_kff = m_tab.add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_current_limit = m_tab.add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_cvelocity = m_tab.add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_kv = m_tab.add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_ka = m_tab.add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+
+
+    
+    // Shuffleboard.getTab("tuning").add("Elevator Sim", m_mech2d);
+
+
+  
 
     public Elevator(){
         
@@ -238,9 +267,9 @@ public class Elevator extends SubsystemBase{
         
         m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;
+        m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;//1.486486
         m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
-        m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
+        
         
         status = StatusCode.StatusCodeNotInitialized;
         for (int i = 0; i < 5; ++i) {
@@ -256,41 +285,17 @@ public class Elevator extends SubsystemBase{
 
         // m_elevator_motor.setPosition(0);
         
-        Shuffleboard.getTab("Tuning").add("Elevator Sim", m_mech2d);
-
-        Shuffleboard.getTab("Tuning").add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry(); 
-        Shuffleboard.getTab("Tuning").add("Elevator kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-        Shuffleboard.getTab("Tuning").add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-        Shuffleboard.getTab("Tuning").add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-        Shuffleboard.getTab("Tuning").add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-       
-        
-        Shuffleboard.getTab("Tuning").add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-       
-        Shuffleboard.getTab("Tuning").add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-        Shuffleboard.getTab("Tuning").add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-        Shuffleboard.getTab("Tuning").add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-
-        Shuffleboard.getTab("Tuning").add("Update Elevator PID", new InstantCommand(this::configure_from_dash)).withWidget(BuiltInWidgets.kCommand);
+     
 
         register();
 
+
+       SmartDashboard.putData(m_tab.getTitle()+"/Update Elevator PID", new InstantCommand(this::configure_from_dash));
         
-        double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
-        double error = m_elevator_motor.getClosedLoopError().getValueAsDouble();
-        double tcurrent = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
-        double velocity = m_elevator_motor.getVelocity().getValueAsDouble();
-        double acceleration = m_elevator_motor.getAcceleration().getValueAsDouble();
-        double position = m_elevator_motor.getPosition().getValueAsDouble();
-
-        Shuffleboard.getTab("tuning").add("Elevator Set Point", set_point).withWidget(BuiltInWidgets.kGraph); 
-        Shuffleboard.getTab("tuning").add("Elevator Error", error).withWidget(BuiltInWidgets.kGraph);
-        Shuffleboard.getTab("tuning").add("Elevator Torque Current", tcurrent).withWidget(BuiltInWidgets.kGraph);
-        Shuffleboard.getTab("tuning").add("Elevator Velocity", velocity).withWidget(BuiltInWidgets.kGraph);
-        Shuffleboard.getTab("tuning").add("Elevator Acceleration", acceleration).withWidget(BuiltInWidgets.kGraph);
-        Shuffleboard.getTab("tuning").add("Elevator Position", position).withWidget(BuiltInWidgets.kGraph);
-        Shuffleboard.getTab("tuning").add("Elevator Sim", m_mech2d);
-
+        m_tab.addDoubleArray("MotionGraph", this::publish_motion_data).withWidget(BuiltInWidgets.kGraph);
+        m_tab.addDoubleArray("ControlGraph", this::publish_control_data).withWidget(BuiltInWidgets.kGraph);
+       
+    
         
 
     }
@@ -423,13 +428,13 @@ public class Elevator extends SubsystemBase{
         m_elevatorMech2d.setLength(m_elevatorSim.getPositionMeters());
     }
 
-    @Override
-    public void periodic() {
-        super.periodic();
-        publish_data();
-    }
-
-    public void publish_data(){
+    // @Override
+    // public void periodic() {
+    //     super.periodic();
+        
+    // }
+    private double[] motion_data = new double[4];
+    public double[] publish_motion_data(){
 
         // // put data important for charaterizing the data to the smart dashboard
         // double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
@@ -447,39 +452,54 @@ public class Elevator extends SubsystemBase{
         // Shuffleboard.getTab("tuning").add("Elevator Position", position).withWidget(BuiltInWidgets.kGraph);
         // Shuffleboard.getTab("tuning").add("Elevator Sim", m_mech2d);
 
+        motion_data[0] = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
+        motion_data[1] = m_elevator_motor.getPosition().getValueAsDouble();
+        motion_data[2] = m_elevator_motor.getVelocity().getValueAsDouble();
+        motion_data[3] = m_elevator_motor.getAcceleration().getValueAsDouble();
 
-        // SmartDashboard.putData("PID_Verification", m_elevator_motor.getClosedLoopSlot()
+        return motion_data;
         
+    }
+
+
+    private double[] control_data = new double[3];
+    
+    private double[] publish_control_data(){
+        
+        control_data[0] = m_elevator_motor.getClosedLoopError().getValueAsDouble();
+        control_data[1] = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
+        control_data[2] = m_elevator_motor.getClosedLoopReferenceSlope().getValueAsDouble();
+        return control_data;
     }
 
     public void configure_from_dash(){
         // // configure the motor from the smart dashboard
-        // m_elevator_config.Slot0.kP = Shuffleboard.getTab("tuning").add("Elevator kP", k_default_kp).getEntry().getDouble(k_default_kp); 
-        // m_elevator_config.Slot0.kI = Shuffleboard.getTab("tuning").add("Elevator kI", k_default_ki).getEntry().getDouble(k_default_ki);
-        // m_elevator_config.Slot0.kD = Shuffleboard.getTab("tuning").add("Elevator kD", k_default_kd).getEntry().getDouble(k_default_kd);
-        // m_elevator_config.Slot0.kG = Shuffleboard.getTab("tuning").add("Elevator kG", k_default_kg).getEntry().getDouble(k_default_kg);
-        // k_default_kff = Shuffleboard.getTab("tuning").add("Elevator kFF", k_default_kff).getEntry().getDouble(k_default_kff);
+        m_elevator_config.Slot0.kP = sh_kp.getDouble(k_default_kp); 
+        m_elevator_config.Slot0.kI = sh_ki.getDouble(k_default_ki);
+        m_elevator_config.Slot0.kD = sh_kd.getDouble(k_default_kd);
+        m_elevator_config.Slot0.kG = sh_kg.getDouble(k_default_kg);
+        k_default_kff = sh_kff.getDouble(k_default_kff);
        
         
-        // m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(Shuffleboard.getTab("tuning").add("Elevator Current Limit", k_current_limit).getEntry().getDouble(k_current_limit)))
-        // .withPeakReverseTorqueCurrent(Amps.of(-Shuffleboard.getTab("tuning").add("Elevator Current Limit", k_current_limit).getEntry().getDouble(k_current_limit)));
+        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(sh_current_limit.getDouble(k_current_limit)))
+        .withPeakReverseTorqueCurrent(Amps.of(-sh_current_limit.getDouble(k_current_limit)));
 
-        // m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = Shuffleboard.getTab("tuning").add("Elevator Cruise Velocity", k_default_cVelocity).getEntry().getDouble(k_default_cVelocity);
-        // m_elevator_config.MotionMagic.MotionMagicExpo_kV = Shuffleboard.getTab("tuning").add("Elevator kV", k_default_kV).getEntry().getDouble(k_default_kV);
-        // m_elevator_config.MotionMagic.MotionMagicExpo_kA = Shuffleboard.getTab("tuning").add("Elevator kA", k_default_kA).getEntry().getDouble(k_default_kA);
+        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = sh_cvelocity.getDouble(k_default_cVelocity);
+        m_elevator_config.MotionMagic.MotionMagicExpo_kV =sh_kv.getDouble(k_default_kV);
+        m_elevator_config.MotionMagic.MotionMagicExpo_kA = sh_ka.getDouble(k_default_kA);
 
 
-        // StatusCode status = StatusCode.StatusCodeNotInitialized;
+        StatusCode status = StatusCode.StatusCodeNotInitialized;
 
-        // for (int i = 0; i < 5; ++i) {
-        //     status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
-        //     if (status.isOK()) break;
-        // }
-        // if (!status.isOK()) {
-        //     System.out.println("Could not apply configs, error code: " + status.toString());
-        // }
+        for (int i = 0; i < 5; ++i) {
+            status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
+            if (status.isOK()) break;
+        }
+        if (!status.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status.toString());
+        }
         
-        // System.out.println("pid Updated");
+        System.out.println("pid Updated");
 
 
     }
