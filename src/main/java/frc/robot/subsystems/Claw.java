@@ -36,6 +36,7 @@ import edu.wpi.first.units.VelocityUnit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -339,12 +340,11 @@ public class Claw extends SubsystemBase {
 
     public Command intake_coral_command(){
 
-        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
+        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
             .until(intake_curent_exceeded(Amp.of(30)))
-            .beforeStarting(this::has_coral_true)
-            .withTimeout(4)
-            .andThen(this::stop_intake
-            );
+            .beforeStarting(this::has_coral_true),
+            new WaitCommand(4))
+            .andThen(this::stop_intake);
     }
 
     public Command outtake_coral_command(){
