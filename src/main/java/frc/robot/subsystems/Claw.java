@@ -26,25 +26,29 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.signals.MotorOutputStatusValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.fasterxml.jackson.databind.ser.std.BooleanSerializer;
 
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.VelocityUnit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 
 public class Claw extends SubsystemBase {
      // All hardware classes already have WPILib integration
     
-    final TalonFX m_mount = new TalonFX(61);
+    final TalonFX m_mount = new TalonFX(61); 
     final TalonFX m_intake = new TalonFX(62); 
     //only a single neutral motor request is required for the system as it is always the same value
     private final NeutralOut m_brake = new NeutralOut();
@@ -83,8 +87,8 @@ public class Claw extends SubsystemBase {
     public final Distance k_algehook_center_length = Inches.of(20);
 
 
-    public final Angle k_max_angle =  Rotation.of(0.3);
-    public final Angle k_min_angle = Degrees.of(-0.15);
+    public final Angle k_min_angle =  Rotation.of(-.15);
+    public final Angle k_max_angle = Degrees.of(0.3);
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
@@ -92,10 +96,10 @@ public class Claw extends SubsystemBase {
     
 
 
-    public final Angle k_coral_position_1 = Rotation.of(0.25);
+    public final Angle k_coral_position_1 = Rotation.of(0.28);
     public final Angle k_coral_position_2 = Rotation.of(0.1);
     public final Angle k_coral_position_3 = Rotation.of(0.0);
-    public final Angle k_coral_position_4 = Rotation.of(-0.15);
+    public final Angle k_coral_position_4 = Rotation.of(-0.07);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
     public final Angle k_alge_position_2 = Rotation.of(0);
@@ -108,11 +112,40 @@ public class Claw extends SubsystemBase {
     public boolean m_has_coral = false;
     
 
+    TalonFXConfiguration m_intake_config = new TalonFXConfiguration();
+    TalonFXConfiguration  m_mount_config = new TalonFXConfiguration();
+
+
+    private final double k_default_mount_ks = 0;
+    private final double k_default_mount_kp = 40;
+    private final double k_default_mount_ki = 0;
+    private final double k_default_mount_kd = 6;
+    private final double k_default_mount_kg = 5;
+    private final double k_default_mount_kff = 15;
+    // mm_expo gains
+    private final double k_default_mount_kV = 1;
+    private final double k_default_mount_kA = 1;
+    private final double k_default_mount_cVelocity = 10; // used for both mm and mm_expo
+    
+    private final double k_mount_current_limit = 30;
+
+
+
+    private final double k_default_intake_ks = 0;
+    private final double k_default_intake_kp = 40;
+    private final double k_default_intake_ki = 0;
+    private final double k_default_intake_kd = 6;
+
+    private final double k_default_intake_accel = 1;
+    private final double k_default_intake_jerk = 1;
+    private final double k_default_intake_cVelocity = 10; // used for both mm and mm_expo
+    
+    private final double k_intake_current_limit = 30;
 
     public Claw(){
 
         // configure the motor controller
-        TalonFXConfiguration m_intake_config = new TalonFXConfiguration();
+        
 
         /* Torque-based velocity does not require a velocity feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
         m_intake_config.Slot0.kS = 2.5; // To account for friction, add 2.5 A of static feedforward
@@ -128,8 +161,9 @@ public class Claw extends SubsystemBase {
         m_intake_config.MotionMagic.MotionMagicAcceleration = 300;
         m_intake_config.MotionMagic.MotionMagicJerk = 3000;
 
+        
        
-
+        
        
         /* Retry config apply up to 5 times, report if failure */
         StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -143,26 +177,28 @@ public class Claw extends SubsystemBase {
 
 
 
-        TalonFXConfiguration  m_mount_config = new TalonFXConfiguration();
+        
        
-        m_mount_config.Slot0.kP = 60; // An error of 1 rotation results in 60 A output
-        m_mount_config.Slot0.kI = 0; // No output for integrated error
-        m_mount_config.Slot0.kD = 6; // A velocity of 1 rps results in 6 A output
-        m_mount_config.Slot0.kG = 0.1;
+        m_mount_config.Slot0.kP = k_default_mount_kp; // An error of 1 rotation results in 60 A output
+        m_mount_config.Slot0.kI = k_default_mount_ki; // No output for integrated error
+        m_mount_config.Slot0.kD = k_default_mount_kd; // A velocity of 1 rps results in 6 A output
+        m_mount_config.Slot0.kG = k_default_mount_kg;
         m_mount_config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         
         // Peak output of 5 A
-        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(10))
-        .withPeakReverseTorqueCurrent(Amps.of(-10));
+        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_mount_current_limit))
+        .withPeakReverseTorqueCurrent(Amps.of(-k_mount_current_limit));
 
-        
-        
+        m_mount_config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
+        m_mount_config.MotorOutput.NeutralMode=NeutralModeValue.Brake;
+            
 
 
         // bind the remote encoder to the mount motor
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration();
         m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6));
+        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.339844);
         m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         
         
@@ -174,9 +210,9 @@ public class Claw extends SubsystemBase {
         m_mount_config.Feedback.RotorToSensorRatio = 100;
         
         //for motion magic controls
-        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = 1;
-        m_mount_config.MotionMagic.MotionMagicExpo_kV = 1;
-        m_mount_config.MotionMagic.MotionMagicExpo_kA = 1;
+        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = k_default_mount_cVelocity;
+        m_mount_config.MotionMagic.MotionMagicExpo_kV = k_default_mount_kV;
+        m_mount_config.MotionMagic.MotionMagicExpo_kA = k_default_mount_kA;
 
 
 
@@ -203,8 +239,25 @@ public class Claw extends SubsystemBase {
         }
         
         //set the position of the mechanism to 0, this is not a control but a delclaration that the position it is in is 0
-        m_mount.setPosition(0);
+        // m_mount.setPosition(0);
 
+        SmartDashboard.putNumber("Mount kP", k_default_mount_kp); 
+        SmartDashboard.putNumber("Mount kI", k_default_mount_ki);
+        SmartDashboard.putNumber("Mount kD", k_default_mount_kd);
+        SmartDashboard.putNumber("Mount kG", k_default_mount_kg);
+        SmartDashboard.putNumber("Mount kff", k_default_mount_kff);
+       
+        
+        SmartDashboard.putNumber("Mount Current Limit", k_mount_current_limit);
+       
+        SmartDashboard.putNumber("Mount Cruise Velocity", k_default_mount_cVelocity);
+        SmartDashboard.putNumber("Mount kV", k_default_mount_kV);
+        SmartDashboard.putNumber("Mount kA", k_default_mount_kA);
+
+        SmartDashboard.putData("Update mount PID", new InstantCommand(this::configure_mount_from_dash));
+        SmartDashboard.putData("Update intake PID", new InstantCommand(this::configure_intake_from_dash));
+
+        register();
 
     }
 
@@ -213,7 +266,7 @@ public class Claw extends SubsystemBase {
     // internal methond to set the positon using a unit aware object
     private void set_mount_angle_mm(Angle position){
 
-           // gt is greater than 
+        //    gt is greater than 
         if (position.gt( k_max_angle)){
             
             // logger.log(position + " requested is greater than the max position ");
@@ -366,6 +419,107 @@ public class Claw extends SubsystemBase {
 
     }
 
+
+    public void publish_mount_data(){
+
+        // put data important for charaterizing the data to the smart dashboard
+        double set_point =m_mount.getClosedLoopReference().getValueAsDouble();
+        double error = m_mount.getClosedLoopError().getValueAsDouble();
+        double tcurrent = m_mount.getTorqueCurrent().getValueAsDouble();
+        double velocity = m_mount.getVelocity().getValueAsDouble();
+        double acceleration = m_mount.getAcceleration().getValueAsDouble();
+        double position = m_mount.getPosition().getValueAsDouble();
+
+        SmartDashboard.putNumber("Mount Set Point", set_point);
+        SmartDashboard.putNumber("Mount Error", error);
+        SmartDashboard.putNumber("Mount Torque Current", tcurrent);
+        SmartDashboard.putNumber("Mount Velocity", velocity);
+        SmartDashboard.putNumber("Mount Acceleration", acceleration);
+        SmartDashboard.putNumber("Mount Position", position);
+
+        // SmartDashboard.putData("Claw Sim", m_mech2d);
+
+
+        // SmartDashboard.putData("PID_Verification", m_elevator_motor.getClosedLoopSlot()
+        
+    }
+
+    public void configure_mount_from_dash(){
+        // configure the motor from the smart dashboard
+        m_mount_config.Slot0.kP = SmartDashboard.getNumber("Mount kP", k_default_mount_kp); 
+        m_mount_config.Slot0.kI = SmartDashboard.getNumber("Mount kI", k_default_mount_ki);
+        m_mount_config.Slot0.kD = SmartDashboard.getNumber("Mount kD", k_default_mount_kd);
+        m_mount_config.Slot0.kG = SmartDashboard.getNumber("Mount kG", k_default_mount_kg);
+       
+
+        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("Mount Current Limit", k_mount_current_limit)))
+        .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("Mount Current Limit", k_mount_current_limit)));
+
+        m_mount_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("Elevator Cruise Velocity", k_default_mount_cVelocity);
+        m_mount_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_mount_kV);
+        m_mount_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_mount_kA);
+
+
+        
+        m_mount.getConfigurator().apply(m_mount_config);
+
+
+    }
+
+    @Override
+    public void periodic() {
+        super.periodic();
+        publish_intake_data();
+        publish_mount_data();
+    }
+
+
+    public void publish_intake_data(){
+
+        // put data important for charaterizing the data to the smart dashboard
+        double set_point =m_intake.getClosedLoopReference().getValueAsDouble();
+        double error = m_intake.getClosedLoopError().getValueAsDouble();
+        double tcurrent = m_intake.getTorqueCurrent().getValueAsDouble();
+        double velocity = m_intake.getVelocity().getValueAsDouble();
+        double acceleration = m_intake.getAcceleration().getValueAsDouble();
+        double position = m_intake.getPosition().getValueAsDouble();
+
+        SmartDashboard.putNumber("Intake Set Point", set_point);
+        SmartDashboard.putNumber("Intake Error", error);
+        SmartDashboard.putNumber("Intake Torque Current", tcurrent);
+        SmartDashboard.putNumber("Intake Velocity", velocity);
+        SmartDashboard.putNumber("Intake Acceleration", acceleration);
+        SmartDashboard.putNumber("Intake Position", position);
+
+        // SmartDashboard.putData("Claw Sim", m_mech2d);
+
+
+        // SmartDashboard.putData("PID_Verification", m_elevator_motor.getClosedLoopSlot()
+        
+    }
+
+    public void configure_intake_from_dash(){
+        // configure the motor from the smart dashboard
+        m_intake_config.Slot0.kP = SmartDashboard.getNumber("intake kP", k_default_intake_kp); 
+        m_intake_config.Slot0.kI = SmartDashboard.getNumber("intake kI", k_default_intake_ki);
+        m_intake_config.Slot0.kD = SmartDashboard.getNumber("intake kD", k_default_intake_kd);
+        
+       
+
+        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("intake Torque Current", k_intake_current_limit)))
+        .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("intake Torque Current", k_intake_current_limit)));
+
+        m_intake_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("intake Cruise Velocity", k_default_intake_cVelocity);
+        // m_mount_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_intake_kV);
+        // m_mount_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_intake_kA);
+        
+        m_intake_config.MotionMagic.MotionMagicAcceleration = SmartDashboard.getNumber("Intake Accel", k_default_intake_accel);
+        m_intake_config.MotionMagic.MotionMagicJerk = SmartDashboard.getNumber("Intake Jerk", k_default_intake_jerk);
+        
+        m_intake.getConfigurator().apply(m_intake_config);
+
+
+    }
     
 
     

@@ -44,6 +44,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -65,9 +67,11 @@ public class Elevator extends SubsystemBase{
     final PositionTorqueCurrentFOC m_elevator_motorOut = new PositionTorqueCurrentFOC(0);
 
     final MotionMagicExpoTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
+    // final MotionMagicExpoTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
     // used normal motion magic for to try and get it to work, but elevator was secretly mechnaically bad 
     // so probably will revert back to expo when fixed
     // final MotionMagicTorqueCurrentFOC m_elevator_motorOut_mm = new MotionMagicTorqueCurrentFOC(0);
+    // final PositionTorqueCurrentFOC m_elevator_motorOut_mm = new PositionTorqueCurrentFOC(0);
     
     private final NeutralOut m_brake = new NeutralOut();
 
@@ -86,10 +90,10 @@ public class Elevator extends SubsystemBase{
     public final Distance k_max_Distance = Meter.of(3);
     public final Angle k_stowed =  Rotation.of(0.02);
 
-    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.1);
-    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.15);
-    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.41);
-    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.617);
+    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.15);
+    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.35);
+    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.551);
+    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.615);
 
 
 
@@ -143,20 +147,22 @@ public class Elevator extends SubsystemBase{
     // stings just shink back down intead of the springs, making the elevator easy to lift from the carrace but not from the first
     // stage where the motor attaches, atleast for the first few inches concelling the issue.  
     private final double k_default_ks = 0;
-    private final double k_default_kp = 130;
+    private final double k_default_kp = 120;
     private final double k_default_ki = 0;
-    private final double k_default_kd = 7;
+    private final double k_default_kd = 3;
     private final double k_default_kg = 0;
+    private double k_default_kff = 10;
+    private double k_default_kff_offset = -1;
     // mm_expo gains
-    private final double k_default_kV = 1;
-    private final double k_default_kA = 1;
-    private final double k_default_cVelocity = 300; // used for both mm and mm_expo
+    private final double k_default_kV = 30;
+    private final double k_default_kA = 5;
+    private final double k_default_cVelocity = 0.2; // used for both mm and mm_expo
     
     // "normal" motion magic gains
-    private final double k_default_Acceleration =3000; //noma
-    private final double k_default_jerk = 4000;
+    private final double k_default_Acceleration =10; //noma
+    private final double k_default_jerk = 10;
 
-    private final double k_current_limit = 420;
+    private final double k_current_limit = 70;
 
 
     private final ElevatorSim m_elevatorSim = new ElevatorSim(
@@ -197,7 +203,7 @@ public class Elevator extends SubsystemBase{
         // Peak output of 20 A
         m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_current_limit))
         .withPeakReverseTorqueCurrent(Amps.of(-k_current_limit));
-        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(300).withSupplyCurrentLimit(75);
+        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(k_current_limit).withSupplyCurrentLimit(k_current_limit);
 
 
 
@@ -212,8 +218,9 @@ public class Elevator extends SubsystemBase{
         // bind the remote encoder to the mount motor
 
         CANcoderConfiguration m_elevator_CANcoder_config = new CANcoderConfiguration();
-        m_elevator_CANcoder_config .MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.85));
-        m_elevator_CANcoder_config .MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        m_elevator_CANcoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.85));
+        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(Rotations.of(-0.045166));
+        m_elevator_CANcoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
        
         
         StatusCode status = StatusCode.StatusCodeNotInitialized;
@@ -230,6 +237,7 @@ public class Elevator extends SubsystemBase{
         m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;
+        m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
         m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
         
         status = StatusCode.StatusCodeNotInitialized;
@@ -252,14 +260,19 @@ public class Elevator extends SubsystemBase{
         SmartDashboard.putNumber("Elevator kI", k_default_ki);
         SmartDashboard.putNumber("Elevator kD", k_default_kd);
         SmartDashboard.putNumber("Elevator kG", k_default_kg);
+        SmartDashboard.putNumber("Elevator kff", k_default_kff);
        
         
-        SmartDashboard.putNumber("Elevator Torque Current", k_current_limit);
+        SmartDashboard.putNumber("Elevator Current Limit", k_current_limit);
        
         SmartDashboard.putNumber("Elevator Cruise Velocity", k_default_cVelocity);
         SmartDashboard.putNumber("Elevator kV", k_default_kV);
         SmartDashboard.putNumber("Elevator kA", k_default_kA);
 
+        SmartDashboard.putData("Update Elevator PID", new InstantCommand(this::configure_from_dash));
+
+        register();
+        
 
     }
 
@@ -304,6 +317,7 @@ public class Elevator extends SubsystemBase{
         }
 
         //calucaulate the conversion from meters to rotations
+        // posision = posision.times(posision.baseUnitMagnitude());
         double ratio = (posision.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
     
         Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
@@ -338,13 +352,18 @@ public class Elevator extends SubsystemBase{
         // Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
         // output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
+        double ff_factor = posision.div(k_elevator_max_rot).magnitude()+k_default_kff_offset;
+
+        Current ffCurrent = Amps.of(k_default_kff).times(ff_factor);
 
         System.out.println("position set "+ posision.in(Rotation) );
 
-        m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)));
+        m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)).withFeedForward(ffCurrent));
         
 
     }
+
+
 
     public BooleanSupplier at_position(double tolerance){
         
@@ -359,10 +378,10 @@ public class Elevator extends SubsystemBase{
     }
         
 
-    public Command set_position_command(Distance position ){
-        return run(()->set_elevator_position_mm(position));
+    // public Command set_position_command(Distance position ){
+    //     return run(()->set_elevator_position_mm(position));
         
-    }
+    // }
 
     public Command set_position_command_angle(Angle position ){
         return run(()->set_elevator_position_mm(position));
@@ -386,24 +405,29 @@ public class Elevator extends SubsystemBase{
         m_elevatorMech2d.setLength(m_elevatorSim.getPositionMeters());
     }
 
+    @Override
+    public void periodic() {
+        super.periodic();
+        publish_data();
+    }
 
     public void publish_data(){
 
         // put data important for charaterizing the data to the smart dashboard
-        // double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
-        // double error = m_elevator_motor.getClosedLoopError().getValueAsDouble();
-        // double tcurrent = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
-        // double velocity = m_elevator_motor.getVelocity().getValueAsDouble();
-        // double acceleration = m_elevator_motor.getAcceleration().getValueAsDouble();
-        // double position = m_elevator_motor.getPosition().getValueAsDouble();
+        double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
+        double error = m_elevator_motor.getClosedLoopError().getValueAsDouble();
+        double tcurrent = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
+        double velocity = m_elevator_motor.getVelocity().getValueAsDouble();
+        double acceleration = m_elevator_motor.getAcceleration().getValueAsDouble();
+        double position = m_elevator_motor.getPosition().getValueAsDouble();
 
-        // SmartDashboard.putNumber("Elevator Set Point", set_point);
-        // SmartDashboard.putNumber("Elevator Error", error);
-        // SmartDashboard.putNumber("Elevator Torque Current", tcurrent);
-        // SmartDashboard.putNumber("Elevator Velocity", velocity);
-        // SmartDashboard.putNumber("Elevator Acceleration", acceleration);
-        // SmartDashboard.putNumber("Elevator Position", position);
-        // SmartDashboard.putData("Elevator Sim", m_mech2d);
+        SmartDashboard.putNumber("Elevator Set Point", set_point);
+        SmartDashboard.putNumber("Elevator Error", error);
+        SmartDashboard.putNumber("Elevator Torque Current", tcurrent);
+        SmartDashboard.putNumber("Elevator Velocity", velocity);
+        SmartDashboard.putNumber("Elevator Acceleration", acceleration);
+        SmartDashboard.putNumber("Elevator Position", position);
+        SmartDashboard.putData("Elevator Sim", m_mech2d);
 
 
         // SmartDashboard.putData("PID_Verification", m_elevator_motor.getClosedLoopSlot()
@@ -411,23 +435,33 @@ public class Elevator extends SubsystemBase{
     }
 
     public void configure_from_dash(){
-        // // configure the motor from the smart dashboard
-        // m_elevator_config.Slot0.kP = SmartDashboard.getNumber("Elevator kP", k_default_kp); 
-        // m_elevator_config.Slot0.kI = SmartDashboard.getNumber("Elevator kI", k_default_ki);
-        // m_elevator_config.Slot0.kD = SmartDashboard.getNumber("Elevator kD", k_default_kd);
-        // m_elevator_config.Slot0.kG = SmartDashboard.getNumber("Elevator kG", k_default_kg);
+        // configure the motor from the smart dashboard
+        m_elevator_config.Slot0.kP = SmartDashboard.getNumber("Elevator kP", k_default_kp); 
+        m_elevator_config.Slot0.kI = SmartDashboard.getNumber("Elevator kI", k_default_ki);
+        m_elevator_config.Slot0.kD = SmartDashboard.getNumber("Elevator kD", k_default_kd);
+        m_elevator_config.Slot0.kG = SmartDashboard.getNumber("Elevator kG", k_default_kg);
+        k_default_kff = SmartDashboard.getNumber("Elevator kFF", k_default_kff);
        
         
-        // m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("Elevator Torque Current", k_current_limit)))
-        // .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("Elevator Torque Current", k_current_limit)));
+        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("Elevator Current Limit", k_current_limit)))
+        .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("Elevator Current Limit", k_current_limit)));
 
-        // m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("Elevator Cruise Velocity", k_default_cVelocity);
-        // m_elevator_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_kV);
-        // m_elevator_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_kA);
+        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("Elevator Cruise Velocity", k_default_cVelocity);
+        m_elevator_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_kV);
+        m_elevator_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_kA);
 
 
+        StatusCode status = StatusCode.StatusCodeNotInitialized;
+
+        for (int i = 0; i < 5; ++i) {
+            status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
+            if (status.isOK()) break;
+        }
+        if (!status.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status.toString());
+        }
         
-        // m_elevator_motor.getConfigurator().apply(m_elevator_config);
+        System.out.println("pid Updated");
 
 
     }
