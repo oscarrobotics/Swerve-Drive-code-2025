@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Map;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.units.DistanceUnit;
@@ -39,7 +40,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
-
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -253,25 +255,42 @@ public class Elevator extends SubsystemBase{
         m_elevator_motor_follower.setControl(new Follower(m_elevator_motor.getDeviceID(), false));
 
         // m_elevator_motor.setPosition(0);
+        
+        Shuffleboard.getTab("Tuning").add("Elevator Sim", m_mech2d);
 
-        SmartDashboard.putData("Elevator Sim", m_mech2d);
-
-        SmartDashboard.putNumber("Elevator kP", k_default_kp); 
-        SmartDashboard.putNumber("Elevator kI", k_default_ki);
-        SmartDashboard.putNumber("Elevator kD", k_default_kd);
-        SmartDashboard.putNumber("Elevator kG", k_default_kg);
-        SmartDashboard.putNumber("Elevator kff", k_default_kff);
+        Shuffleboard.getTab("Tuning").add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry(); 
+        Shuffleboard.getTab("Tuning").add("Elevator kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+        Shuffleboard.getTab("Tuning").add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+        Shuffleboard.getTab("Tuning").add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+        Shuffleboard.getTab("Tuning").add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
        
         
-        SmartDashboard.putNumber("Elevator Current Limit", k_current_limit);
+        Shuffleboard.getTab("Tuning").add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
        
-        SmartDashboard.putNumber("Elevator Cruise Velocity", k_default_cVelocity);
-        SmartDashboard.putNumber("Elevator kV", k_default_kV);
-        SmartDashboard.putNumber("Elevator kA", k_default_kA);
+        Shuffleboard.getTab("Tuning").add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+        Shuffleboard.getTab("Tuning").add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+        Shuffleboard.getTab("Tuning").add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
 
-        SmartDashboard.putData("Update Elevator PID", new InstantCommand(this::configure_from_dash));
+        Shuffleboard.getTab("Tuning").add("Update Elevator PID", new InstantCommand(this::configure_from_dash)).withWidget(BuiltInWidgets.kCommand);
 
         register();
+
+        
+        double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
+        double error = m_elevator_motor.getClosedLoopError().getValueAsDouble();
+        double tcurrent = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
+        double velocity = m_elevator_motor.getVelocity().getValueAsDouble();
+        double acceleration = m_elevator_motor.getAcceleration().getValueAsDouble();
+        double position = m_elevator_motor.getPosition().getValueAsDouble();
+
+        Shuffleboard.getTab("tuning").add("Elevator Set Point", set_point).withWidget(BuiltInWidgets.kGraph); 
+        Shuffleboard.getTab("tuning").add("Elevator Error", error).withWidget(BuiltInWidgets.kGraph);
+        Shuffleboard.getTab("tuning").add("Elevator Torque Current", tcurrent).withWidget(BuiltInWidgets.kGraph);
+        Shuffleboard.getTab("tuning").add("Elevator Velocity", velocity).withWidget(BuiltInWidgets.kGraph);
+        Shuffleboard.getTab("tuning").add("Elevator Acceleration", acceleration).withWidget(BuiltInWidgets.kGraph);
+        Shuffleboard.getTab("tuning").add("Elevator Position", position).withWidget(BuiltInWidgets.kGraph);
+        Shuffleboard.getTab("tuning").add("Elevator Sim", m_mech2d);
+
         
 
     }
@@ -413,21 +432,21 @@ public class Elevator extends SubsystemBase{
 
     public void publish_data(){
 
-        // put data important for charaterizing the data to the smart dashboard
-        double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
-        double error = m_elevator_motor.getClosedLoopError().getValueAsDouble();
-        double tcurrent = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
-        double velocity = m_elevator_motor.getVelocity().getValueAsDouble();
-        double acceleration = m_elevator_motor.getAcceleration().getValueAsDouble();
-        double position = m_elevator_motor.getPosition().getValueAsDouble();
+        // // put data important for charaterizing the data to the smart dashboard
+        // double set_point = m_elevator_motor.getClosedLoopReference().getValueAsDouble();
+        // double error = m_elevator_motor.getClosedLoopError().getValueAsDouble();
+        // double tcurrent = m_elevator_motor.getTorqueCurrent().getValueAsDouble();
+        // double velocity = m_elevator_motor.getVelocity().getValueAsDouble();
+        // double acceleration = m_elevator_motor.getAcceleration().getValueAsDouble();
+        // double position = m_elevator_motor.getPosition().getValueAsDouble();
 
-        SmartDashboard.putNumber("Elevator Set Point", set_point);
-        SmartDashboard.putNumber("Elevator Error", error);
-        SmartDashboard.putNumber("Elevator Torque Current", tcurrent);
-        SmartDashboard.putNumber("Elevator Velocity", velocity);
-        SmartDashboard.putNumber("Elevator Acceleration", acceleration);
-        SmartDashboard.putNumber("Elevator Position", position);
-        SmartDashboard.putData("Elevator Sim", m_mech2d);
+        // Shuffleboard.getTab("tuning").getComponents)
+        // Shuffleboard.getTab("tuning").add("Elevator Error", error).withWidget(BuiltInWidgets.kGraph);
+        // Shuffleboard.getTab("tuning").add("Elevator Torque Current", tcurrent).withWidget(BuiltInWidgets.kGraph);
+        // Shuffleboard.getTab("tuning").add("Elevator Velocity", velocity).withWidget(BuiltInWidgets.kGraph);
+        // Shuffleboard.getTab("tuning").add("Elevator Acceleration", acceleration).withWidget(BuiltInWidgets.kGraph);
+        // Shuffleboard.getTab("tuning").add("Elevator Position", position).withWidget(BuiltInWidgets.kGraph);
+        // Shuffleboard.getTab("tuning").add("Elevator Sim", m_mech2d);
 
 
         // SmartDashboard.putData("PID_Verification", m_elevator_motor.getClosedLoopSlot()
@@ -435,33 +454,33 @@ public class Elevator extends SubsystemBase{
     }
 
     public void configure_from_dash(){
-        // configure the motor from the smart dashboard
-        m_elevator_config.Slot0.kP = SmartDashboard.getNumber("Elevator kP", k_default_kp); 
-        m_elevator_config.Slot0.kI = SmartDashboard.getNumber("Elevator kI", k_default_ki);
-        m_elevator_config.Slot0.kD = SmartDashboard.getNumber("Elevator kD", k_default_kd);
-        m_elevator_config.Slot0.kG = SmartDashboard.getNumber("Elevator kG", k_default_kg);
-        k_default_kff = SmartDashboard.getNumber("Elevator kFF", k_default_kff);
+        // // configure the motor from the smart dashboard
+        // m_elevator_config.Slot0.kP = Shuffleboard.getTab("tuning").add("Elevator kP", k_default_kp).getEntry().getDouble(k_default_kp); 
+        // m_elevator_config.Slot0.kI = Shuffleboard.getTab("tuning").add("Elevator kI", k_default_ki).getEntry().getDouble(k_default_ki);
+        // m_elevator_config.Slot0.kD = Shuffleboard.getTab("tuning").add("Elevator kD", k_default_kd).getEntry().getDouble(k_default_kd);
+        // m_elevator_config.Slot0.kG = Shuffleboard.getTab("tuning").add("Elevator kG", k_default_kg).getEntry().getDouble(k_default_kg);
+        // k_default_kff = Shuffleboard.getTab("tuning").add("Elevator kFF", k_default_kff).getEntry().getDouble(k_default_kff);
        
         
-        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("Elevator Current Limit", k_current_limit)))
-        .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("Elevator Current Limit", k_current_limit)));
+        // m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(Shuffleboard.getTab("tuning").add("Elevator Current Limit", k_current_limit).getEntry().getDouble(k_current_limit)))
+        // .withPeakReverseTorqueCurrent(Amps.of(-Shuffleboard.getTab("tuning").add("Elevator Current Limit", k_current_limit).getEntry().getDouble(k_current_limit)));
 
-        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("Elevator Cruise Velocity", k_default_cVelocity);
-        m_elevator_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_kV);
-        m_elevator_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_kA);
+        // m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = Shuffleboard.getTab("tuning").add("Elevator Cruise Velocity", k_default_cVelocity).getEntry().getDouble(k_default_cVelocity);
+        // m_elevator_config.MotionMagic.MotionMagicExpo_kV = Shuffleboard.getTab("tuning").add("Elevator kV", k_default_kV).getEntry().getDouble(k_default_kV);
+        // m_elevator_config.MotionMagic.MotionMagicExpo_kA = Shuffleboard.getTab("tuning").add("Elevator kA", k_default_kA).getEntry().getDouble(k_default_kA);
 
 
-        StatusCode status = StatusCode.StatusCodeNotInitialized;
+        // StatusCode status = StatusCode.StatusCodeNotInitialized;
 
-        for (int i = 0; i < 5; ++i) {
-            status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
-            if (status.isOK()) break;
-        }
-        if (!status.isOK()) {
-            System.out.println("Could not apply configs, error code: " + status.toString());
-        }
+        // for (int i = 0; i < 5; ++i) {
+        //     status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
+        //     if (status.isOK()) break;
+        // }
+        // if (!status.isOK()) {
+        //     System.out.println("Could not apply configs, error code: " + status.toString());
+        // }
         
-        System.out.println("pid Updated");
+        // System.out.println("pid Updated");
 
 
     }
