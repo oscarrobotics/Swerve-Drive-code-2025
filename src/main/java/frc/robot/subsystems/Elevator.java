@@ -156,7 +156,7 @@ public class Elevator extends SubsystemBase{
     // mm_expo gains
     private final double k_default_kV = 30;
     private final double k_default_kA = 5;
-    private final double k_default_cVelocity = 0.2; // used for both mm and mm_expo
+    private final double k_default_cVelocity = 0.1; // used for both mm and mm_expo
     
     // "normal" motion magic gains
     private final double k_default_Acceleration =10; //noma

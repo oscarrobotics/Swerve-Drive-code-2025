@@ -117,22 +117,22 @@ public class Claw extends SubsystemBase {
 
 
     private final double k_default_mount_ks = 0;
-    private final double k_default_mount_kp = 40;
+    private final double k_default_mount_kp = 80;
     private final double k_default_mount_ki = 0;
-    private final double k_default_mount_kd = 6;
+    private final double k_default_mount_kd = 8;
     private final double k_default_mount_kg = 5;
-    private final double k_default_mount_kff = 15;
+    private final double k_default_mount_kff = 0;
     // mm_expo gains
-    private final double k_default_mount_kV = 1;
-    private final double k_default_mount_kA = 1;
-    private final double k_default_mount_cVelocity = 10; // used for both mm and mm_expo
+    private final double k_default_mount_kV = 10;
+    private final double k_default_mount_kA = 10;
+    private final double k_default_mount_cVelocity = 0.1; // used for both mm and mm_expo
     
     private final double k_mount_current_limit = 30;
 
 
 
     private final double k_default_intake_ks = 0;
-    private final double k_default_intake_kp = 40;
+    private final double k_default_intake_kp = 20;
     private final double k_default_intake_ki = 0;
     private final double k_default_intake_kd = 6;
 
@@ -148,10 +148,10 @@ public class Claw extends SubsystemBase {
         
 
         /* Torque-based velocity does not require a velocity feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-        m_intake_config.Slot0.kS = 2.5; // To account for friction, add 2.5 A of static feedforward
-        m_intake_config.Slot0.kI = 0; // No output for integrated error
-        m_intake_config.Slot0.kD = 0; // No output for error derivative
-        m_intake_config.Slot0.kP = 20; // An error of 1 rotation per second results in 5 A output
+        m_intake_config.Slot0.kS = k_default_intake_ks; // To account for friction, add 2.5 A of static feedforward
+        m_intake_config.Slot0.kI = k_default_intake_ki; // No output for integrated error
+        m_intake_config.Slot0.kD = k_default_intake_kd; // No output for error derivative
+        m_intake_config.Slot0.kP = k_default_intake_kp; // An error of 1 rotation per second results in 5 A output
         
         // Peak output of 5 A
         m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(30))
