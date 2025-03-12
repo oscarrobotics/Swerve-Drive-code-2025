@@ -96,10 +96,10 @@ public class Elevator extends SubsystemBase{
     public final Distance k_max_Distance = Meter.of(3);
     public final Angle k_stowed =  Rotation.of(0.02);
 
-    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.15);
-    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.35);
-    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.551);
-    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.615);
+    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.06);
+    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.28);
+    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.53);
+    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.94);
 
 
 
@@ -153,16 +153,16 @@ public class Elevator extends SubsystemBase{
     // stings just shink back down intead of the springs, making the elevator easy to lift from the carrace but not from the first
     // stage where the motor attaches, atleast for the first few inches concelling the issue.  
     private final double k_default_ks = 0;
-    private final double k_default_kp = 120;
-    private final double k_default_ki = 0;
-    private final double k_default_kd = 3;
-    private final double k_default_kg = 0;
-    private double k_default_kff = 10;
-    private double k_default_kff_offset = -1;
+    private final double k_default_kp = 160;
+    private final double k_default_ki = 10;
+    private final double k_default_kd = 120;
+    private final double k_default_kg = 6;
+    private double k_default_kff = 3;
+    private double k_default_kff_offset = 0;
     // mm_expo gains
-    private final double k_default_kV = 30;
-    private final double k_default_kA = 5;
-    private final double k_default_cVelocity = 0.1; // used for both mm and mm_expo
+    private final double k_default_kV = 3;
+    private final double k_default_kA = 0.5;
+    private final double k_default_cVelocity = 0.4; // used for both mm and mm_expo
     
     // "normal" motion magic gains
     private final double k_default_Acceleration =10; //noma
@@ -200,15 +200,16 @@ public class Elevator extends SubsystemBase{
     private ShuffleboardTab  m_tab = Shuffleboard.getTab("Elevator Tuning");
 
     // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
-    private GenericEntry sh_kp = m_tab.add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry(); 
+    private GenericEntry sh_kp = m_tab.add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
     private GenericEntry sh_ki = m_tab.add("Elevator kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_kd = m_tab.add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_kg = m_tab.add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_kff = m_tab.add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_current_limit = m_tab.add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_cvelocity = m_tab.add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_kv = m_tab.add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_ka = m_tab.add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_kd = m_tab.add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    private GenericEntry sh_kg = m_tab.add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    private GenericEntry sh_kff = m_tab.add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    private GenericEntry sh_kff_offset = m_tab.add("Elevator kff offset", k_default_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    private GenericEntry sh_current_limit = m_tab.add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
+    private GenericEntry sh_cvelocity = m_tab.add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+    private GenericEntry sh_kv = m_tab.add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    private GenericEntry sh_ka = m_tab.add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
 
 
     
@@ -267,7 +268,7 @@ public class Elevator extends SubsystemBase{
         
         m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        m_elevator_config.Feedback.SensorToMechanismRatio = 1.0;//1.486486
+        m_elevator_config.Feedback.SensorToMechanismRatio = 1/1.486486;//1.486486
         m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
         
         

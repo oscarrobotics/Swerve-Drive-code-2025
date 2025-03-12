@@ -34,6 +34,13 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.fasterxml.jackson.databind.ser.std.BooleanSerializer;
 
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+
+import edu.wpi.first.networktables.GenericEntry;
+
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.units.VelocityUnit;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,6 +50,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import java.util.Map;
+import java.util.function.BooleanSupplier;
 
 
 public class Claw extends SubsystemBase {
@@ -92,11 +102,11 @@ public class Claw extends SubsystemBase {
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
-    public final Angle k_stowed = Rotation.of(0);
+    public final Angle k_stowed = Rotation.of(0.2);
     
 
 
-    public final Angle k_coral_position_1 = Rotation.of(0.28);
+    public final Angle k_coral_position_1 = Rotation.of(0.27);
     public final Angle k_coral_position_2 = Rotation.of(0.1);
     public final Angle k_coral_position_3 = Rotation.of(0.0);
     public final Angle k_coral_position_4 = Rotation.of(-0.07);
@@ -117,30 +127,63 @@ public class Claw extends SubsystemBase {
 
 
     private final double k_default_mount_ks = 0;
-    private final double k_default_mount_kp = 80;
+    private final double k_default_mount_kp = 100;
     private final double k_default_mount_ki = 0;
-    private final double k_default_mount_kd = 8;
+    private final double k_default_mount_kd = 30;
     private final double k_default_mount_kg = 5;
     private final double k_default_mount_kff = 0;
     // mm_expo gains
     private final double k_default_mount_kV = 10;
-    private final double k_default_mount_kA = 10;
-    private final double k_default_mount_cVelocity = 0.1; // used for both mm and mm_expo
+    private final double k_default_mount_kA = 3;
+    private final double k_default_mount_cVelocity = 0.4; // used for both mm and mm_expo
     
     private final double k_mount_current_limit = 30;
 
 
 
-    private final double k_default_intake_ks = 0;
-    private final double k_default_intake_kp = 20;
+    private final double k_default_intake_ks = 4;
+    private final double k_default_intake_kp = 10;
     private final double k_default_intake_ki = 0;
-    private final double k_default_intake_kd = 6;
+    private final double k_default_intake_kd = 3;
 
     private final double k_default_intake_accel = 1;
     private final double k_default_intake_jerk = 1;
-    private final double k_default_intake_cVelocity = 10; // used for both mm and mm_expo
     
     private final double k_intake_current_limit = 30;
+
+
+
+    private ShuffleboardTab  m_mount_tab = Shuffleboard.getTab("Mount Tuning");
+
+    // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
+    private GenericEntry sh_mount_kp = m_mount_tab.add("Mount kP", k_default_mount_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
+    private GenericEntry sh_mount_ki = m_mount_tab.add("Mount kI", k_default_mount_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    private GenericEntry sh_mount_kd = m_mount_tab.add("Mount kD", k_default_mount_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    private GenericEntry sh_mount_kg = m_mount_tab.add("Mount kG", k_default_mount_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // private GenericEntry sh_mount_kff = m_mount_tab.add("Mount kff", k_default_mount_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // private GenericEntry sh_mount_kff_offset = m_mount_tab.add("Mount kff offset", k_default_mount_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
+    private GenericEntry sh_mount_cvelocity = m_mount_tab.add("Mount Cruise Velocity", k_default_mount_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+    private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+
+    private ShuffleboardTab  m_intake_tab = Shuffleboard.getTab("Intake Tuning");
+
+    // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
+    // private GenericEntry sh_intake_kp = m_intake_tab.add("Mount kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
+    // private GenericEntry sh_intake_ki = m_intake_tab.add("Mount kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    // private GenericEntry sh_intake_kd = m_intake_tab.add("Mount kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // private GenericEntry sh_intake_kg = m_intake_tab.add("Mount kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // private GenericEntry sh_intake_kff = m_intake_tab.add("Mount kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // private GenericEntry sh_intake_kff_offset = m_intake_tab.add("Mount kff offset", k_default_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // private GenericEntry sh_intake_current_limit = m_intake_tab.add("Mount Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
+    // private GenericEntry sh_intake_cvelocity = m_intake_tab.add("Mount Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+    // private GenericEntry sh_intake_kv = m_intake_tab.add("Mount kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    // private GenericEntry sh_intake_ka = m_intake_tab.add("Mount kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+
+
+
+
 
     public Claw(){
 
@@ -267,18 +310,18 @@ public class Claw extends SubsystemBase {
     private void set_mount_angle_mm(Angle position){
 
         //    gt is greater than 
-        if (position.gt( k_max_angle)){
+        // if (position.gt( k_max_angle)){
             
-            // logger.log(position + " requested is greater than the max position ");
-            position = k_max_angle;
+        //     // logger.log(position + " requested is greater than the max position ");
+        //     position = k_max_angle;
 
-        }
-        else if (position.lt(k_min_angle)){
+        // }
+        // else if (position.lt(k_min_angle)){
 
-            //logger.log(position + " requested is less than the minimum position");
-            position = k_min_angle;
+        //     //logger.log(position + " requested is less than the minimum position");
+        //     position = k_min_angle;
 
-        }
+        // }
 
         m_mount.setControl(m_mountFXOut_mm.withPosition(position));
 
@@ -394,7 +437,7 @@ public class Claw extends SubsystemBase {
     public Command intake_coral_command(){
 
         return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
-            .until(intake_curent_exceeded(Amp.of(30)))
+            .until(intake_curent_exceeded(Amp.of(40)))
             .beforeStarting(this::has_coral_true),
             new WaitCommand(4))
             .andThen(this::stop_intake);
