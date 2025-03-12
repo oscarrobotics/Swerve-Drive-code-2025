@@ -111,10 +111,10 @@ public class RobotContainer {
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
-        joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*0.3).withVelocityY(0)));
-        joystick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*0.3).withVelocityX(0)));
-        joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*0.3).withVelocityY(0)));
-        joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*0.3).withVelocityX(0)));
+        joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        joystick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         // todo potentially
         // joystick.povDownLeft(). 
         // joystick.povDownRight().
