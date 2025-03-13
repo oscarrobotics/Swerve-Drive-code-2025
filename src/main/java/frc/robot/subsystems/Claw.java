@@ -155,17 +155,29 @@ public class Claw extends SubsystemBase {
 
     private ShuffleboardTab  m_mount_tab = Shuffleboard.getTab("Mount Tuning");
 
-    // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
-    private GenericEntry sh_mount_kp = m_mount_tab.add("Mount kP", k_default_mount_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
-    private GenericEntry sh_mount_ki = m_mount_tab.add("Mount kI", k_default_mount_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_mount_kd = m_mount_tab.add("Mount kD", k_default_mount_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    private GenericEntry sh_mount_kg = m_mount_tab.add("Mount kG", k_default_mount_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
+    // private GenericEntry sh_mount_kp = m_mount_tab.add("Mount kP", k_default_mount_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
+    // private GenericEntry sh_mount_ki = m_mount_tab.add("Mount kI", k_default_mount_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    // private GenericEntry sh_mount_kd = m_mount_tab.add("Mount kD", k_default_mount_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // private GenericEntry sh_mount_kg = m_mount_tab.add("Mount kG", k_default_mount_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // // private GenericEntry sh_mount_kff = m_mount_tab.add("Mount kff", k_default_mount_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // // private GenericEntry sh_mount_kff_offset = m_mount_tab.add("Mount kff offset", k_default_mount_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
+    // private GenericEntry sh_mount_cvelocity = m_mount_tab.add("Mount Cruise Velocity", k_default_mount_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+    // private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    // private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+
+    private GenericEntry sh_coral_position_1 = m_mount_tab.addPersistent("coral_position_1", k_coral_position_1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry(); 
+    private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_2).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry();
+    private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_3).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry();
+    private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_4).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry();
     // private GenericEntry sh_mount_kff = m_mount_tab.add("Mount kff", k_default_mount_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
     // private GenericEntry sh_mount_kff_offset = m_mount_tab.add("Mount kff offset", k_default_mount_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
-    private GenericEntry sh_mount_cvelocity = m_mount_tab.add("Mount Cruise Velocity", k_default_mount_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
-    private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
-    private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    // private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
+    // private GenericEntry sh_mount_cvelocity = m_mount_tab.add("Mount Cruise Velocity", k_default_mount_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+    // private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    // private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+
 
     private ShuffleboardTab  m_intake_tab = Shuffleboard.getTab("Intake Tuning");
 
@@ -284,20 +296,9 @@ public class Claw extends SubsystemBase {
         //set the position of the mechanism to 0, this is not a control but a delclaration that the position it is in is 0
         // m_mount.setPosition(0);
 
-        SmartDashboard.putNumber("Mount kP", k_default_mount_kp); 
-        SmartDashboard.putNumber("Mount kI", k_default_mount_ki);
-        SmartDashboard.putNumber("Mount kD", k_default_mount_kd);
-        SmartDashboard.putNumber("Mount kG", k_default_mount_kg);
-        SmartDashboard.putNumber("Mount kff", k_default_mount_kff);
-       
-        
-        SmartDashboard.putNumber("Mount Current Limit", k_mount_current_limit);
-       
-        SmartDashboard.putNumber("Mount Cruise Velocity", k_default_mount_cVelocity);
-        SmartDashboard.putNumber("Mount kV", k_default_mount_kV);
-        SmartDashboard.putNumber("Mount kA", k_default_mount_kA);
+     
 
-        SmartDashboard.putData("Update mount PID", new InstantCommand(this::configure_mount_from_dash));
+        SmartDashboard.putData("Update mount positions", new InstantCommand(this::configure_mount_from_dash));
         SmartDashboard.putData("Update intake PID", new InstantCommand(this::configure_intake_from_dash));
 
         register();
@@ -552,7 +553,7 @@ public class Claw extends SubsystemBase {
         m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("intake Torque Current", k_intake_current_limit)))
         .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("intake Torque Current", k_intake_current_limit)));
 
-        m_intake_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("intake Cruise Velocity", k_default_intake_cVelocity);
+        // m_intake_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("intake Cruise Velocity", k_default_intake_cVelocity);
         // m_mount_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_intake_kV);
         // m_mount_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_intake_kA);
         
