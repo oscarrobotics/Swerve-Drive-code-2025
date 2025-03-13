@@ -90,16 +90,16 @@ public class Elevator extends SubsystemBase{
 
 
     public final Angle k_elevator_min_rot = Rotations.of(0);
-    public final Angle k_elevator_max_rot = Rotations.of(0.625);
+    public final Angle k_elevator_max_rot = Rotations.of(0.98);
 
     public final Distance k_min_Distance =  Meters.of(0);
     public final Distance k_max_Distance = Meter.of(3);
     public final Angle k_stowed =  Rotation.of(0.02);
 
-    public final Angle k_coral_level_sense_postion_1 = Rotations.of(0.06);
-    public final Angle k_coral_level_sense_postion_2 = Rotations.of(0.28);
-    public final Angle k_coral_level_sense_postion_3 = Rotations.of(0.53);
-    public final Angle k_coral_level_sense_postion_4 = Rotations.of(0.94);
+    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.06);
+    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.28);
+    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.53);
+    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.94);
 
 
 
@@ -199,17 +199,23 @@ public class Elevator extends SubsystemBase{
         
     private ShuffleboardTab  m_tab = Shuffleboard.getTab("Elevator Tuning");
 
+
+    private GenericEntry sh_coral_position_1 = m_tab.addPersistent("coral_position_1", k_coral_level_sense_postion_1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry(); 
+    private GenericEntry sh_coral_position_2 = m_tab.addPersistent("coral_position_2", k_coral_level_sense_postion_2).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry();
+    private GenericEntry sh_coral_position_3 = m_tab.addPersistent("coral_position_3", k_coral_level_sense_postion_3).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry();
+    private GenericEntry sh_coral_position_4 = m_tab.addPersistent("coral_position_4", k_coral_level_sense_postion_4).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry();
+
     // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
-    private GenericEntry sh_kp = m_tab.add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
-    private GenericEntry sh_ki = m_tab.add("Elevator kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    private GenericEntry sh_kd = m_tab.add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    private GenericEntry sh_kg = m_tab.add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    private GenericEntry sh_kff = m_tab.add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    private GenericEntry sh_kff_offset = m_tab.add("Elevator kff offset", k_default_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    private GenericEntry sh_current_limit = m_tab.add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
-    private GenericEntry sh_cvelocity = m_tab.add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
-    private GenericEntry sh_kv = m_tab.add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
-    private GenericEntry sh_ka = m_tab.add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    // private GenericEntry sh_kp = m_tab.add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
+    // private GenericEntry sh_ki = m_tab.add("Elevator kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
+    // private GenericEntry sh_kd = m_tab.add("Elevator kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // private GenericEntry sh_kg = m_tab.add("Elevator kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // private GenericEntry sh_kff = m_tab.add("Elevator kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
+    // private GenericEntry sh_kff_offset = m_tab.add("Elevator kff offset", k_default_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
+    // private GenericEntry sh_current_limit = m_tab.add("Elevator Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
+    // private GenericEntry sh_cvelocity = m_tab.add("Elevator Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+    // private GenericEntry sh_kv = m_tab.add("Elevator kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
+    // private GenericEntry sh_ka = m_tab.add("Elevator kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
 
 
     
@@ -290,8 +296,8 @@ public class Elevator extends SubsystemBase{
 
         register();
 
-
-       SmartDashboard.putData(m_tab.getTitle()+"/Update Elevator PID", new InstantCommand(this::configure_from_dash));
+        SmartDashboard.putData("Update elevator positions", new InstantCommand(this::update_locations));
+    //    SmartDashboard.putData(m_tab.getTitle()+"/Update Elevator PID", new InstantCommand(this::configure_from_dash));
         
         m_tab.addDoubleArray("MotionGraph", this::publish_motion_data).withWidget(BuiltInWidgets.kGraph);
         m_tab.addDoubleArray("ControlGraph", this::publish_control_data).withWidget(BuiltInWidgets.kGraph);
@@ -472,35 +478,48 @@ public class Elevator extends SubsystemBase{
         control_data[2] = m_elevator_motor.getClosedLoopReferenceSlope().getValueAsDouble();
         return control_data;
     }
+    
+    public void update_locations(){
+       
+        k_coral_level_sense_postion_1 = Rotation.of(sh_coral_position_1.getDouble(k_coral_level_sense_postion_1.magnitude()));
+        k_coral_level_sense_postion_2 = Rotation.of(sh_coral_position_2.getDouble(k_coral_level_sense_postion_2.magnitude()));
+        k_coral_level_sense_postion_3 = Rotation.of(sh_coral_position_3.getDouble(k_coral_level_sense_postion_3.magnitude()));
+        k_coral_level_sense_postion_4 = Rotation.of(sh_coral_position_4.getDouble(k_coral_level_sense_postion_4.magnitude()));
+
+
+    }
+
+
+
 
     public void configure_from_dash(){
         // // configure the motor from the smart dashboard
-        m_elevator_config.Slot0.kP = sh_kp.getDouble(k_default_kp); 
-        m_elevator_config.Slot0.kI = sh_ki.getDouble(k_default_ki);
-        m_elevator_config.Slot0.kD = sh_kd.getDouble(k_default_kd);
-        m_elevator_config.Slot0.kG = sh_kg.getDouble(k_default_kg);
-        k_default_kff = sh_kff.getDouble(k_default_kff);
+        // m_elevator_config.Slot0.kP = sh_kp.getDouble(k_default_kp); 
+        // m_elevator_config.Slot0.kI = sh_ki.getDouble(k_default_ki);
+        // m_elevator_config.Slot0.kD = sh_kd.getDouble(k_default_kd);
+        // m_elevator_config.Slot0.kG = sh_kg.getDouble(k_default_kg);
+        // k_default_kff = sh_kff.getDouble(k_default_kff);
        
         
-        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(sh_current_limit.getDouble(k_current_limit)))
-        .withPeakReverseTorqueCurrent(Amps.of(-sh_current_limit.getDouble(k_current_limit)));
+        // m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(sh_current_limit.getDouble(k_current_limit)))
+        // .withPeakReverseTorqueCurrent(Amps.of(-sh_current_limit.getDouble(k_current_limit)));
 
-        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = sh_cvelocity.getDouble(k_default_cVelocity);
-        m_elevator_config.MotionMagic.MotionMagicExpo_kV =sh_kv.getDouble(k_default_kV);
-        m_elevator_config.MotionMagic.MotionMagicExpo_kA = sh_ka.getDouble(k_default_kA);
+        // m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = sh_cvelocity.getDouble(k_default_cVelocity);
+        // m_elevator_config.MotionMagic.MotionMagicExpo_kV =sh_kv.getDouble(k_default_kV);
+        // m_elevator_config.MotionMagic.MotionMagicExpo_kA = sh_ka.getDouble(k_default_kA);
 
 
-        StatusCode status = StatusCode.StatusCodeNotInitialized;
+        // StatusCode status = StatusCode.StatusCodeNotInitialized;
 
-        for (int i = 0; i < 5; ++i) {
-            status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
-            if (status.isOK()) break;
-        }
-        if (!status.isOK()) {
-            System.out.println("Could not apply configs, error code: " + status.toString());
-        }
+        // for (int i = 0; i < 5; ++i) {
+        //     status = m_elevator_motor.getConfigurator().apply(m_elevator_config);
+        //     if (status.isOK()) break;
+        // }
+        // if (!status.isOK()) {
+        //     System.out.println("Could not apply configs, error code: " + status.toString());
+        // }
         
-        System.out.println("pid Updated");
+        // System.out.println("pid Updated");
 
 
     }

@@ -106,10 +106,10 @@ public class Claw extends SubsystemBase {
     
 
 
-    public final Angle k_coral_position_1 = Rotation.of(0.27);
-    public final Angle k_coral_position_2 = Rotation.of(0.1);
-    public final Angle k_coral_position_3 = Rotation.of(0.0);
-    public final Angle k_coral_position_4 = Rotation.of(-0.07);
+    public Angle k_coral_position_1 = Rotation.of(0.27);
+    public Angle k_coral_position_2 = Rotation.of(0.1);
+    public Angle k_coral_position_3 = Rotation.of(0.0);
+    public Angle k_coral_position_4 = Rotation.of(-0.07);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
     public final Angle k_alge_position_2 = Rotation.of(0);
@@ -298,8 +298,8 @@ public class Claw extends SubsystemBase {
 
      
 
-        SmartDashboard.putData("Update mount positions", new InstantCommand(this::configure_mount_from_dash));
-        SmartDashboard.putData("Update intake PID", new InstantCommand(this::configure_intake_from_dash));
+        SmartDashboard.putData("Update mount positions", new InstantCommand(this::update_locations));
+        // SmartDashboard.putData("Update intake PID", new InstantCommand(this::configure_intake_from_dash));
 
         register();
 
@@ -561,6 +561,17 @@ public class Claw extends SubsystemBase {
         m_intake_config.MotionMagic.MotionMagicJerk = SmartDashboard.getNumber("Intake Jerk", k_default_intake_jerk);
         
         m_intake.getConfigurator().apply(m_intake_config);
+
+
+    }
+
+
+    public void update_locations(){
+       
+        k_coral_position_1 = Rotation.of(sh_coral_position_1.getDouble(k_coral_position_1.magnitude()));
+        k_coral_position_2 = Rotation.of(sh_coral_position_2.getDouble(k_coral_position_2.magnitude()));
+        k_coral_position_3 = Rotation.of(sh_coral_position_3.getDouble(k_coral_position_3.magnitude()));
+        k_coral_position_4 = Rotation.of(sh_coral_position_4.getDouble(k_coral_position_4.magnitude()));
 
 
     }
