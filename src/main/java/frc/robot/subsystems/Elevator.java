@@ -97,8 +97,8 @@ public class Elevator extends SubsystemBase{
     public final Angle k_stowed =  Rotation.of(0.02);
 
     public Angle k_coral_level_sense_postion_1 = Rotations.of(0.06);
-    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.28);
-    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.53);
+    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.16);
+    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36);
     public Angle k_coral_level_sense_postion_4 = Rotations.of(0.94);
 
 
@@ -116,7 +116,7 @@ public class Elevator extends SubsystemBase{
     //goal heights
     
     public final Distance k_coral_level_1 = Meters.of(0.48);
-    public final Distance k_coral_level_2 = Meters.of(0.81);
+    public final Distance k_coral_level_2 = Meters.of(0.6);
     public final Distance k_coral_level_3 = Meters.of(1.21);
     public final Distance k_coral_level_4 = Meters.of(1.83);
 
@@ -200,10 +200,10 @@ public class Elevator extends SubsystemBase{
     private ShuffleboardTab  m_tab = Shuffleboard.getTab("Elevator Tuning");
 
 
-    private GenericEntry sh_coral_position_1 = m_tab.addPersistent("coral_position_1", k_coral_level_sense_postion_1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry(); 
-    private GenericEntry sh_coral_position_2 = m_tab.addPersistent("coral_position_2", k_coral_level_sense_postion_2).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry();
-    private GenericEntry sh_coral_position_3 = m_tab.addPersistent("coral_position_3", k_coral_level_sense_postion_3).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry();
-    private GenericEntry sh_coral_position_4 = m_tab.addPersistent("coral_position_4", k_coral_level_sense_postion_4).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot,"max",k_elevator_max_rot)).getEntry();
+    private GenericEntry sh_coral_position_1 = m_tab.addPersistent("coral_position_1", k_coral_level_sense_postion_1.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot.magnitude(),"max",k_elevator_max_rot.magnitude())).getEntry(); 
+    private GenericEntry sh_coral_position_2 = m_tab.addPersistent("coral_position_2", k_coral_level_sense_postion_2.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot.magnitude(),"max",k_elevator_max_rot.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_3 = m_tab.addPersistent("coral_position_3", k_coral_level_sense_postion_3.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot.magnitude(),"max",k_elevator_max_rot.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_4 = m_tab.addPersistent("coral_position_4", k_coral_level_sense_postion_4.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_elevator_min_rot.magnitude(),"max",k_elevator_max_rot.magnitude())).getEntry();
 
     // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
     // private GenericEntry sh_kp = m_tab.add("Elevator kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
@@ -360,7 +360,7 @@ public class Elevator extends SubsystemBase{
 
     }
 
-    private void set_elevator_position_mm(Angle posision){
+    public void set_elevator_position_mm(Angle posision){
 
         // // gt is greater than 
         // if (posision.gt( k_max_Distance)){
@@ -485,6 +485,9 @@ public class Elevator extends SubsystemBase{
         k_coral_level_sense_postion_2 = Rotation.of(sh_coral_position_2.getDouble(k_coral_level_sense_postion_2.magnitude()));
         k_coral_level_sense_postion_3 = Rotation.of(sh_coral_position_3.getDouble(k_coral_level_sense_postion_3.magnitude()));
         k_coral_level_sense_postion_4 = Rotation.of(sh_coral_position_4.getDouble(k_coral_level_sense_postion_4.magnitude()));
+
+
+        System.out.println(k_coral_level_sense_postion_1);
 
 
     }

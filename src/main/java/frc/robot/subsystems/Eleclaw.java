@@ -48,21 +48,26 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class Eleclaw extends SubsystemBase{
 
     private Elevator elevator;
     private Claw claw;
+
     private CommandSwerveDrivetrain drivetrain;
+
+    private Intake intake;
 
     HashMap<String, Waypoint> named_waypoints; 
 
 
-    public Eleclaw(Elevator elevator, Claw claw, CommandSwerveDrivetrain drivetrain){
+    public Eleclaw(Elevator elevator, Claw claw,Intake intake, CommandSwerveDrivetrain drivetrain){
         
         this.elevator = elevator;
         this.claw = claw;
+        this.intake = intake;
         this.drivetrain = drivetrain; 
     }
 
@@ -108,14 +113,14 @@ public class Eleclaw extends SubsystemBase{
         
         
 
-        return claw.intake_coral_command().until(claw.has_coral()).withTimeout(timeout);
+        return intake.intake_coral_command().until(intake.has_coral()).withTimeout(timeout);
 
     }
 
     public Command retry_intake_coral(){
         
         Time timeout = Seconds.of(13);
-        return claw.intake_coral_command().until(claw.has_coral()).withTimeout(timeout);
+        return intake.intake_coral_command().until(intake.has_coral()).withTimeout(timeout);
 
     }
 
@@ -126,7 +131,7 @@ public class Eleclaw extends SubsystemBase{
         return Commands.parallel(run(()->elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1)).until(elevator.at_position()),
         run(()->claw.set_position_command_mm(claw.k_coral_position_1)).until(claw.at_position())
         ).andThen(
-            claw.outtake_coral_command()
+            intake.outtake_coral_command()
         )
         ;
         

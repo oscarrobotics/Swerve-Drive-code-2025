@@ -17,17 +17,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.DeferredCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Eleclaw;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-// import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class RobotContainer {
     
@@ -57,6 +59,7 @@ public class RobotContainer {
     
     public final Elevator elevator = new Elevator();
     public final Claw claw = new Claw();
+    public final Intake intake = new Intake();
 
 
     //Used to keep track of which direction the controller should drive the robot
@@ -78,9 +81,9 @@ public class RobotContainer {
     public RobotContainer() {
 
 
-        NamedCommands.registerCommand("EjectCoral", claw.outtake_coral_command());
+        NamedCommands.registerCommand("EjectCoral", intake.outtake_coral_command());
         
-        NamedCommands.registerCommand("PickCoral", claw.intake_coral_command());
+        NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
         autoChooser = AutoBuilder.buildAutoChooser("tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
@@ -149,20 +152,27 @@ public class RobotContainer {
     //    controlstick.y().onTrue(elevator.get_posiCommand(25.0));
         // controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
         //binds buttons to elevator position commands
-        controlstick.a().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1));
-        controlstick.b().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2));
-        controlstick.x().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3));
-        controlstick.y().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4));
+        // controlstick.a().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1));
+        // controlstick.b().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2));
+        // controlstick.x().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3));
+        // controlstick.y().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4));
+        
+     
+        controlstick.a().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_1), elevator));
+        controlstick.b().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_2), elevator));
+        controlstick.x().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_3), elevator));
+        controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
 
-        controlstick.povUp().onTrue(claw.set_position_command_mm(claw.k_coral_position_1));
-        controlstick.povLeft().onTrue(claw.set_position_command_mm(claw.k_coral_position_2));
-        controlstick.povDown().onTrue(claw.set_position_command_mm(claw.k_coral_position_3));
-        controlstick.povRight().onTrue(claw.set_position_command_mm(claw.k_coral_position_4));
+    
+        controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
+        controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
+        controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_3));
+        controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_4));
 
 
         //binds buttons to intake and outtake commands
-        controlstick.leftBumper().onTrue(claw.outtake_coral_command());
-        controlstick.rightBumper().onTrue(claw.intake_coral_command());
+        controlstick.leftBumper().onTrue(intake.outtake_coral_command());
+        controlstick.rightBumper().onTrue(intake.intake_coral_command());
 
         
 
@@ -172,10 +182,10 @@ public class RobotContainer {
         
         // controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
 
-        // elevator.setDefaultCommand(elevator.set_position_command_angle(elevator.k_stowed));
+        elevator.setDefaultCommand(elevator.set_position_command_angle(elevator.k_stowed));
         // elevator.setDefaultCommand(new InstantCommand(elevator::configure_from_dash, elevator));
         // SmartDashboard.putData("configure elevator", new InstantCommand(elevator::configure_from_dash));
-        // claw.setDefaultCommand(claw.set_position_command_mm(claw.k_stowed));
+        claw.setDefaultCommand(claw.set_position_command_mm(claw.k_stowed));
             
 
 
