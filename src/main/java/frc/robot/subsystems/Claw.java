@@ -59,19 +59,14 @@ public class Claw extends SubsystemBase {
      // All hardware classes already have WPILib integration
     
     final TalonFX m_mount = new TalonFX(61); 
-    final TalonFX m_intake = new TalonFX(62); 
+  
     //only a single neutral motor request is required for the system as it is always the same value
     private final NeutralOut m_brake = new NeutralOut();
 
  
-    final TalonFXSimState m_intakeSim = m_intake.getSimState();
     final TalonFXSimState m_mountSim = m_mount.getSimState();
  
 
-
-    final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
-    final MotionMagicVelocityTorqueCurrentFOC m_intakeFXOut_v_mm = new MotionMagicVelocityTorqueCurrentFOC(0).withSlot(0);
-    final MotionMagicExpoTorqueCurrentFOC m_intakeFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
 
     final PositionTorqueCurrentFOC m_mountFXOut = new PositionTorqueCurrentFOC(0).withSlot(0);
     final MotionMagicExpoTorqueCurrentFOC m_mountFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
@@ -102,13 +97,13 @@ public class Claw extends SubsystemBase {
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
-    public final Angle k_stowed = Rotation.of(0.2);
+    public final Angle k_stowed = Rotation.of(0.22);
     
 
 
     public Angle k_coral_position_1 = Rotation.of(0.27);
-    public Angle k_coral_position_2 = Rotation.of(0.1);
-    public Angle k_coral_position_3 = Rotation.of(0.0);
+    public Angle k_coral_position_2 = Rotation.of(0.18);
+    public Angle k_coral_position_3 = Rotation.of(0.11);
     public Angle k_coral_position_4 = Rotation.of(-0.07);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
@@ -119,10 +114,10 @@ public class Claw extends SubsystemBase {
     public final Angle k_process_alge_position = Rotation.of(0);
     public final Angle k_barge_alge_position = Rotation.of(0);
 
-    public boolean m_has_coral = false;
+    
     
 
-    TalonFXConfiguration m_intake_config = new TalonFXConfiguration();
+    
     TalonFXConfiguration  m_mount_config = new TalonFXConfiguration();
 
 
@@ -141,16 +136,6 @@ public class Claw extends SubsystemBase {
 
 
 
-    private final double k_default_intake_ks = 4;
-    private final double k_default_intake_kp = 10;
-    private final double k_default_intake_ki = 0;
-    private final double k_default_intake_kd = 3;
-
-    private final double k_default_intake_accel = 1;
-    private final double k_default_intake_jerk = 1;
-    
-    private final double k_intake_current_limit = 30;
-
 
 
     private ShuffleboardTab  m_mount_tab = Shuffleboard.getTab("Mount Tuning");
@@ -167,31 +152,16 @@ public class Claw extends SubsystemBase {
     // private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
     // private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
 
-    private GenericEntry sh_coral_position_1 = m_mount_tab.addPersistent("coral_position_1", k_coral_position_1).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry(); 
-    private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_2).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry();
-    private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_3).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry();
-    private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_4).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle,"max",k_max_angle)).getEntry();
+    private GenericEntry sh_coral_position_1 = m_mount_tab.addPersistent("coral_position_1", k_coral_position_1.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry(); 
+    private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_2.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_3.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_4.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
     // private GenericEntry sh_mount_kff = m_mount_tab.add("Mount kff", k_default_mount_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
     // private GenericEntry sh_mount_kff_offset = m_mount_tab.add("Mount kff offset", k_default_mount_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
     // private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
     // private GenericEntry sh_mount_cvelocity = m_mount_tab.add("Mount Cruise Velocity", k_default_mount_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
     // private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
     // private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
-
-
-    private ShuffleboardTab  m_intake_tab = Shuffleboard.getTab("Intake Tuning");
-
-    // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
-    // private GenericEntry sh_intake_kp = m_intake_tab.add("Mount kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
-    // private GenericEntry sh_intake_ki = m_intake_tab.add("Mount kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    // private GenericEntry sh_intake_kd = m_intake_tab.add("Mount kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    // private GenericEntry sh_intake_kg = m_intake_tab.add("Mount kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    // private GenericEntry sh_intake_kff = m_intake_tab.add("Mount kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    // private GenericEntry sh_intake_kff_offset = m_intake_tab.add("Mount kff offset", k_default_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    // private GenericEntry sh_intake_current_limit = m_intake_tab.add("Mount Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
-    // private GenericEntry sh_intake_cvelocity = m_intake_tab.add("Mount Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
-    // private GenericEntry sh_intake_kv = m_intake_tab.add("Mount kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
-    // private GenericEntry sh_intake_ka = m_intake_tab.add("Mount kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
 
 
 
@@ -202,38 +172,6 @@ public class Claw extends SubsystemBase {
         // configure the motor controller
         
 
-        /* Torque-based velocity does not require a velocity feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-        m_intake_config.Slot0.kS = k_default_intake_ks; // To account for friction, add 2.5 A of static feedforward
-        m_intake_config.Slot0.kI = k_default_intake_ki; // No output for integrated error
-        m_intake_config.Slot0.kD = k_default_intake_kd; // No output for error derivative
-        m_intake_config.Slot0.kP = k_default_intake_kp; // An error of 1 rotation per second results in 5 A output
-        
-        // Peak output of 5 A
-        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(30))
-        .withPeakReverseTorqueCurrent(Amps.of(-30));
-
-        //motion magic settings
-        m_intake_config.MotionMagic.MotionMagicAcceleration = 300;
-        m_intake_config.MotionMagic.MotionMagicJerk = 3000;
-
-        
-       
-        
-       
-        /* Retry config apply up to 5 times, report if failure */
-        StatusCode status = StatusCode.StatusCodeNotInitialized;
-        for (int i = 0; i < 5; ++i) {
-        status = m_intake.getConfigurator().apply(m_intake_config);
-        if (status.isOK()) break;
-        }
-        if (!status.isOK()) {
-        System.out.println("Could not apply configs, error code: " + status.toString());
-        }
-
-
-
-        
-       
         m_mount_config.Slot0.kP = k_default_mount_kp; // An error of 1 rotation results in 60 A output
         m_mount_config.Slot0.kI = k_default_mount_ki; // No output for integrated error
         m_mount_config.Slot0.kD = k_default_mount_kd; // A velocity of 1 rps results in 6 A output
@@ -272,7 +210,7 @@ public class Claw extends SubsystemBase {
 
 
         // m_fx.getConfigurator().apply(fx_cfg);
-        status = StatusCode.StatusCodeNotInitialized;
+        StatusCode status = StatusCode.StatusCodeNotInitialized;
 
         for (int i = 0; i < 5; ++i) {
             status = m_mount_encoder.getConfigurator().apply(m_mount_encoder_config);
@@ -329,39 +267,9 @@ public class Claw extends SubsystemBase {
 
     }
 
-    private void set_intake_speed(AngularVelocity speed){
-
-        // if (speed.gt(k_max_wheel_speed)){
-        //     //logger.log("max wheel speed exceeded")
-        //     speed = k_max_wheel_speed;
-
-        // }
-        // else if(speed.lt(k_max_wheel_speed.unaryMinus())){//unary Minus is negate
-        //     //logger.log("negativce max wheel speed exceeded")
-        //     speed = k_max_wheel_speed.unaryMinus();
-        // }
-
-        m_intake.setControl(m_intakeFXOut_v_mm.withVelocity(speed));
-
-    }
-    
+ 
 
 
-    private void advance_intake(Distance delta){
-
-        double gear_ratio = 2;
-        Distance intake_diameter = Inches.of(4);
-
-        Angle delta_rev = Rotation.of(delta.div(intake_diameter.times(Math.PI)).magnitude());
-
-        Angle cur_position = m_intake.getPosition().getValue();
-
-        m_intake.setPosition(cur_position.plus(delta_rev));
-
-
-
-
-    }
 
 
     public BooleanSupplier at_position(double tolerance){
@@ -377,55 +285,14 @@ public class Claw extends SubsystemBase {
     }
 
 
-    public BooleanSupplier has_coral(){
-
-        return ()-> m_has_coral;
-    }
-        
+    
 
 
 
-
-    private void stop_intake(){
-        m_intake.setControl(m_brake);
-    }
-
-    private Current get_intake_current(){
-
-        return m_intake.getTorqueCurrent().getValue();
-    }
-
-    private BooleanSupplier intake_curent_exceeded(Current amps){
-
-        BooleanSupplier current_trigger = ()-> get_intake_current().gt(amps);
-
-        return current_trigger;
-
-    }
-
-    private void has_coral_true(){
-        m_has_coral = true;
-    }
-
-    private void has_coral_false(){
-        m_has_coral = false;
-    }
+   
+   
  
-    // roboto container(or other commands) can call this methond to get acces to a
-    // command that will call the internal private method that directly controls the 
-    // motor with the postion suppliied when this method was called
-    // ie, some part of code wants the position to be X, so it calls 
-    // command = m_EX_Subsystem.getposition_commmand(x) and command now
-    // contains a command of run(()->set_turntable_posiotn(x))
-    // it will then pass/bind this command to the Command Scheduler to run 
-    // when approprite( determinted by the binding type and the command type, ie run,...)
-    // the command sceduler will then call ()->set_turntable_position(x).
-    // the ()-> is needted becuse the Command scheduler cannont provide parameters at 
-    // time it would call it, so instead ()-> is a "wrapper" method with no name,
-    // called an anonomus function that takes no parameters, what "()" means, but calls
-    // the inner method that is "hard coded" with the value x at the time m_EX_Subsystem.getposition_commmand(x)
-    // is called, giving you a new run command/anonomus method for every postion, a meathod that writes methods to 
-    // call methdods
+    
 
     //note that this method returns a command and is no a command itself
     public Command set_position_command_mm(Angle position){
@@ -435,34 +302,7 @@ public class Claw extends SubsystemBase {
 
     }
 
-    public Command intake_coral_command(){
-
-        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
-            .until(intake_curent_exceeded(Amp.of(40)))
-            .beforeStarting(this::has_coral_true),
-            new WaitCommand(4))
-            .andThen(this::stop_intake);
-    }
-
-    public Command outtake_coral_command(){
-
-        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
-            .withTimeout(2)
-            .andThen(this::stop_intake
-            ).andThen(this::has_coral_false);
-
-        
-    }
-
-    public Command launch_coral_command(){
-
-        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
-            .withTimeout(2)
-            .andThen(this::stop_intake
-            ).andThen(this::has_coral_false);
-
-    }
-
+       
 
     public void publish_mount_data(){
 
@@ -513,57 +353,13 @@ public class Claw extends SubsystemBase {
     @Override
     public void periodic() {
         super.periodic();
-        publish_intake_data();
+     
         publish_mount_data();
     }
 
 
-    public void publish_intake_data(){
+  
 
-        // put data important for charaterizing the data to the smart dashboard
-        double set_point =m_intake.getClosedLoopReference().getValueAsDouble();
-        double error = m_intake.getClosedLoopError().getValueAsDouble();
-        double tcurrent = m_intake.getTorqueCurrent().getValueAsDouble();
-        double velocity = m_intake.getVelocity().getValueAsDouble();
-        double acceleration = m_intake.getAcceleration().getValueAsDouble();
-        double position = m_intake.getPosition().getValueAsDouble();
-
-        SmartDashboard.putNumber("Intake Set Point", set_point);
-        SmartDashboard.putNumber("Intake Error", error);
-        SmartDashboard.putNumber("Intake Torque Current", tcurrent);
-        SmartDashboard.putNumber("Intake Velocity", velocity);
-        SmartDashboard.putNumber("Intake Acceleration", acceleration);
-        SmartDashboard.putNumber("Intake Position", position);
-
-        // SmartDashboard.putData("Claw Sim", m_mech2d);
-
-
-        // SmartDashboard.putData("PID_Verification", m_elevator_motor.getClosedLoopSlot()
-        
-    }
-
-    public void configure_intake_from_dash(){
-        // configure the motor from the smart dashboard
-        m_intake_config.Slot0.kP = SmartDashboard.getNumber("intake kP", k_default_intake_kp); 
-        m_intake_config.Slot0.kI = SmartDashboard.getNumber("intake kI", k_default_intake_ki);
-        m_intake_config.Slot0.kD = SmartDashboard.getNumber("intake kD", k_default_intake_kd);
-        
-       
-
-        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(SmartDashboard.getNumber("intake Torque Current", k_intake_current_limit)))
-        .withPeakReverseTorqueCurrent(Amps.of(-SmartDashboard.getNumber("intake Torque Current", k_intake_current_limit)));
-
-        // m_intake_config.MotionMagic.MotionMagicCruiseVelocity = SmartDashboard.getNumber("intake Cruise Velocity", k_default_intake_cVelocity);
-        // m_mount_config.MotionMagic.MotionMagicExpo_kV = SmartDashboard.getNumber("Elevator kV", k_default_intake_kV);
-        // m_mount_config.MotionMagic.MotionMagicExpo_kA = SmartDashboard.getNumber("Elevator kA", k_default_intake_kA);
-        
-        m_intake_config.MotionMagic.MotionMagicAcceleration = SmartDashboard.getNumber("Intake Accel", k_default_intake_accel);
-        m_intake_config.MotionMagic.MotionMagicJerk = SmartDashboard.getNumber("Intake Jerk", k_default_intake_jerk);
-        
-        m_intake.getConfigurator().apply(m_intake_config);
-
-
-    }
 
 
     public void update_locations(){
