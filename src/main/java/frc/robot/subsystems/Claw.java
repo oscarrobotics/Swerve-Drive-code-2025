@@ -97,13 +97,13 @@ public class Claw extends SubsystemBase {
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
-    public final Angle k_stowed = Rotation.of(0.22);
+    public final Angle k_stowed = Rotation.of(0.29);
     
 
 
     public Angle k_coral_position_1 = Rotation.of(0.27);
-    public Angle k_coral_position_2 = Rotation.of(0.18);
-    public Angle k_coral_position_3 = Rotation.of(0.11);
+    public Angle k_coral_position_2 = Rotation.of(0.18);//middle scoreing heights
+    public Angle k_coral_position_3 = Rotation.of(0.08);//top scoreing height
     public Angle k_coral_position_4 = Rotation.of(-0.07);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
@@ -239,7 +239,6 @@ public class Claw extends SubsystemBase {
         SmartDashboard.putData("Update mount positions", new InstantCommand(this::update_locations));
         // SmartDashboard.putData("Update intake PID", new InstantCommand(this::configure_intake_from_dash));
 
-        register();
 
     }
 

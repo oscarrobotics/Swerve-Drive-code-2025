@@ -56,7 +56,7 @@ public class Lighting extends SubsystemBase{
 
     
     private AddressableLED led;
-    private int ledLength = 220; 
+    private int ledLength = 260; 
 
     public Lighting(){
 
@@ -68,15 +68,17 @@ public class Lighting extends SubsystemBase{
         for (int i = 0; i < ledLength; i++) {
             // Set the first half of the LEDs to red
             if (i < ledLength / 2) {
-                ledColors.setRGB(i, 255, 0, 0);
+                ledColors.setRGB(i, 0, 120, 120);
             } else { // Set the second half to blue
-                ledColors.setRGB(i, 0, 0, 255);
+                ledColors.setRGB(i, 0, 120, 120);
             }
         }   
 
 
         led.setData(ledColors);
+      
         led.start();
+
         
         
     }

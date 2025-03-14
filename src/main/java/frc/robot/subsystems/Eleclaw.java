@@ -13,6 +13,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Talon;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
@@ -134,6 +136,32 @@ public class Eleclaw extends SubsystemBase{
             intake.outtake_coral_command()
         )
         ;
+        
+    }
+
+
+    public Command position_coral_2(){
+
+        return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2),
+        claw.set_position_command_mm(claw.k_coral_position_2));
+       
+        
+        
+    }
+    public Command position_coral_3(){
+
+        return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3),
+        claw.set_position_command_mm(claw.k_coral_position_2));
+       
+        
+        
+    }
+    public Command position_coral_4(){
+
+        return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4),
+      new WaitCommand(2).andThen( new WaitCommand(10)).until(elevator.at_position(0.008)).andThen(claw.set_position_command_mm(claw.k_coral_position_3)));
+       
+        
         
     }
 

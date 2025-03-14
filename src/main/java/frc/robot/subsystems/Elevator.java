@@ -97,7 +97,7 @@ public class Elevator extends SubsystemBase{
     public final Angle k_stowed =  Rotation.of(0.02);
 
     public Angle k_coral_level_sense_postion_1 = Rotations.of(0.06);
-    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.16);
+    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14);
     public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36);
     public Angle k_coral_level_sense_postion_4 = Rotations.of(0.94);
 
@@ -294,7 +294,7 @@ public class Elevator extends SubsystemBase{
         
      
 
-        register();
+        
 
         SmartDashboard.putData("Update elevator positions", new InstantCommand(this::update_locations));
     //    SmartDashboard.putData(m_tab.getTitle()+"/Update Elevator PID", new InstantCommand(this::configure_from_dash));
@@ -386,7 +386,7 @@ public class Elevator extends SubsystemBase{
 
         Current ffCurrent = Amps.of(k_default_kff).times(ff_factor);
 
-        System.out.println("position set "+ posision.in(Rotation) );
+        // System.out.println("position set "+ posision.in(Rotation) );
 
         m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)).withFeedForward(ffCurrent));
         

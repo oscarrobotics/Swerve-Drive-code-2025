@@ -26,6 +26,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Claw;
+import frc.robot.subsystems.Lighting;
 import frc.robot.subsystems.Eleclaw;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -60,6 +61,9 @@ public class RobotContainer {
     public final Elevator elevator = new Elevator();
     public final Claw claw = new Claw();
     public final Intake intake = new Intake();
+    public final Lighting lighting = new Lighting();
+
+    public Eleclaw eleclaw;
 
 
     //Used to keep track of which direction the controller should drive the robot
@@ -88,7 +92,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         //code used for both intake and outake of coral from the claw during auto and teleop 
-
+        eleclaw = new Eleclaw(elevator, claw, intake, drivetrain);
         configureBindings();
     }
 
@@ -159,13 +163,18 @@ public class RobotContainer {
         
      
         controlstick.a().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_1), elevator));
-        controlstick.b().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_2), elevator));
-        controlstick.x().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_3), elevator));
+        // controlstick.b().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_2), elevator));
+        // controlstick.x().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_3), elevator));
         controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
 
+        controlstick.b().whileTrue(eleclaw.position_coral_2());
+    
+        controlstick.x().whileTrue(eleclaw.position_coral_3());
+        controlstick.y().whileTrue(eleclaw.position_coral_4());
+        
     
         controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
-        controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
+        // controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
         controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_3));
         controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_4));
 
