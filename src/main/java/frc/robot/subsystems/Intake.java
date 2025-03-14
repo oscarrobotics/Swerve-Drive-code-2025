@@ -33,6 +33,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import com.fasterxml.jackson.databind.ser.std.BooleanSerializer;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -120,6 +121,7 @@ public class Intake extends SubsystemBase {
     private final double k_intake_current_limit = 30;
 
     public boolean m_has_coral = false;
+    public boolean m_has_alge = false;
    
 
     private ShuffleboardTab  m_intake_tab = Shuffleboard.getTab("Intake Tuning");
@@ -258,10 +260,28 @@ public class Intake extends SubsystemBase {
         return m_intake.getTorqueCurrent().getValue();
     }
 
-    private BooleanSupplier intake_curent_exceeded(Current amps){
 
-        BooleanSupplier current_trigger = ()-> get_intake_current().gt(amps);
+    private Timer current_Timer = new Timer();
+    private BooleanSupplier intake_curent_exceeded(Current amps , double time){
 
+        BooleanSupplier current_trigger = ()->{
+
+        if (get_intake_current().gt(amps))
+            
+            current_Timer.start();
+
+        if(get_intake_current().lte(amps)){
+            current_Timer.stop();
+        }
+        if (current_Timer.get()>time){
+            current_Timer.stop();
+            current_Timer.reset();
+            return true;
+        }
+        else
+            return false;
+
+        };
         return current_trigger;
 
     }
@@ -272,6 +292,14 @@ public class Intake extends SubsystemBase {
 
     private void has_coral_false(){
         m_has_coral = false;
+    }
+
+    private void has_alge_true(){
+        m_has_alge = true;
+    }
+
+    private void has_alge_false(){
+        m_has_alge = false;
     }
  
     // roboto container(or other commands) can call this methond to get acces to a
@@ -294,8 +322,8 @@ public class Intake extends SubsystemBase {
 
     public Command intake_coral_command(){
 
-        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
-            .until(intake_curent_exceeded(Amp.of(35)))
+        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(200, RPM));})
+            .until(intake_curent_exceeded(Amp.of(35),2))
             .beforeStarting(this::has_coral_true),
             new WaitCommand(2))
             .andThen(this::stop_intake);
@@ -304,9 +332,28 @@ public class Intake extends SubsystemBase {
     public Command outtake_coral_command(){
 
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
-            .withTimeout(2)
+            .withTimeout(1)
             .andThen(this::stop_intake
             ).andThen(this::has_coral_false);
+
+        
+    }
+
+    public Command intake_alge_command (){
+        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-200, RPM));})
+            .until(intake_curent_exceeded(Amp.of(35),2))
+            .beforeStarting(this::has_alge_true),
+            new WaitCommand(2))
+            .andThen(this::stop_intake);
+
+    }
+
+    public Command outtake_alge_command(){
+
+        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(400, RPM));})
+            .withTimeout(1)
+            .andThen(this::stop_intake
+            ).andThen(this::has_alge_false);
 
         
     }
@@ -314,7 +361,7 @@ public class Intake extends SubsystemBase {
     public Command launch_coral_command(){
 
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
-            .withTimeout(2)
+            .withTimeout(1)
             .andThen(this::stop_intake
             ).andThen(this::has_coral_false);
 
