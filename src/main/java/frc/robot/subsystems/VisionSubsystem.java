@@ -5,8 +5,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.lib.util.TunableOption;
-import frc.robot.Constants;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.estimator.PoseEstimator;
@@ -25,8 +24,6 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-import dev.doglog.DogLog;
-
 public class VisionSubsystem extends SubsystemBase {
     private static VisionSubsystem instance;
     private final PhotonCamera camera;
@@ -36,7 +33,7 @@ public class VisionSubsystem extends SubsystemBase {
     private Pose2d lastPose = new Pose2d();
     private PhotonPipelineResult lastResult = null;
     private boolean updateDashboard = true;
-    private static final TunableOption optUpdateVisionDashboard = new TunableOption("Update vision dashboard", false);
+
 
     public VisionSubsystem() {
         assert (instance == null);
@@ -76,9 +73,7 @@ public class VisionSubsystem extends SubsystemBase {
             lastPose = robotPose.estimatedPose.toPose2d();
             field.setRobotPose(lastPose);
 
-            // DogLog.log("Vision/TargetPoses", (Pose3d[])result.getTargets().stream().map(tgt -> robotPose.estimatedPose.plus(Constants.Vision.robotToCam).plus(tgt.getBestCameraToTarget())).toArray(size -> new Pose3d[size]));
-            // DogLog.log("Vision/Pose Difference", PoseSubsystem.getInstance().getPose().getTranslation().getDistance(lastPose.getTranslation()));
-            
+          
             if (poseEstimator != null) {
                 poseEstimator.addVisionMeasurement(lastPose, robotPose.timestampSeconds);
                 updated = true;
@@ -98,15 +93,10 @@ public class VisionSubsystem extends SubsystemBase {
 
         // TODO Belongs in periodic() or elsewhere?
         if (lastResult != null) {
-            // DogLog.log("Vision/Result", lastResult.toString());
+        
         }
-        DogLog.log("Vision/Have target(s)", haveTarget);
-        DogLog.log("Vision/Pose", lastPose);
+       
 
-        if (optUpdateVisionDashboard.get()) {
-            // SmartDashboard.putString("Vision/Result", lastResult.toString());
-            SmartDashboard.putBoolean("Vision/Have target(s)", haveTarget);
-            // SmartDashboard.putString("Vision/Last pose", PoseSubsystem.prettyPose(lastPose));
-        }
+        
     }
 }
