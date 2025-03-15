@@ -10,15 +10,19 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 import static edu.wpi.first.units.Units.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+
+import javax.print.attribute.standard.JobHoldUntil;
 
 import edu.wpi.first.units.DistanceUnit;
 import edu.wpi.first.units.measure.*;
@@ -62,15 +66,18 @@ public class Eleclaw extends SubsystemBase{
 
     private Intake intake;
 
+    private CommandXboxController operator;
+
     HashMap<String, Waypoint> named_waypoints; 
 
 
-    public Eleclaw(Elevator elevator, Claw claw,Intake intake, CommandSwerveDrivetrain drivetrain){
+    public Eleclaw(Elevator elevator, Claw claw,Intake intake, CommandSwerveDrivetrain drivetrain, CommandXboxController operator ){
         
         this.elevator = elevator;
         this.claw = claw;
         this.intake = intake;
         this.drivetrain = drivetrain; 
+        this.operator = operator;
     }
 
 
@@ -143,7 +150,7 @@ public class Eleclaw extends SubsystemBase{
     public Command position_coral_2(){
 
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2),
-        claw.set_position_command_mm(claw.k_coral_position_2));
+        claw.set_position_command_mm(claw.k_coral_position_2), intake.outtake_coral_command().onlyIf(()->operator.rightBumper().getAsBoolean()));
        
         
         
@@ -151,7 +158,7 @@ public class Eleclaw extends SubsystemBase{
     public Command position_coral_3(){
 
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3),
-        claw.set_position_command_mm(claw.k_coral_position_2));
+        claw.set_position_command_mm(claw.k_coral_position_2),intake.outtake_coral_command().onlyIf(()->operator.rightBumper().getAsBoolean()));
        
         
         
@@ -159,13 +166,28 @@ public class Eleclaw extends SubsystemBase{
     public Command position_coral_4(){
 
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4),
-      new WaitCommand(2).andThen( new WaitCommand(10)).until(elevator.at_position(0.008)).andThen(claw.set_position_command_mm(claw.k_coral_position_3)));
+      new WaitCommand(2).andThen( new WaitCommand(10)).until(elevator.at_position(0.008)).andThen(claw.set_position_command_mm(claw.k_coral_position_3))).andThen(
+        intake.outtake_coral_command()).onlyIf(()->operator.rightBumper().getAsBoolean()).andThen(claw.set_position_command_mm(claw.k_coral_position_3).onlyIf(()->operator.rightBumper().getAsBoolean())
+      );
        
         
         
     }
 
 
+    public Command reapply_elevator_position(){
 
+
+        return elevator.set_position_command_angle(Rotation.of(elevator.get_reference()));
+    }
+
+    public Command reapply_claw_position(){
+
+
+        return claw.set_position_command_mm(Rotation.of(claw.get_reference()));
+    }
+
+
+    
 
 }
