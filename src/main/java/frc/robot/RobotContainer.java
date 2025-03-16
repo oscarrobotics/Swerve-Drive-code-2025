@@ -5,6 +5,7 @@
 package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -75,6 +76,18 @@ public class RobotContainer {
     double forward_dir = -1;
     double side_dir = -1;
 
+
+    double xfilter = 0;
+    double yfilter = 0;
+    double twistfilter = 0;
+
+    final double k_xfilt_positive = 0.75;
+    final double k_yfilt_positive = 0.75;
+    final double k_tfilt_positive = 0.75;
+    final double k_xfilt_negative = 0.9;
+    final double k_yfilt_negative = 0.9;
+    final double k_tfilt_negative = 1;
+
     // public final Eleclaw eleclaw = new Eleclaw(elevator, claw);
 
 
@@ -106,15 +119,26 @@ public class RobotContainer {
         //the speed control based on evelator position is also implemented here as well
         //as the driver orientation flip apllication
 
+
+
+
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY()*Math.abs(joystick.getLeftY() )* MaxSpeed*forward_dir *  (elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean() ? 1:0.3)) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX()*Math.abs(joystick.getLeftX() ) * MaxSpeed *side_dir* (elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean() ? 1:0.3)) // Drive left with negative X (left)
+                drive.withVelocityX(joystick.getLeftY()* MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3)) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed *side_dir* ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3)) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
-      
+        
+
+        joystick.leftStick().toggleOnTrue( 
+            drivetrain.applyRequest(
+                // Drive counterclockwise with negative X (left)
+    
+            )
+            
+        );
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
@@ -207,6 +231,24 @@ public class RobotContainer {
     
     void flip_side(){
         side_dir=side_dir*-1;
+    }
+
+    private Supplier<SwerveRequest> smooth_drive(){
+
+        double x_speed = joystick.getLeftY() * MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3);
+        double y_speed =joystick.getLeftX()  * MaxSpeed *side_dir* ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3);
+        double t_speed =-joystick.getRightX() * MaxAngularRate*((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3);
+
+        xfilter = x_speed>=xfilter? x_speed*k_xfilt_positive+xfilter*(1-k_xfilt_positive): x_speed*k_xfilt_negative+xfilter*(1-k_xfilt_negative);
+        yfilter = y_speed>=yfilter? y_speed*k_yfilt_positive+yfilter*(1-k_yfilt_positive): y_speed*k_yfilt_negative+yfilter*(1-k_yfilt_negative);
+        twistfilter = t_speed>=twistfilter? t_speed*k_tfilt_positive+twistfilter*(1-k_tfilt_positive): t_speed*k_tfilt_negative+twistfilter*(1-k_tfilt_negative);
+        Supplier<SwerveRequest> request = ()->drive.withVelocityX() // Drive forward with negative Y (forward)
+        .withVelocityY( // Drive left with negative X (left)
+        .withRotationalRate();
+
+        return request;
+
+
     }
 
     public Command getAutonomousCommand() {
