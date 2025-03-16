@@ -139,6 +139,7 @@ public class RobotContainer {
 
         joystick.leftStick().toggleOnTrue( 
             drivetrain.applyRequest(
+                smooth_drive()
                 // Drive counterclockwise with negative X (left)
     
             )
@@ -243,6 +244,8 @@ public class RobotContainer {
         side_dir=side_dir*-1;
     }
 
+    
+
     private Supplier<SwerveRequest> smooth_drive(){
 
         double x_speed = joystick.getLeftY() * MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3);
@@ -252,9 +255,15 @@ public class RobotContainer {
         xfilter = x_speed>=xfilter? x_speed*k_xfilt_positive+xfilter*(1-k_xfilt_positive): x_speed*k_xfilt_negative+xfilter*(1-k_xfilt_negative);
         yfilter = y_speed>=yfilter? y_speed*k_yfilt_positive+yfilter*(1-k_yfilt_positive): y_speed*k_yfilt_negative+yfilter*(1-k_yfilt_negative);
         twistfilter = t_speed>=twistfilter? t_speed*k_tfilt_positive+twistfilter*(1-k_tfilt_positive): t_speed*k_tfilt_negative+twistfilter*(1-k_tfilt_negative);
-        Supplier<SwerveRequest> request = ()->drive.withVelocityX() // Drive forward with negative Y (forward)
-        .withVelocityY( // Drive left with negative X (left)
-        .withRotationalRate();
+
+        SmartDashboard.putNumber("x_filter", xfilter);
+        SmartDashboard.putNumber("y_filter", yfilter);
+        SmartDashboard.putNumber("twist_filter", twistfilter);
+        System.out.println("smooth drive");
+        
+        Supplier<SwerveRequest> request = ()->drive.withVelocityX( xfilter) // Drive forward with negative Y (forward)
+        .withVelocityY( yfilter)// Drive left with negative X (left)
+        .withRotationalRate(twistfilter);
 
         return request;
 

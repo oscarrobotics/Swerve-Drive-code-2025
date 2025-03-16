@@ -174,7 +174,7 @@ public class Eleclaw extends SubsystemBase{
     public Command position_coral_4(){
 
         return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj()))),
-      new WaitCommand(1).andThen( new WaitCommand(10)).until(elevator.at_position(0.05)).andThen(new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_high))),
+      new WaitCommand(1).andThen( new WaitCommand(10)).until(elevator.at_position(0.05)).andThen(new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_high.plus(A_adj())))),
       new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command())
       );
     }
@@ -252,9 +252,9 @@ public class Eleclaw extends SubsystemBase{
 
     private Angle A_adj(){
 
-        double left = operator.getLeftY();
+        double left = operator.getLeftX();
 
-        double right = operator.getRightY();
+        double right = operator.getRightX();
 
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
