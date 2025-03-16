@@ -97,10 +97,10 @@ public class Elevator extends SubsystemBase{
     public final Angle k_stowed =  Rotation.of(0.08);//0.08
     public final Angle k_load =  Rotation.of(0.1);//0.08
 
-    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04);
-    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14);
-    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36);
-    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98);
+    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
+    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14); // level 2
+    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36); // level 3
+    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4
 
 
 
