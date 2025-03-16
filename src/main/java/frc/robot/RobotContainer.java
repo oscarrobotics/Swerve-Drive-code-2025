@@ -30,6 +30,7 @@ import frc.robot.subsystems.Lighting;
 import frc.robot.subsystems.Eleclaw;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 public class RobotContainer {
@@ -84,15 +85,19 @@ public class RobotContainer {
 
     public RobotContainer() {
 
+        eleclaw = new Eleclaw(elevator, claw, intake, drivetrain, controlstick);
 
-        NamedCommands.registerCommand("EjectCoral", intake.outtake_coral_command());
-        
+        NamedCommands.registerCommand("EjectCoral", intake.auto_outtake_coral_command());
+
+        // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
+        // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
+        NamedCommands.registerCommand("ScoreCoral1", eleclaw.score_coral_1());
         NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
         autoChooser = AutoBuilder.buildAutoChooser("tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         //code used for both intake and outake of coral from the claw during auto and teleop 
-        eleclaw = new Eleclaw(elevator, claw, intake, drivetrain, controlstick);
+
         configureBindings();
     }
 
@@ -118,10 +123,10 @@ public class RobotContainer {
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
-        joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
-        joystick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
-        joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
-        joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        joystick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         // todo potentially
         // joystick.povDownLeft(). 
         // joystick.povDownRight().
@@ -162,26 +167,31 @@ public class RobotContainer {
         // controlstick.y().whileTrue(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4));
         
      
-        controlstick.a().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_1), elevator));
+        // controlstick.a().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_1), elevator));
         // controlstick.b().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_2), elevator));
         // controlstick.x().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_3), elevator));
-        controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
+        // controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
 
         controlstick.b().whileTrue(eleclaw.position_coral_2());
     
         controlstick.x().whileTrue(eleclaw.position_coral_3());
         controlstick.y().whileTrue(eleclaw.position_coral_4());
+
+        controlstick.povUp().whileTrue(eleclaw.uppper_alge());
+        controlstick.povDown().whileTrue(eleclaw.lower_alge());
+        controlstick.povLeft().whileTrue(eleclaw.position_load());
         
     
-        controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
+        // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
         // controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
-        controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_3));
-        controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_4));
+        // controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
+        controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_floor));
 
 
         //binds buttons to intake and outtake commands
-        controlstick.leftBumper().onTrue(intake.outtake_coral_command());
-        controlstick.rightBumper().onTrue(intake.intake_coral_command());
+        // controlstick.leftBumper().onTrue(intake.outtake_coral_command());
+        controlstick.rightBumper().whileTrue(intake.continuous_intake());
+        // controlstick.rightTrigger(0.5).onTrue(intake.co_intake());
 
         
 

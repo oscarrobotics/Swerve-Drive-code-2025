@@ -322,17 +322,34 @@ public class Intake extends SubsystemBase {
 
     public Command intake_coral_command(){
 
-        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(200, RPM));})
-            .until(intake_curent_exceeded(Amp.of(35),2))
+        return new ParallelRaceGroup( run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM));})
+            .until(intake_curent_exceeded(Amp.of(35),3))
             .beforeStarting(this::has_coral_true),
-            new WaitCommand(2))
+            new WaitCommand(1.5))
             .andThen(this::stop_intake);
+    }
+
+    public Command continuous_intake(){
+
+        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM)),this::stop_intake);
+        
     }
 
     public Command outtake_coral_command(){
 
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-170, RPM));})
-            .withTimeout(1)
+            .withTimeout(2)
+            .andThen(this::stop_intake
+            ).andThen(this::has_coral_false);
+
+        
+    }
+
+
+    public Command auto_outtake_coral_command(){
+
+        return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-160, RPM));})
+            .withTimeout(2)
             .andThen(this::stop_intake
             ).andThen(this::has_coral_false);
 
