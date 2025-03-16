@@ -94,12 +94,13 @@ public class Elevator extends SubsystemBase{
 
     public final Distance k_min_Distance =  Meters.of(0);
     public final Distance k_max_Distance = Meter.of(3);
-    public final Angle k_stowed =  Rotation.of(0.02);
+    public final Angle k_stowed =  Rotation.of(0.08);//0.08
+    public final Angle k_load =  Rotation.of(0.1);//0.08
 
-    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.06);
+    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04);
     public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14);
     public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36);
-    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.94);
+    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98);
 
 
 
@@ -360,6 +361,12 @@ public class Elevator extends SubsystemBase{
 
     }
 
+
+   
+
+     
+
+
     public void set_elevator_position_mm(Angle posision){
 
         // // gt is greater than 
@@ -397,7 +404,12 @@ public class Elevator extends SubsystemBase{
 
     public BooleanSupplier at_position(double tolerance){
         
-        BooleanSupplier position_trigger = ()-> Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance;
+        BooleanSupplier position_trigger = ()->{
+
+             return Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance &&
+             Math.abs(m_elevator_motor.getVelocity().getValueAsDouble())<tolerance;
+        }
+        ;
         
         return position_trigger;
     }
@@ -405,6 +417,11 @@ public class Elevator extends SubsystemBase{
     public BooleanSupplier at_position(){
 
         return at_position(0.005);
+    }
+
+    public double get_reference(){
+
+        return m_elevator_motor.getClosedLoopReference().getValueAsDouble();
     }
         
 

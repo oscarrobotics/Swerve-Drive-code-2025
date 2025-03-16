@@ -68,9 +68,9 @@ public class Lighting extends SubsystemBase{
         for (int i = 0; i < ledLength; i++) {
             // Set the first half of the LEDs to red
             if (i < ledLength / 2) {
-                ledColors.setRGB(i, 0, 120, 120);
+                ledColors.setRGB(i, 150, 0, 0);
             } else { // Set the second half to blue
-                ledColors.setRGB(i, 0, 120, 120);
+                ledColors.setRGB(i, 150, 0, 0);
             }
         }   
 

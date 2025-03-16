@@ -98,13 +98,15 @@ public class Claw extends SubsystemBase {
     public final Angle k_load_coral_position = Degrees.of(0);
 
     public final Angle k_stowed = Rotation.of(0.29);
-    
-
+    public final Angle k_load = Rotation.of(0.18);
 
     public Angle k_coral_position_1 = Rotation.of(0.27);
-    public Angle k_coral_position_2 = Rotation.of(0.18);//middle scoreing heights
-    public Angle k_coral_position_3 = Rotation.of(0.08);//top scoreing height
-    public Angle k_coral_position_4 = Rotation.of(-0.07);
+    public Angle k_coral_position_mid = Rotation.of(0.2);//middle scoreing heights
+    public Angle k_coral_position_shoot_alge = Rotation.of(0.18);//middle scoreing heights
+    public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
+    public Angle k_coral_position_high = Rotation.of(0.04);//top scoreing height
+   
+    public Angle k_coral_position_floor = Rotation.of(-0.07);
 
     public final Angle k_alge_position_1 = Rotation.of(0);
     public final Angle k_alge_position_2 = Rotation.of(0);
@@ -122,10 +124,10 @@ public class Claw extends SubsystemBase {
 
 
     private final double k_default_mount_ks = 0;
-    private final double k_default_mount_kp = 100;
+    private final double k_default_mount_kp = 130;
     private final double k_default_mount_ki = 0;
     private final double k_default_mount_kd = 30;
-    private final double k_default_mount_kg = 5;
+    private final double k_default_mount_kg = 2;
     private final double k_default_mount_kff = 0;
     // mm_expo gains
     private final double k_default_mount_kV = 10;
@@ -153,9 +155,9 @@ public class Claw extends SubsystemBase {
     // private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
 
     private GenericEntry sh_coral_position_1 = m_mount_tab.addPersistent("coral_position_1", k_coral_position_1.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry(); 
-    private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_2.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
-    private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_3.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
-    private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_4.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_mid.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_high.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_floor.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
     // private GenericEntry sh_mount_kff = m_mount_tab.add("Mount kff", k_default_mount_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
     // private GenericEntry sh_mount_kff_offset = m_mount_tab.add("Mount kff offset", k_default_mount_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
     // private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
@@ -273,7 +275,10 @@ public class Claw extends SubsystemBase {
 
     public BooleanSupplier at_position(double tolerance){
         
-        BooleanSupplier position_trigger = ()-> Math.abs(m_mount.getClosedLoopError().getValueAsDouble())<tolerance;
+        BooleanSupplier position_trigger = ()->{
+            return Math.abs(m_mount.getClosedLoopError().getValueAsDouble())<tolerance
+            && Math.abs(m_mount.getVelocity().getValueAsDouble())<tolerance;
+        } ;
         
         return position_trigger;
     }
@@ -283,6 +288,12 @@ public class Claw extends SubsystemBase {
         return at_position(0.005);
     }
 
+    public double get_reference(){
+
+        return m_mount.getClosedLoopReference().getValueAsDouble();
+        
+    }
+        
 
     
 
@@ -364,9 +375,9 @@ public class Claw extends SubsystemBase {
     public void update_locations(){
        
         k_coral_position_1 = Rotation.of(sh_coral_position_1.getDouble(k_coral_position_1.magnitude()));
-        k_coral_position_2 = Rotation.of(sh_coral_position_2.getDouble(k_coral_position_2.magnitude()));
-        k_coral_position_3 = Rotation.of(sh_coral_position_3.getDouble(k_coral_position_3.magnitude()));
-        k_coral_position_4 = Rotation.of(sh_coral_position_4.getDouble(k_coral_position_4.magnitude()));
+        k_coral_position_mid = Rotation.of(sh_coral_position_2.getDouble(k_coral_position_mid.magnitude()));
+        k_coral_position_high = Rotation.of(sh_coral_position_3.getDouble(k_coral_position_high.magnitude()));
+        k_coral_position_floor = Rotation.of(sh_coral_position_4.getDouble(k_coral_position_floor.magnitude()));
 
 
     }
