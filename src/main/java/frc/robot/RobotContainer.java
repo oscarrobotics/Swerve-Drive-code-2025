@@ -130,10 +130,8 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(joystick.getLeftY()* MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3)) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX() * MaxSpeed *side_dir* ((elevator.is_stowed()&& !joystick.rightBumper().getAsBoolean()) ? (joystick.rightBumper().getAsBoolean() ? 1:0.7):0.3)) // Drive left with negative X (left)
-                drive.withVelocityX(joystick.getLeftY()*Math.abs(joystick.getLeftY() )* MaxSpeed*forward_dir *  (elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 1:0.3)) // Drive forward with negative Y (forward)
-                    .withVelocityY(joystick.getLeftX()*Math.abs(joystick.getLeftX() ) * MaxSpeed *side_dir* (elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 1:0.3)) // Drive left with negative X (left)
+                drive.withVelocityX(joystick.getLeftY()* MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.start().getAsBoolean()) ? (joystick.back().getAsBoolean() ? 1:0.7):0.3)) // Drive forward with negative Y (forward)
+                    .withVelocityY(joystick.getLeftX() * MaxSpeed *side_dir* ((elevator.is_stowed()&& !joystick.start().getAsBoolean()) ? (joystick.back().getAsBoolean() ? 1:0.7):0.3)) // Drive left with negative X (left)
                     .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
