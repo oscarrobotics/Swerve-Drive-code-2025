@@ -152,6 +152,12 @@ public class RobotContainer {
         joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
         joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        
+        // toggles the values of the forward and side direction variables that control the direction of the robot
+        joystick.x().onTrue(new InstantCommand(()->flip_for()));
+        joystick.y().onTrue(new InstantCommand(()->flip_side()));
+        
+        
         // todo potentially
         // joystick.povDownLeft(). 
         // joystick.povDownRight().
@@ -164,9 +170,7 @@ public class RobotContainer {
         // ));
 
 
-        // toggles the values of the forward and side direction variables that control the direction of the robot
-        joystick.x().onTrue(new InstantCommand(()->flip_for()));
-        joystick.y().onTrue(new InstantCommand(()->flip_side()));
+        
      
        
 
