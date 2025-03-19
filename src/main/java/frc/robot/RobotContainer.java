@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 import java.util.function.Supplier;
 
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -137,14 +138,14 @@ public class RobotContainer {
         );
         
 
-        joystick.leftStick().toggleOnTrue( 
-            drivetrain.applyRequest(
-                smooth_drive()
-                // Drive counterclockwise with negative X (left)
+        // joystick.leftStick().toggleOnTrue( 
+        //     drivetrain.applyRequest(
+        //         smooth_drive()
+        //         // Drive counterclockwise with negative X (left)
     
-            )
+        //     )
             
-        );
+        // );
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
@@ -205,12 +206,13 @@ public class RobotContainer {
         controlstick.povUp().whileTrue(eleclaw.uppper_alge());
         controlstick.povDown().whileTrue(eleclaw.lower_alge());
         controlstick.povLeft().whileTrue(eleclaw.position_load());
+        controlstick.povRight().whileTrue(eleclaw.score_alge());
         
     
         // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
         // controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
         // controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
-        controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_floor));
+        // controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_floor));
 
 
         //binds buttons to intake and outtake commands

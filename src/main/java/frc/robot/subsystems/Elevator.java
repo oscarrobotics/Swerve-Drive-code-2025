@@ -100,7 +100,7 @@ public class Elevator extends SubsystemBase{
     public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
     public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14); // level 2
     public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36); // level 3
-    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4
+    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.95); // level 4
 
 
 
@@ -258,7 +258,7 @@ public class Elevator extends SubsystemBase{
 
         CANcoderConfiguration m_elevator_CANcoder_config = new CANcoderConfiguration();
         m_elevator_CANcoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.85));
-        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(Rotations.of(-0.045166));
+        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(Rotations.of(-0.104004));
         m_elevator_CANcoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
        
         
@@ -504,7 +504,7 @@ public class Elevator extends SubsystemBase{
         k_coral_level_sense_postion_4 = Rotation.of(sh_coral_position_4.getDouble(k_coral_level_sense_postion_4.magnitude()));
 
 
-        System.out.println(k_coral_level_sense_postion_1);
+        // System.out.println(k_coral_level_sense_postion_1);
 
 
     }
