@@ -21,6 +21,7 @@ import static edu.wpi.first.units.Units.*;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.function.Supplier;
 
 import javax.print.attribute.standard.JobHoldUntil;
 
@@ -58,7 +59,7 @@ import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
-public class Eleclaw extends SubsystemBase{
+public class Eleclaw{
 
     private Elevator elevator;
     private Claw claw;
@@ -157,16 +158,17 @@ public class Eleclaw extends SubsystemBase{
 
     public Command position_coral_2(){
 
-        // return Commands.parallel(new RepeatCommand( elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj()))),
-        // new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj()))), new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command()));
+        return Commands.parallel(new RepeatCommand( elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2)),
+        new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_mid)), 
+        new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command()));
        
         // return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())))),
         // new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())))), new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command()));
        
-        return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())))),
-        new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())))), 
-        new RepeatCommand(intake.outtake_coral_command().onlyWhile(()->operator.leftBumper().getAsBoolean()))
-        );
+        // return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())))),
+        // new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())))), 
+        // new RepeatCommand(intake.outtake_coral_command().onlyWhile(()->operator.leftBumper().getAsBoolean()))
+        // );
 
 
        
@@ -174,36 +176,36 @@ public class Eleclaw extends SubsystemBase{
     }
     public Command position_coral_3(){
 
-        // return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3.plus(H_adj()))),
-        // new RepeatCommand( claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj()))),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command()));
+        return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3)),
+        new RepeatCommand( claw.set_position_command_mm(claw.k_coral_position_mid)),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command()));
        
         
-        return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3.plus(H_adj())))),
-        new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())))),
-         new RepeatCommand(intake.outtake_coral_command().onlyWhile(()->operator.leftBumper().getAsBoolean()))
-         );
+        // return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3.plus(H_adj())))),
+        // new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())))),
+        //  new RepeatCommand(intake.outtake_coral_command().onlyWhile(()->operator.leftBumper().getAsBoolean()))
+        //  );
         
     }
     public Command position_coral_4(){
 
-    //     return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj()))),
-    //   new WaitCommand(1).andThen( new WaitCommand(10)).until(elevator.at_position(0.05)).andThen(new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_high.plus(A_adj())))),
-    //   new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command())
-    //   );
+        return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4)),
+      new WaitCommand(1).andThen( new WaitCommand(10)).until(elevator.at_position(0.05)).andThen(new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_high))),
+      new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_coral_command())
+      );
 
-        return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())))),
-        new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_high.plus(A_adj())))), 
-        new RepeatCommand(intake.outtake_coral_command().onlyWhile(()->operator.leftBumper().getAsBoolean()))
-        );
+        // return Commands.parallel(new RepeatCommand(run(()-> elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())))),
+        // new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_coral_position_high.plus(A_adj())))), 
+        // new RepeatCommand(intake.outtake_coral_command().onlyWhile(()->operator.leftBumper().getAsBoolean()))
+        // );
 
     }
        
     public Command position_load(){
-        // return Commands.parallel(elevator.set_position_command_angle(elevator.k_load),
-        // claw.set_position_command_mm(claw.k_load));
-        return Commands.parallel(new RepeatCommand(run(()->elevator.set_position_command_angle(elevator.k_load.plus(H_adj())))),
-        new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_load.plus(A_adj()))))
-        );
+        return Commands.parallel(elevator.set_position_command_angle(elevator.k_load),
+        claw.set_position_command_mm(claw.k_load));
+        // return Commands.parallel(new RepeatCommand(run(()->elevator.set_position_command_angle(elevator.k_load.plus(H_adj())))),
+        // new RepeatCommand(run(()-> claw.set_position_command_mm(claw.k_load.plus(A_adj()))))
+        // );
       
     }
         
@@ -212,14 +214,21 @@ public class Eleclaw extends SubsystemBase{
 
 
     public Command lower_alge(){
-        return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2),
-        claw.set_position_command_mm(claw.k_coral_position_get_alge),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.intake_alge_command())
+        return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj()))),
+        new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_get_alge.plus(A_adj()))),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.intake_alge_command())
         );
 
     }
     public Command upper_alge(){
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3),
         claw.set_position_command_mm(claw.k_coral_position_get_alge),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.intake_alge_command())
+        );
+
+    }
+
+    public Command score_alge(){
+        return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4),
+        claw.set_position_command_mm(claw.k_coral_position_shoot_alge),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.outtake_alge_command())
         );
 
     }
@@ -265,7 +274,7 @@ public class Eleclaw extends SubsystemBase{
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
 
-        value = value/80;
+        value = value/10;
 
         return Rotation.of(value);
 
@@ -281,8 +290,8 @@ public class Eleclaw extends SubsystemBase{
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
 
-        value = value/80;
-
+        value = value/10;
+        
         return Rotation.of(value);
 
 
