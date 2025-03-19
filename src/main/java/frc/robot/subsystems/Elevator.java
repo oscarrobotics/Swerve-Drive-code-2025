@@ -114,7 +114,7 @@ public class Elevator extends SubsystemBase{
     public final Distance k_windlass_radius = Inches.of(1);
 
 
-    //goal heights
+    //Heights of the reef scoring rods.
     
     public final Distance k_coral_level_1 = Meters.of(0.48);
     public final Distance k_coral_level_2 = Meters.of(0.6);
@@ -153,16 +153,16 @@ public class Elevator extends SubsystemBase{
     // and but I belive the string is strecthing absorbing the force some of the spring provide and when lited by the first stage the 
     // stings just shink back down intead of the springs, making the elevator easy to lift from the carrace but not from the first
     // stage where the motor attaches, atleast for the first few inches concelling the issue.  
-    private final double k_default_ks = 0;
-    private final double k_default_kp = 160;
-    private final double k_default_ki = 10;
-    private final double k_default_kd = 120;
-    private final double k_default_kg = 6;
+    private final double k_default_ks = 0; // output to overcome static friction
+    private final double k_default_kp = 160; // proportional
+    private final double k_default_ki = 10; // integral
+    private final double k_default_kd = 120; //derivative
+    private final double k_default_kg = 6; //gravity; minimum ampage(?) for movement to account for opposing forces
     private double k_default_kff = 3;
     private double k_default_kff_offset = 0;
     // mm_expo gains
-    private final double k_default_kV = 3;
-    private final double k_default_kA = 0.5;
+    private final double k_default_kV = 3; // voltage required to maintain a given velocity, in V/rps
+    private final double k_default_kA = 0.5; // voltage required to apply a given acceleration, in V/(rps/s)
     private final double k_default_cVelocity = 0.4; // used for both mm and mm_expo
     
     // "normal" motion magic gains
@@ -547,3 +547,14 @@ public class Elevator extends SubsystemBase{
 
 }
 
+//k_coral_level_sense_postion_1
+
+//Elevator heights
+
+//scoring heights
+
+//sensor
+
+//READ ME IF YOUR LOOKING FOR ELEVATOR COMMANDS
+//For those using ctrl + f to look for the command lines that set the height of the elevator and ect. They are in eleclaw.java, and the variables for the heights are in Elevator.java
+//If this information is just wrong or becomes outdated, please change or delete it

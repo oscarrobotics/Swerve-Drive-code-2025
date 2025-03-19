@@ -75,10 +75,6 @@ public class Claw extends SubsystemBase {
     
 
      
-    //
-
-
-   
     public final AngularVelocity k_max_wheel_speed = RevolutionsPerSecond.of(1000/60.0);
     
 
@@ -91,7 +87,7 @@ public class Claw extends SubsystemBase {
     public final Distance k_intake_length = Inches.of(12);
     public final Distance k_algehook_center_length = Inches.of(20);
 
-
+    //Mount/Claw wrist angles
     public final Angle k_min_angle =  Rotation.of(-.15);
     public final Angle k_max_angle = Degrees.of(0.3);
 
@@ -122,19 +118,19 @@ public class Claw extends SubsystemBase {
     
     TalonFXConfiguration  m_mount_config = new TalonFXConfiguration();
 
-
-    private final double k_default_mount_ks = 0;
-    private final double k_default_mount_kp = 130;
-    private final double k_default_mount_ki = 0;
-    private final double k_default_mount_kd = 30;
-    private final double k_default_mount_kg = 2;
+// variables controlling the movement of the claw wrist/pivoter
+    private final double k_default_mount_ks = 0; // output to overcome static friction
+    private final double k_default_mount_kp = 130; //proportional
+    private final double k_default_mount_ki = 0; //integral
+    private final double k_default_mount_kd = 30; //derivative
+    private final double k_default_mount_kg = 2; // gravity; minimum ampage(?) for movement to account for opposing forces
     private final double k_default_mount_kff = 0;
     // mm_expo gains
-    private final double k_default_mount_kV = 10;
-    private final double k_default_mount_kA = 3;
+    private final double k_default_mount_kV = 10; // voltage required to maintain a given velocity, in V/rps
+    private final double k_default_mount_kA = 3; // voltage required to apply a given acceleration, in V/(rps/s)
     private final double k_default_mount_cVelocity = 0.4; // used for both mm and mm_expo
     
-    private final double k_mount_current_limit = 30;
+    private final double k_mount_current_limit = 30; // maximum ampage, usually whining from the motor means this is too low
 
 
 
@@ -168,7 +164,7 @@ public class Claw extends SubsystemBase {
 
 
 
-
+//where things relating to the claws function is stored
     public Claw(){
 
         // configure the motor controller
@@ -181,28 +177,28 @@ public class Claw extends SubsystemBase {
         m_mount_config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
         
         // Peak output of 5 A
-        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_mount_current_limit))
-        .withPeakReverseTorqueCurrent(Amps.of(-k_mount_current_limit));
+        m_mount_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_mount_current_limit)) //torque limit = max speed
+        .withPeakReverseTorqueCurrent(Amps.of(-k_mount_current_limit)); // maximum speed it can go back, clockwise
 
-        m_mount_config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-        m_mount_config.MotorOutput.NeutralMode=NeutralModeValue.Brake;
+        m_mount_config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);//Positive motor output = clockwise motion
+        m_mount_config.MotorOutput.NeutralMode=NeutralModeValue.Brake; //When the motor is nuetral or disabled the default is Brake/dont move
             
 
 
         // bind the remote encoder to the mount motor
 
-        CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration();
-        m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6));
-        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.339844);
-        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration(); // Class for CANcoder, a CAN based magnetic encoder that provides absolute and relative position along with filtered velocity. This handles the configurations for the com.ctre.phoenix6.hardware.CANcoder
+        m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6)); //The positive discontinuity point of the absolute sensor in rotations. This determines the point at which the absolute sensor wraps around, keeping the absolute position in the range [x-1, x).
+        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.339844); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
+        m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //Direction of the sensor to determine positive rotation, as seen facing the LED side of the CANcoder. Counterclockwise motion also = positive motion
         
         
 
         
-        m_mount_config.Feedback.FeedbackRemoteSensorID = m_mount_encoder.getDeviceID();
-        m_mount_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        m_mount_config.Feedback.SensorToMechanismRatio = 1.0;
-        m_mount_config.Feedback.RotorToSensorRatio = 100;
+        m_mount_config.Feedback.FeedbackRemoteSensorID = m_mount_encoder.getDeviceID(); // Device id is [0,62]
+        m_mount_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder; //Talon will fuse another sensor's information with the internal rotor, which provides the best possible position and velocity for accuracy and bandwidth (this also requires setting FeedbackRemoteSensorID).
+        m_mount_config.Feedback.SensorToMechanismRatio = 1.0; //The ratio of sensor rotations to the mechanism's output. 1+ is seen as a reduction
+        m_mount_config.Feedback.RotorToSensorRatio = 100; //The ratio of motor rotor rotations to remote sensor rotations. 1+ is seen as a reduction
         
         //for motion magic controls
         m_mount_config.MotionMagic.MotionMagicCruiseVelocity = k_default_mount_cVelocity;
@@ -313,7 +309,7 @@ public class Claw extends SubsystemBase {
     }
 
        
-
+    //These values are in smart dashboard
     public void publish_mount_data(){
 
         // put data important for charaterizing the data to the smart dashboard
