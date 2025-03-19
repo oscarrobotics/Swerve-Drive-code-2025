@@ -217,7 +217,7 @@ public class Eleclaw extends SubsystemBase{
         );
 
     }
-    public Command uppper_alge(){
+    public Command upper_alge(){
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3),
         claw.set_position_command_mm(claw.k_coral_position_get_alge),new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.intake_alge_command())
         );

@@ -96,12 +96,24 @@ public class Elevator extends SubsystemBase{
     public final Distance k_max_Distance = Meter.of(3);
     public final Angle k_stowed =  Rotation.of(0.08);//0.08
     public final Angle k_load =  Rotation.of(0.1);//0.08
+//Note to self, write how to accurately change/covert the magnitude value from desired values
 
-    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
-    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14); // level 2
-    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36); // level 3
-    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4
-
+//Formula for converting inches to rotations. The maximum any point of the elevator moves is 66 inches
+// 66 = 1 and 0 = 0
+// So, y/66 = x
+// y = is how many inches far you want to move to
+// x = is the amount of rotations needed to get to that position
+// P.S you need to account for the physical height of the elevator when trying to get it to move to a position you want it to
+    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trough
+    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.48); // level 2, was 0.14
+    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.72); // level 3, was 0.36
+    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.89); // level 4, was 0.98
+/*
+    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); // trough
+    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14); // level 2, change to 39 inches with and angle of 35 degrees
+    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36); // level 3, change to 55 inches with an angle of 35 degrees
+    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4, change to 79 inches with an angle of 35 degrees
+ */
 
 
 

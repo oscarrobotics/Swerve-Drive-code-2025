@@ -100,7 +100,7 @@ public class Claw extends SubsystemBase {
     public Angle k_coral_position_mid = Rotation.of(0.2);//middle scoreing heights
     public Angle k_coral_position_shoot_alge = Rotation.of(0.18);//middle scoreing heights
     public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
-    public Angle k_coral_position_high = Rotation.of(0.04);//top scoreing height
+    public Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
    
     public Angle k_coral_position_floor = Rotation.of(-0.07);
 
