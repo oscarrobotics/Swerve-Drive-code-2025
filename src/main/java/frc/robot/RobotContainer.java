@@ -30,6 +30,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lighting;
 import frc.robot.subsystems.Eleclaw;
+import frc.robot.subsystems.VisionSubsystem;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -65,6 +66,7 @@ public class RobotContainer {
     public final Claw claw = new Claw();
     public final Intake intake = new Intake();
     public final Lighting lighting = new Lighting();
+    public final VisionSubsystem vision = new VisionSubsystem();
 
     public Eleclaw eleclaw;
 
