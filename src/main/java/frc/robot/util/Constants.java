@@ -119,16 +119,15 @@ public class Constants {
 
     public static class k_vision{
 
-        public static final String k_front_camera_name = "front_camera";
-
-        
-        public static final Transform3d k_front_camera_offset = new Transform3d(
+        // fix values (like quaternions)
+        public static final String k_orange_camera_name = "orange_camera";
+        public static final Transform3d k_orange_camera_offset = new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
             new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))
             );
 
-        public static final String k_rear_camera_name = "rear_camera";
-        public static final Transform3d k_rear_camera_offset =  new Transform3d(
+        public static final String k_green_camera_name = "green_camera";
+        public static final Transform3d k_green_camera_offset =  new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
             new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))
             );
