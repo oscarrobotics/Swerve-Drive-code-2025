@@ -202,21 +202,23 @@ public class RobotContainer {
         // controlstick.x().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_3), elevator));
         // controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
 
+        //TEMPORARILY COMMENTED OUT TO TEST DIFFERENT ANGLE
+    
         controlstick.b().whileTrue(eleclaw.position_coral_2());
     
         controlstick.x().whileTrue(eleclaw.position_coral_3());
         controlstick.y().whileTrue(eleclaw.position_coral_4());
 
-        controlstick.povUp().whileTrue(eleclaw.uppper_alge());
+        controlstick.povUp().whileTrue(eleclaw.upper_alge());
         controlstick.povDown().whileTrue(eleclaw.lower_alge());
         controlstick.povLeft().whileTrue(eleclaw.position_load());
-        controlstick.povRight().whileTrue(eleclaw.score_alge());
-        
+    
     
         // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
         // controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
-        // controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
-        // controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_floor));
+        //controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
+        //controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_floor));
+        controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
 
 
         //binds buttons to intake and outtake commands
