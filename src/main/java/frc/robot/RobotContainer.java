@@ -73,7 +73,7 @@ public class RobotContainer {
 <<<<<<< HEAD
     public final Climber climber = new Climber();
 =======
-    public final VisionSubsystem vision = new VisionSubsystem();
+    public final VisionSubsystem vision = new VisionSubsystem(drivetrain);
 
 >>>>>>> 94a6ff1b2e6f577308181b621d9ed25ef1c4f6aa
     public Eleclaw eleclaw;
@@ -111,14 +111,11 @@ public class RobotContainer {
 
         eleclaw = new Eleclaw(elevator, claw, intake, drivetrain, controlstick);
 
-        NamedCommands.registerCommand("EjectCoral", intake.auto_outtake_coral_command());
-
-        // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
-        // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
-        NamedCommands.registerCommand("ScoreCoral1", eleclaw.score_coral_1());
-        NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
+        name_commands();
         autoChooser = AutoBuilder.buildAutoChooser("tests");
         SmartDashboard.putData("Auto Mode", autoChooser);
+
+       
 
         //code used for both intake and outake of coral from the claw during auto and teleop 
 
@@ -257,6 +254,16 @@ public class RobotContainer {
 
     }
 
+    private void name_commands() {
+        NamedCommands.registerCommand("EjectCoral", intake.auto_outtake_coral_command());
+
+        // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
+        // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
+        NamedCommands.registerCommand("ScoreCoral1", eleclaw.score_coral_1());
+        NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
+        
+    }
+
     void flip_for(){
         forward_dir=forward_dir*-1;
 
@@ -296,4 +303,7 @@ public class RobotContainer {
         /* Run the path selected from the auto chooser */
         return autoChooser.getSelected();
     }
+
+   
+
 }

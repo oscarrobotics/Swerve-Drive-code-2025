@@ -31,6 +31,8 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+
 public class VisionSubsystem extends SubsystemBase {
     private static VisionSubsystem instance;
     private final PhotonCamera orange_camera;
@@ -43,8 +45,11 @@ public class VisionSubsystem extends SubsystemBase {
     private PhotonPipelineResult lastResult = null;
     private boolean updateDashboard = true;
 
+    private CommandSwerveDrivetrain m_drivetrain;
+
+
     // check constants.java for values; subject to change (prob quaternions)
-    public VisionSubsystem() {
+    public VisionSubsystem( CommandSwerveDrivetrain drivetrain) {   
         assert (instance == null);
         instance = this;
  
@@ -64,13 +69,14 @@ public class VisionSubsystem extends SubsystemBase {
         // green_photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         SmartDashboard.putData("Vision/Field", field);
+        m_drivetrain = drivetrain;
     }
 
     public static VisionSubsystem getInstance() {
         return instance;
     }
 
-    public boolean updatePoseEstimate(PoseEstimator<SwerveModulePosition[]> poseEstimator) {
+    public boolean updatePoseEstimate() {
         List<PhotonPipelineResult> orange_results = orange_camera.getAllUnreadResults();
         // List<PhotonPipelineResult> green_results = green_camera.getAllUnreadResults();
 
@@ -92,8 +98,8 @@ public class VisionSubsystem extends SubsystemBase {
             field.setRobotPose(lastPose);
 
           
-            if (poseEstimator != null) {
-                poseEstimator.addVisionMeasurement(lastPose, robotPose.timestampSeconds);
+            if (m_drivetrain != null) {
+                m_drivetrain.addVisionMeasurement(lastPose, robotPose.timestampSeconds);
                 updated = true;
             }
         }
