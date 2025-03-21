@@ -59,6 +59,8 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.util.Constants;
+import frc.robot.util.Constants.*;
 
 public class Elevator extends SubsystemBase{
     // All hardware classes already have WPILib integration
@@ -83,107 +85,43 @@ public class Elevator extends SubsystemBase{
 
 
 
-    //if external cancoder isnt used
-    public final double k_elevator_rotations = 3.7;
-    public final double k_elevator_ratio = k_elevator_rotations*1;
 
 
+    public final Angle k_elevator_min_rot = Constants.k_elevator.k_min_rot;
+    public final Angle k_elevator_max_rot = Constants.k_elevator.k_max_rot;
 
-    public final Angle k_elevator_min_rot = Rotations.of(0);
-    public final Angle k_elevator_max_rot = Rotations.of(0.98);
-
-    public final Distance k_min_Distance =  Meters.of(0);
-    public final Distance k_max_Distance = Meter.of(3);
-    public final Angle k_stowed =  Rotation.of(0.08);//0.08
-    public final Angle k_load =  Rotation.of(0.1);//0.08
-
-    public Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
-    public Angle k_coral_level_sense_postion_2 = Rotations.of(0.14); // level 2
-    public Angle k_coral_level_sense_postion_3 = Rotations.of(0.36); // level 3
-    public Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4
+    public final Distance k_min_length =  Constants.k_elevator.k_min_length;    
+    public final Distance k_max_length = Constants.k_elevator.k_max_length;
 
 
 
 
-    // physical Characteristics of robot
-    public final Distance min_axel_height = Inches.of(12);
-    public final Distance max_axel_height = Inches.of(78);
+    public final Angle k_stowed =  Constants.k_elevator.k_stowed;//0.08
+    public final Angle k_load =  Constants.k_elevator.k_load;//0.08
+
+    public Angle k_coral_level_sense_postion_1 = Constants.k_elevator.k_coral_level_sense_postion_1; //trought
+    public Angle k_coral_level_sense_postion_2 = Constants.k_elevator.k_coral_level_sense_postion_2; // level 2
+    public Angle k_coral_level_sense_postion_3 = Constants.k_elevator.k_coral_level_sense_postion_3; // level 3
+    public Angle k_coral_level_sense_postion_4 = Constants.k_elevator.k_coral_level_sense_postion_4; // level 4
+    
 
     public final Mass k_carrage_mass = Kilogram.of(13);
 
-    public final Distance k_windlass_radius = Inches.of(1);
-
-
-    //goal heights
-    
-    public final Distance k_coral_level_1 = Meters.of(0.48);
-    public final Distance k_coral_level_2 = Meters.of(0.6);
-    public final Distance k_coral_level_3 = Meters.of(1.21);
-    public final Distance k_coral_level_4 = Meters.of(1.83);
-
-    public final Distance k_alge_level_1 = Meters.of(0);
-    public final Distance k_alge_level_2 = Meters.of(0);
-    public final Distance k_alge_stacked = Meters.of(0.4);
-    
-
-    public final Distance k_barge_height = Meters.of(0);
-
-    public final Distance k_processor_height = Meters.of(0);
-
-
-    // Theses are the gains for the controll loop of the elevator, they control how the elevator moves
-    // by breaking up the nessay controll efforts into differnts aspects of the mechanial system suck how 
-    // much force is necessary to overcome firction(ks), how much force is necessar to overcom gravity(kG),
-    // how much force is necessary/how much effort(related to how fast it should move) it should apply
-    // depending on how far it is from the set point(kP), how much force it should apply depending on how fast
-    // it is approaching or leaving the set point(kD), and how much force it needs over small forces over time near 
-    // while it is near the set point(kI)
-    // KV and KA are used to descrive the velocity profile the elevator should follow to get to a position set point
-    // when using motikon magic expo, there exact definintion is explained in the CTRE documentation,
-    // higher values will make the elevator move slower, and should gradually be adjusted down as to the optimun value
-    // cVelocity is cruise velocity, it is the max speed the elevator will move at when using motion magic
-    // acceleration and jerk are used to control how fast the elevator can accelerate and decelerate in normal motion magic
-    // to generate trapazoidal profiles, they are not used in motion magic expo.
-    // At comp, while trying to get the elevator to work, I was mostly just adjusting these values trying to get the 
-    // elevator to move, but as it turns out he eclevator was mechanically mechaninly malfunctioning, so no set of values
-    // would have worked. the Elevator is 3 stages which means the force required to move it is 3 times greater than the acual
-    // weight of the elevator( an issue whenn the force is tranfered though 5mm belt teeth), to mitigate this, the elevator has 
-    // contant force sprigne that draw the carage up in the second stage, which "should" transfer back thought the other stages,
-    // assinting the motor, unfortunately I belived this relied on an assumption that the string would perfectly transfer the force,
-    // and but I belive the string is strecthing absorbing the force some of the spring provide and when lited by the first stage the 
-    // stings just shink back down intead of the springs, making the elevator easy to lift from the carrace but not from the first
-    // stage where the motor attaches, atleast for the first few inches concelling the issue.  
-    private final double k_default_ks = 0;
-    private final double k_default_kp = 160;
-    private final double k_default_ki = 10;
-    private final double k_default_kd = 120;
-    private final double k_default_kg = 6;
-    private double k_default_kff = 3;
-    private double k_default_kff_offset = 0;
-    // mm_expo gains
-    private final double k_default_kV = 3;
-    private final double k_default_kA = 0.5;
-    private final double k_default_cVelocity = 0.4; // used for both mm and mm_expo
-    
-    // "normal" motion magic gains
-    private final double k_default_Acceleration =10; //noma
-    private final double k_default_jerk = 10;
-
-    private final double k_current_limit = 70;
 
 
     private final ElevatorSim m_elevatorSim = new ElevatorSim(
         DCMotor.getKrakenX60(2), 
         11.7/3, 
         k_carrage_mass.in(Kilograms), 
-        k_windlass_radius.in(Meters),
-        min_axel_height.in(Meters), 
-        max_axel_height.in(Meters), 
+        0.025,
+        k_min_length.in(Meters), 
+        k_max_length.in(Meters), 
         false, 
-        min_axel_height.in(Meters));
+        k_min_length.in(Meters)
+        );
 
     private final Mechanism2d m_mech2d =
-        new Mechanism2d(6, max_axel_height.in(Meters));
+        new Mechanism2d(6, k_max_length.in(Meters));
     private final MechanismRoot2d m_mech2dRoot =
         m_mech2d.getRoot("Elevator Root", 3, 0.0);
     private final MechanismLigament2d m_elevatorMech2d =
@@ -233,32 +171,33 @@ public class Elevator extends SubsystemBase{
         
 
         
-        m_elevator_config.Slot0.kS = k_default_ks;
-        m_elevator_config.Slot0.kP = k_default_kp; // An error of 1 rotation results in 60 A output
-        m_elevator_config.Slot0.kI = k_default_ki; // No output for integrated error
-        m_elevator_config.Slot0.kD = k_default_kd; // A velocity of 1 rps results in 6 A output
-        m_elevator_config.Slot0.kG = k_default_kg;
+        m_elevator_config.Slot0.kS = Constants.k_elevator.k_0_ks;
+        m_elevator_config.Slot0.kP = Constants.k_elevator.k_0_kp;
+        m_elevator_config.Slot0.kI = Constants.k_elevator.k_0_ki;
+        m_elevator_config.Slot0.kD = Constants.k_elevator.k_0_kd;
+        m_elevator_config.Slot0.kG = Constants.k_elevator.k_0_kg;
+        
         m_elevator_config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         // Peak output of 20 A
-        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_current_limit))
-        .withPeakReverseTorqueCurrent(Amps.of(-k_current_limit));
-        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(k_current_limit).withSupplyCurrentLimit(k_current_limit);
+        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(Constants.k_elevator.k_current_limit)) 
+        .withPeakReverseTorqueCurrent(Amps.of(-Constants.k_elevator.k_current_limit));
+        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(Constants.k_elevator.k_current_limit).withSupplyCurrentLimit(Constants.k_elevator.k_current_limit);
 
 
 
         //for motion magic controls
-        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = k_default_cVelocity;
-        m_elevator_config.MotionMagic.MotionMagicAcceleration = k_default_Acceleration;
-        m_elevator_config.MotionMagic.MotionMagicJerk = k_default_jerk;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kV = k_default_kV;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kA = k_default_kA;
+        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = Constants.k_elevator.k_0_cruiseVel;
+        m_elevator_config.MotionMagic.MotionMagicAcceleration = Constants.k_elevator.k_0_Acceleration;
+        m_elevator_config.MotionMagic.MotionMagicJerk = Constants.k_elevator.k_0_jerk;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kV = Constants.k_elevator.k_0_kV;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kA = Constants.k_elevator.k_0_kA;
 
 
         // bind the remote encoder to the mount motor
 
         CANcoderConfiguration m_elevator_CANcoder_config = new CANcoderConfiguration();
         m_elevator_CANcoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.85));
-        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(Rotations.of(-0.045166));
+        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(Constants.k_elevator.k_mag_sensor_offset);
         m_elevator_CANcoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
        
         
@@ -275,8 +214,8 @@ public class Elevator extends SubsystemBase{
         
         m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        m_elevator_config.Feedback.SensorToMechanismRatio = 1/1.486486;//1.486486
-        m_elevator_config.Feedback.RotorToSensorRatio = 11.71*5.5;
+        m_elevator_config.Feedback.SensorToMechanismRatio = Constants.k_elevator.k_sensor_to_mechanism;//1.486486
+        m_elevator_config.Feedback.RotorToSensorRatio = Constants.k_elevator.k_rotor_to_sensor;//1.486486
         
         
         status = StatusCode.StatusCodeNotInitialized;
@@ -335,21 +274,21 @@ public class Elevator extends SubsystemBase{
     private void set_elevator_position(Distance position){
 
         // gt is greater than 
-        if (position.gt( k_max_Distance)){
+        if (position.gt( k_max_length)){
          
             // logger.log(position + " requested is greater than the max position ");
-            position = k_max_Distance;
+            position = k_max_length;
 
         }
-        else if (position.lt(k_min_Distance)){
+        else if (position.lt(k_min_length)){
 
             //logger.log(position + " requested is less than the minimum position");
-            position = k_min_Distance;
+            position = k_min_length;
 
         }
 
         //calucaulate the conversion from meters to rotations
-        double ratio = (position.minus(k_min_Distance)).div(k_max_Distance.minus(k_min_Distance)).baseUnitMagnitude();
+        double ratio = (position.minus(k_min_length)).div(k_max_length.minus(k_min_length)).baseUnitMagnitude();
     
         Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
@@ -389,9 +328,9 @@ public class Elevator extends SubsystemBase{
         // Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
         // output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
-        double ff_factor = posision.div(k_elevator_max_rot).magnitude()+k_default_kff_offset;
+        double ff_factor = posision.div(k_elevator_max_rot).magnitude();
 
-        Current ffCurrent = Amps.of(k_default_kff).times(ff_factor);
+        Current ffCurrent = Amps.of(Constants.k_elevator.k_0_kff).times(ff_factor);
 
         // System.out.println("position set "+ posision.in(Rotation) );
 
@@ -444,7 +383,7 @@ public class Elevator extends SubsystemBase{
 
         
         var elevatorVelocity = 
-            (m_elevatorSim.getVelocityMetersPerSecond()/k_windlass_radius.in(Meter));
+            (m_elevatorSim.getVelocityMetersPerSecond()/0.025);
 
         m_elevator_motorSim.setRawRotorPosition(m_elevatorSim.getPositionMeters());
         m_elevator_motorSim.setRotorVelocity(elevatorVelocity);
@@ -504,7 +443,7 @@ public class Elevator extends SubsystemBase{
         k_coral_level_sense_postion_4 = Rotation.of(sh_coral_position_4.getDouble(k_coral_level_sense_postion_4.magnitude()));
 
 
-        System.out.println(k_coral_level_sense_postion_1);
+        // System.out.println(k_coral_level_sense_postion_1);
 
 
     }
@@ -547,3 +486,14 @@ public class Elevator extends SubsystemBase{
 
 }
 
+//k_coral_level_sense_postion_1
+
+//Elevator heights
+
+//scoring heights
+
+//sensor
+
+//READ ME IF YOUR LOOKING FOR ELEVATOR COMMANDS
+//For those using ctrl + f to look for the command lines that set the height of the elevator and ect. They are in eleclaw.java, and the variables for the heights are in Elevator.java
+//If this information is just wrong or becomes outdated, please change or delete it

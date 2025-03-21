@@ -110,10 +110,10 @@ public class Intake extends SubsystemBase {
 
 
 
-    private final double k_default_intake_ks = 4;
-    private final double k_default_intake_kp = 10;
-    private final double k_default_intake_ki = 0;
-    private final double k_default_intake_kd = 3;
+    private final double k_default_intake_ks = 4; // output to overcome static friction
+    private final double k_default_intake_kp = 10; // proportional
+    private final double k_default_intake_ki = 0; // integral
+    private final double k_default_intake_kd = 3; //derivative
 
     private final double k_default_intake_accel = 1;
     private final double k_default_intake_jerk = 1;

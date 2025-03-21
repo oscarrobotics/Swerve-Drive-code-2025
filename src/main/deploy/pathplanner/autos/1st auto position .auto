@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st coral eject"
+            "pathName": "1st auto eject"
           }
         },
         {
@@ -25,7 +25,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st coral pick"
+            "pathName": "1st auto pick"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st coral eject 2"
+            "pathName": "1st auto eject 2"
           }
         },
         {
@@ -56,12 +56,6 @@
           "type": "named",
           "data": {
             "name": "EjectCoral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1st coral finish"
           }
         }
       ]
