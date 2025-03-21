@@ -148,7 +148,7 @@ public class Intake extends SubsystemBase {
         
 
         /* Torque-based velocity does not require a velocity feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-        m_intake_config.Slot0.kS = k_default_intake_ks; // To account for friction, add 2.5 A of static feedforward
+        /*m_intake_config.Slot0.kS = k_default_intake_ks; // To account for friction, add 2.5 A of static feedforward
         m_intake_config.Slot0.kI = k_default_intake_ki; // No output for integrated error
         m_intake_config.Slot0.kD = k_default_intake_kd; // No output for error derivative
         m_intake_config.Slot0.kP = k_default_intake_kp; // An error of 1 rotation per second results in 5 A output
@@ -440,11 +440,11 @@ public class Intake extends SubsystemBase {
         m_intake.getConfigurator().apply(m_intake_config);
 
 
-    }
+    } 
 
 
     
 
     
     
-}
+}   

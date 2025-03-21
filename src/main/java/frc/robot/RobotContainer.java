@@ -29,6 +29,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lighting;
 import frc.robot.subsystems.Eleclaw;
+import frc.robot.subsystems.Climber;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -64,7 +65,7 @@ public class RobotContainer {
     public final Claw claw = new Claw();
     public final Intake intake = new Intake();
     public final Lighting lighting = new Lighting();
-
+    public final Climber climber = new Climber();
     public Eleclaw eleclaw;
 
 
@@ -152,6 +153,7 @@ public class RobotContainer {
         joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
         joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        // joystick.rightTrigger().
         // todo potentially
         // joystick.povDownLeft(). 
         // joystick.povDownRight().
