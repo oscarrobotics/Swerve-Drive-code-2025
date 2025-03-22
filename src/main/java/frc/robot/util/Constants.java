@@ -1,6 +1,7 @@
 package frc.robot.util;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.units.measure.Mass;
 import static edu.wpi.first.units.Units.*;
@@ -19,7 +20,7 @@ public class Constants {
 
     public static class k_elevator {
 
-        public static final Angle k_mag_sensor_offset = Rotations.of(-0.104004);
+        public static final Angle k_mag_sensor_offset = Rotations.of(-0.241943);
         public static final double k_sensor_to_mechanism =1/1.486486; // sensor rotations to mechanism travel ratio
         public static final double k_rotor_to_sensor = 11.71*5.5;
 
@@ -33,6 +34,7 @@ public class Constants {
         // can be used as verification points to ensure the elevator is working correctly
         // if verification fails, then the elevator should come back into spec if re-mesured,
         // whithout need to change the scoring goal heights
+        public static final Distance k_height_offset = Meters.of(0.075);// height of top of belly pan
 
         public static final Distance k_min_length =  Meters.of(0);// distace from the axel to the to of the belly pan a 0
         public static final Distance k_max_length = Meter.of(1.83); // distance from the axel to belly pan at max height
@@ -57,13 +59,13 @@ public class Constants {
 
         //elevator goal sensor positions, legacy fall back
 
-        public static final Angle k_stowed =  Rotation.of(0.08);//0.08
-        public static final Angle k_load =  Rotation.of(0.1);//0.08
+        public static final Angle k_stowed =  Rotation.of(0.01);//0.08
+        public static final Angle k_load =  Rotation.of(0.28);//0.08
 
         public static Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
-        public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.14); // level 2
-        public static Angle k_coral_level_sense_postion_3 = Rotations.of(0.36); // level 3
-        public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.95); // level 4
+        public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.4); // level 2
+        public static Angle k_coral_level_sense_postion_3 = Rotations.of(0.6); // level 3
+        public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4
 
 
         // elevator goal leghts
@@ -84,16 +86,16 @@ public class Constants {
         public static final double k_current_limit = 70;
         // Slot 0 elevator pid gains
         public static final double k_0_ks = 0; // output to overcome static friction
-        public static final double k_0_kp = 160; // proportional
+        public static final double k_0_kp = 180; // proportional
         public static final double k_0_ki = 10; // integral
         public static final double k_0_kd = 120; //derivative
-        public static final double k_0_kg = 6; //gravity; minimum ampage(?) for movement to account for opposing forces
-        public static double k_0_kff = 3;
+        public static final double k_0_kg = 7; //gravity; minimum ampage(?) for movement to account for opposing forces
+        public static double k_0_kff = 2.5;
         public static double k_0_kff_offset = 0;
         //slot 0 motion magic expo gains
-        public static final double k_0_kV = 3; // voltage required to maintain a given velocity, in V/rps
-        public static final double k_0_kA = 0.5; // voltage required to apply a given acceleration, in V/(rps/s)
-        public static final double k_0_cruiseVel = 0.4; // used for both mm and mm_expo
+        public static final double k_0_kV = 3.5; // voltage required to maintain a given velocity, in V/rps
+        public static final double k_0_kA = 0.6; // voltage required to apply a given acceleration, in V/(rps/s)
+        public static final double k_0_cruiseVel = 0.6; // used for both mm and mm_expo
         
         // slot 0 "normal" motion magic gains
         public static final double k_0_Acceleration =10; //noma
@@ -107,6 +109,44 @@ public class Constants {
 
     public static class k_claw{
 
+        public final AngularVelocity k_max_wheel_speed = RevolutionsPerSecond.of(1000/60.0);
+    
+
+    
+        public final AngularVelocity k_max_arm_speed = RevolutionsPerSecond.of(5/60.0);
+
+
+
+        // physical dimentions of the robot
+        public final Distance k_intake_length = Inches.of(12);
+        public final Distance k_algehook_center_length = Inches.of(20);
+
+        //Mount/Claw wrist angles
+        public final Angle k_min_angle =  Rotation.of(-.15);
+        public final Angle k_max_angle = Degrees.of(0.3);
+
+        public final Angle k_load_coral_position = Degrees.of(0);
+
+        public final Angle k_stowed = Rotation.of(0.25);
+        public final Angle k_load = Rotation.of(0.18);
+
+        public Angle k_coral_position_1 = Rotation.of(0.27);
+        public Angle k_coral_position_mid = Rotation.of(0.12);//middle scoreing heights
+        public Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
+        public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
+        public Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
+    
+        public Angle k_coral_position_floor = Rotation.of(-0.07);
+
+        public final Angle k_alge_position_1 = Rotation.of(0);
+        public final Angle k_alge_position_2 = Rotation.of(0);
+        public final Angle k_alge_position_3 = Rotation.of(0);
+        public final Angle k_alge_position_4 = Rotation.of(0);
+
+        public final Angle k_process_alge_position = Rotation.of(0);
+        public final Angle k_barge_alge_position = Rotation.of(0);
+
+
     }
 
     public static class k_intake{
@@ -114,19 +154,61 @@ public class Constants {
     }
 
     public static class k_climber{
+        
+        public static final Angle k_max_travel = Rotations.of(5); // todo
+        public static final Angle k_deploy_position = Rotations.of(21.1); // todo
+
+        public static final double deploy_current_limit = 20;  
+        public static final double climb_current_limit = 70;
+
+        public static final double deploy_cruse_velocity = 0.4; 
+        public static final double climb_cruse_velocity = 0.4;
+
+        public static final double acceleration = 10;
+        public static final double jerk = 10;
+        public static final double kV = 0.5;
+        public static final double kA = 0.5;
+
+
+        // PID gains for deploy velocity
+        public static final double k_deploy_velocity_ks = 2;
+        public static final double k_deploy_velocity_kp = 8;
+        public static final double k_deploy_velocity_ki = 0;
+        public static final double k_deploy_velocity_kd = 1;
+        // PID gains for climbing velocity
+        public static final double k_climb_velocity_ks = 2;
+        public static final double k_climb_velocity_kp = 4;
+        public static final double k_climb_velocity_ki = 0;
+        public static final double k_climb_velocity_kd = 1;
+
+        // PID gains for deploy position
+        public static final double k_deploy_position_kp = 4;
+        public static final double k_deploy_position_ki = 0;
+        public static final double k_deploy_position_kd = 0;
+        public static final double k_deploy_position_kg = 0;
+        // PID gains for climbing position
+        public static final double k_climb_position_kp = 4;
+        public static final double k_climb_position_ki = 0;
+        public static final double k_climb_position_kd = 1;
+        public static final double k_climb_position_kg = 3;
+
+
+
 
     }
 
     public static class k_vision{
 
         // fix values (like quaternions)
-        public static final String k_orange_camera_name = "orange_camera";
+        
+
+        public static final String k_orange_camera_name = "Arducam_OV2311_USB_Camera";
         public static final Transform3d k_orange_camera_offset = new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
             new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))
             );
 
-        public static final String k_green_camera_name = "green_camera";
+        public static final String k_green_camera_name = "Arducam_OV9782_USB_Camera";
         public static final Transform3d k_green_camera_offset =  new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
             new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))

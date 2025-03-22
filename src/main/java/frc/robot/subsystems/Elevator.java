@@ -59,7 +59,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
-import frc.robot.util.Constants;
+// import frc.robot.util.Constants;
 import frc.robot.util.Constants.*;
 
 public class Elevator extends SubsystemBase{
@@ -87,22 +87,22 @@ public class Elevator extends SubsystemBase{
 
 
 
-    public final Angle k_elevator_min_rot = Constants.k_elevator.k_min_rot;
-    public final Angle k_elevator_max_rot = Constants.k_elevator.k_max_rot;
+    public final Angle k_elevator_min_rot = k_elevator.k_min_rot;
+    public final Angle k_elevator_max_rot = k_elevator.k_max_rot;
 
-    public final Distance k_min_length =  Constants.k_elevator.k_min_length;    
-    public final Distance k_max_length = Constants.k_elevator.k_max_length;
-
-
+    public final Distance k_min_length =  k_elevator.k_min_length;    
+    public final Distance k_max_length = k_elevator.k_max_length;
 
 
-    public final Angle k_stowed =  Constants.k_elevator.k_stowed;//0.08
-    public final Angle k_load =  Constants.k_elevator.k_load;//0.08
 
-    public Angle k_coral_level_sense_postion_1 = Constants.k_elevator.k_coral_level_sense_postion_1; //trought
-    public Angle k_coral_level_sense_postion_2 = Constants.k_elevator.k_coral_level_sense_postion_2; // level 2
-    public Angle k_coral_level_sense_postion_3 = Constants.k_elevator.k_coral_level_sense_postion_3; // level 3
-    public Angle k_coral_level_sense_postion_4 = Constants.k_elevator.k_coral_level_sense_postion_4; // level 4
+
+    public final Angle k_stowed =  k_elevator.k_stowed;//0.08
+    public final Angle k_load =  k_elevator.k_load;//0.08
+
+    public Angle k_coral_level_sense_postion_1 = k_elevator.k_coral_level_sense_postion_1; //trought
+    public Angle k_coral_level_sense_postion_2 = k_elevator.k_coral_level_sense_postion_2; // level 2
+    public Angle k_coral_level_sense_postion_3 = k_elevator.k_coral_level_sense_postion_3; // level 3
+    public Angle k_coral_level_sense_postion_4 = k_elevator.k_coral_level_sense_postion_4; // level 4
     
 
     public final Mass k_carrage_mass = Kilogram.of(13);
@@ -171,33 +171,33 @@ public class Elevator extends SubsystemBase{
         
 
         
-        m_elevator_config.Slot0.kS = Constants.k_elevator.k_0_ks;
-        m_elevator_config.Slot0.kP = Constants.k_elevator.k_0_kp;
-        m_elevator_config.Slot0.kI = Constants.k_elevator.k_0_ki;
-        m_elevator_config.Slot0.kD = Constants.k_elevator.k_0_kd;
-        m_elevator_config.Slot0.kG = Constants.k_elevator.k_0_kg;
+        m_elevator_config.Slot0.kS = k_elevator.k_0_ks;
+        m_elevator_config.Slot0.kP = k_elevator.k_0_kp;
+        m_elevator_config.Slot0.kI = k_elevator.k_0_ki;
+        m_elevator_config.Slot0.kD = k_elevator.k_0_kd;
+        m_elevator_config.Slot0.kG = k_elevator.k_0_kg;
         
         m_elevator_config.Slot0.GravityType = GravityTypeValue.Elevator_Static;
         // Peak output of 20 A
-        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(Constants.k_elevator.k_current_limit)) 
-        .withPeakReverseTorqueCurrent(Amps.of(-Constants.k_elevator.k_current_limit));
-        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(Constants.k_elevator.k_current_limit).withSupplyCurrentLimit(Constants.k_elevator.k_current_limit);
+        m_elevator_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_elevator.k_current_limit)) 
+        .withPeakReverseTorqueCurrent(Amps.of(-k_elevator.k_current_limit));
+        CurrentLimitsConfigs elecurent = new CurrentLimitsConfigs().withStatorCurrentLimit(k_elevator.k_current_limit).withSupplyCurrentLimit(k_elevator.k_current_limit);
 
 
 
         //for motion magic controls
-        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = Constants.k_elevator.k_0_cruiseVel;
-        m_elevator_config.MotionMagic.MotionMagicAcceleration = Constants.k_elevator.k_0_Acceleration;
-        m_elevator_config.MotionMagic.MotionMagicJerk = Constants.k_elevator.k_0_jerk;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kV = Constants.k_elevator.k_0_kV;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kA = Constants.k_elevator.k_0_kA;
+        m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = k_elevator.k_0_cruiseVel;
+        m_elevator_config.MotionMagic.MotionMagicAcceleration = k_elevator.k_0_Acceleration;
+        m_elevator_config.MotionMagic.MotionMagicJerk = k_elevator.k_0_jerk;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kV = k_elevator.k_0_kV;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kA = k_elevator.k_0_kA;
 
 
         // bind the remote encoder to the mount motor
 
         CANcoderConfiguration m_elevator_CANcoder_config = new CANcoderConfiguration();
         m_elevator_CANcoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.85));
-        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(Constants.k_elevator.k_mag_sensor_offset);
+        m_elevator_CANcoder_config.MagnetSensor.withMagnetOffset(k_elevator.k_mag_sensor_offset);
         m_elevator_CANcoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
        
         
@@ -214,8 +214,8 @@ public class Elevator extends SubsystemBase{
         
         m_elevator_config.Feedback.FeedbackRemoteSensorID = m_elevator_CANcoder.getDeviceID();
         m_elevator_config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        m_elevator_config.Feedback.SensorToMechanismRatio = Constants.k_elevator.k_sensor_to_mechanism;//1.486486
-        m_elevator_config.Feedback.RotorToSensorRatio = Constants.k_elevator.k_rotor_to_sensor;//1.486486
+        m_elevator_config.Feedback.SensorToMechanismRatio = k_elevator.k_sensor_to_mechanism;//1.486486
+        m_elevator_config.Feedback.RotorToSensorRatio = k_elevator.k_rotor_to_sensor;//1.486486
         
         
         status = StatusCode.StatusCodeNotInitialized;
@@ -263,7 +263,9 @@ public class Elevator extends SubsystemBase{
     
     public boolean is_stowed(){
 
-        return true;
+        
+
+        return m_elevator_motor.getPosition().getValueAsDouble()<0.3;
         // return m_elevator_CANcoder.getAbsolutePosition().getValue().lt(Rotation.of(0.2));
     }
 
@@ -330,7 +332,7 @@ public class Elevator extends SubsystemBase{
         // output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
         double ff_factor = posision.div(k_elevator_max_rot).magnitude();
 
-        Current ffCurrent = Amps.of(Constants.k_elevator.k_0_kff).times(ff_factor);
+        Current ffCurrent = Amps.of(k_elevator.k_0_kff).times(ff_factor);
 
         // System.out.println("position set "+ posision.in(Rotation) );
 
@@ -373,6 +375,66 @@ public class Elevator extends SubsystemBase{
         return run(()->set_elevator_position_mm(position));
         
     }
+
+
+    public Angle height2pos(Distance Height){
+
+        var length = Height.minus(k_elevator.k_height_offset);
+
+        Angle out_pos = Rotation.of(0.169696969);// output this in error, not too low or too high
+
+        if(length.lt(k_elevator.k_1q_length)){
+
+            var length_range = k_elevator.k_1q_length.minus(k_elevator.k_min_length);
+            var prop_length = length.minus(k_elevator.k_min_length);
+            var legth_ratio = prop_length.div(length_range);
+
+            var pos_range = k_elevator.k_1q_length_sense.minus(k_elevator.k_min_length_sense);
+            var prob_pos = legth_ratio.times(pos_range);
+            var offset_pos = prob_pos.plus(k_elevator.k_min_length_sense);
+            out_pos = offset_pos;
+
+        }
+        else if (length.lt(k_elevator.k_mid_length)){
+            var length_range = k_elevator.k_mid_length.minus(k_elevator.k_1q_length);
+            var prop_length = length.minus(k_elevator.k_1q_length);
+            var legth_ratio = prop_length.div(length_range);
+
+            var pos_range = k_elevator.k_mid_length_sense.minus(k_elevator.k_1q_length_sense);
+            var prob_pos = legth_ratio.times(pos_range);
+            var offset_pos = prob_pos.plus(k_elevator.k_1q_length_sense);
+            out_pos = offset_pos;
+        }
+        else if (length.lt(k_elevator.k_3q_length)){
+            var length_range = k_elevator.k_3q_length.minus(k_elevator.k_mid_length);
+            var prop_length = length.minus(k_elevator.k_mid_length);
+            var legth_ratio = prop_length.div(length_range);
+
+            var pos_range = k_elevator.k_3q_length_sense.minus(k_elevator.k_mid_length_sense);
+            var prob_pos = legth_ratio.times(pos_range);
+            var offset_pos = prob_pos.plus(k_elevator.k_mid_length_sense);
+            out_pos = offset_pos;
+        }
+        else if (length.lt(k_elevator.k_max_length)){
+            var length_range = k_elevator.k_max_length.minus(k_elevator.k_3q_length);
+            var prop_length = length.minus(k_elevator.k_3q_length);
+            var legth_ratio = prop_length.div(length_range);
+
+            var pos_range = k_elevator.k_max_length_sense.minus(k_elevator.k_3q_length_sense);
+            var prop_pos = legth_ratio.times(pos_range);
+            var offset_pos = prop_pos.plus(k_elevator.k_3q_length_sense);
+            out_pos = offset_pos;
+        }
+        
+
+        return out_pos;
+
+        
+    }
+    
+
+    
+
 
     @Override
     public void simulationPeriodic() {

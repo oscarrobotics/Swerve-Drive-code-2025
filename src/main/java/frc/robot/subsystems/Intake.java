@@ -67,51 +67,23 @@ public class Intake extends SubsystemBase {
  
     final TalonFXSimState m_intakeSim = m_intake.getSimState();
     
- 
-
-
-    final VelocityTorqueCurrentFOC m_intakeFXOut = new VelocityTorqueCurrentFOC(0).withSlot(0);
-    final MotionMagicVelocityTorqueCurrentFOC m_intakeFXOut_v_mm = new MotionMagicVelocityTorqueCurrentFOC(0).withSlot(0);
-    final MotionMagicExpoTorqueCurrentFOC m_intakeFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
 
     
+    final MotionMagicVelocityTorqueCurrentFOC m_intakeFXOut_v_mm = new MotionMagicVelocityTorqueCurrentFOC(0).withSlot(0);
+    final MotionMagicExpoTorqueCurrentFOC m_intakeFXOut_ep_mm = new MotionMagicExpoTorqueCurrentFOC(0).withSlot(0);
 
-     
-    //
-
-
-   
+    
     public final AngularVelocity k_max_wheel_speed = RevolutionsPerSecond.of(1000/60.0);
     
-
-    
-
-
-
-
     // physical dimentions of the robot
     public final Distance k_intake_length = Inches.of(12);
     public final Distance k_algehook_center_length = Inches.of(20);
 
 
-   
-
-    
-
-
-   
-
-   
-    
-
     TalonFXConfiguration m_intake_config = new TalonFXConfiguration();
   
-
-
-
-
-    private final double k_default_intake_ks = 4; // output to overcome static friction
-    private final double k_default_intake_kp = 10; // proportional
+    private final double k_default_intake_ks = 10; // output to overcome static friction
+    private final double k_default_intake_kp = 30; // proportional
     private final double k_default_intake_ki = 0; // integral
     private final double k_default_intake_kd = 3; //derivative
 
@@ -126,19 +98,7 @@ public class Intake extends SubsystemBase {
 
     private ShuffleboardTab  m_intake_tab = Shuffleboard.getTab("Intake Tuning");
 
-    // private GenericEntry sh_sim= m_tab.add("Elevator Sim", m_mech2d);
-    // private GenericEntry sh_intake_kp = m_intake_tab.add("Mount kP", k_default_kp).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",10,"max",200)).getEntry(); 
-    // private GenericEntry sh_intake_ki = m_intake_tab.add("Mount kI", k_default_ki).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",100)).getEntry();
-    // private GenericEntry sh_intake_kd = m_intake_tab.add("Mount kD", k_default_kd).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    // private GenericEntry sh_intake_kg = m_intake_tab.add("Mount kG", k_default_kg).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    // private GenericEntry sh_intake_kff = m_intake_tab.add("Mount kff", k_default_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
-    // private GenericEntry sh_intake_kff_offset = m_intake_tab.add("Mount kff offset", k_default_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
-    // private GenericEntry sh_intake_current_limit = m_intake_tab.add("Mount Current Limit", k_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
-    // private GenericEntry sh_intake_cvelocity = m_intake_tab.add("Mount Cruise Velocity", k_default_cVelocity).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
-    // private GenericEntry sh_intake_kv = m_intake_tab.add("Mount kV", k_default_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
-    // private GenericEntry sh_intake_ka = m_intake_tab.add("Mount kA", k_default_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
-
-
+    // private Generi
 
 
 
@@ -148,15 +108,15 @@ public class Intake extends SubsystemBase {
         
 
         /* Torque-based velocity does not require a velocity feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
-        /*m_intake_config.Slot0.kS = k_default_intake_ks; // To account for friction, add 2.5 A of static feedforward
+        m_intake_config.Slot0.kS = k_default_intake_ks; // To account for friction, add 2.5 A of static feedforward
         m_intake_config.Slot0.kI = k_default_intake_ki; // No output for integrated error
         m_intake_config.Slot0.kD = k_default_intake_kd; // No output for error derivative
         m_intake_config.Slot0.kP = k_default_intake_kp; // An error of 1 rotation per second results in 5 A output
         
-        // Peak output of 5 A
+        m_intake_config.Slot0.kA =10; // No output for error derivative
+        m_intake_config.Slot0.kV = 10;        // Peak output of 5 A
         m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(30))
         .withPeakReverseTorqueCurrent(Amps.of(-30));
-
         //motion magic settings
         m_intake_config.MotionMagic.MotionMagicAcceleration = 300;
         m_intake_config.MotionMagic.MotionMagicJerk = 3000;

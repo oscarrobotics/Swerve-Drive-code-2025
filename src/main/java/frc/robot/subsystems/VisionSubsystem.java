@@ -32,6 +32,7 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.util.Constants.k_vision;
 
 public class VisionSubsystem extends SubsystemBase {
     private static VisionSubsystem instance;
@@ -53,7 +54,7 @@ public class VisionSubsystem extends SubsystemBase {
         assert (instance == null);
         instance = this;
  
-        orange_camera = new PhotonCamera("");
+        orange_camera = new PhotonCamera(k_vision.k_orange_camera_name);
         // green_camera = new PhotonCamera("");
 
         kTagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);
