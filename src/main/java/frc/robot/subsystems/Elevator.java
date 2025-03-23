@@ -335,7 +335,12 @@ public class Elevator extends SubsystemBase{
         Current ffCurrent = Amps.of(k_elevator.k_0_kff).times(ff_factor);
 
         // System.out.println("position set "+ posision.in(Rotation) );
+        // double cV = k_elevator.k_0_cruiseVel;
+        // if(m_elevator_motor.getPosition().getValue().lt(Rotation.of(0.2))){
+        //     cV = k_elevator.k_0_cruiseVel/3;
+        // }
 
+        
         m_elevator_motor.setControl(m_elevator_motorOut_mm.withPosition(posision.in(Rotations)).withFeedForward(ffCurrent));
         
 
@@ -372,7 +377,11 @@ public class Elevator extends SubsystemBase{
     // }
 
     public Command set_position_command_angle(Angle position ){
-        return run(()->set_elevator_position_mm(position));
+        return runOnce(()->set_elevator_position_mm(position));
+        
+    }
+    public void set_position_angle(Angle position ){
+        runOnce(()->set_elevator_position_mm(position));
         
     }
 

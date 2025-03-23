@@ -159,7 +159,7 @@ public class Constants {
         public static final Angle k_deploy_position = Rotations.of(21.1); // todo
 
         public static final double deploy_current_limit = 20;  
-        public static final double climb_current_limit = 70;
+        public static final double climb_current_limit = 120;
 
         public static final double deploy_cruse_velocity = 0.4; 
         public static final double climb_cruse_velocity = 0.4;
@@ -202,13 +202,13 @@ public class Constants {
         // fix values (like quaternions)
         
 
-        public static final String k_orange_camera_name = "Arducam_OV2311_USB_Camera";
+        public static final String k_orange_camera_name = "orange";
         public static final Transform3d k_orange_camera_offset = new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
             new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))
             );
 
-        public static final String k_green_camera_name = "Arducam_OV9782_USB_Camera";
+        public static final String k_green_camera_name = "green";
         public static final Transform3d k_green_camera_offset =  new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
             new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))

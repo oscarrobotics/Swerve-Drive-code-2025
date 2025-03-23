@@ -97,7 +97,7 @@ public class Claw extends SubsystemBase {
     public final Angle k_load = Rotation.of(0.26);
 
     public Angle k_coral_position_1 = Rotation.of(0.27);
-    public Angle k_coral_position_mid = Rotation.of(0.12);//middle scoreing heights
+    public Angle k_coral_position_mid = Rotation.of(0.16);//middle scoreing heights
     public Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
     public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
     public Angle k_coral_position_high = Rotation.of(0.14);//top scoreing height OG is 0.04
@@ -304,7 +304,7 @@ public class Claw extends SubsystemBase {
     public Command set_position_command_mm(Angle position){
 
         //  \/ run command template returns a run command that does the thing insided      
-        return run(()-> set_mount_angle_mm(position));
+        return runOnce(()-> set_mount_angle_mm(position));
 
     }
 

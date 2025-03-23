@@ -221,14 +221,14 @@ public class RobotContainer {
 
         //TEMPORARILY COMMENTED OUT TO TEST DIFFERENT ANGLE
     
-        controlstick.b().whileTrue(eleclaw.position_coral_2());
+        controlstick.b().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_2))).onFalse(new InstantCommand(eleclaw::stow));
     
-        controlstick.x().whileTrue(eleclaw.position_coral_3());
-        controlstick.y().whileTrue(eleclaw.position_coral_4());
+        controlstick.x().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_3))).onFalse(new InstantCommand(eleclaw::stow));
+        controlstick.y().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_4))).onFalse(new InstantCommand(eleclaw::stow));
 
-        controlstick.povUp().whileTrue(eleclaw.upper_alge());
-        controlstick.povDown().whileTrue(eleclaw.lower_alge());
-        controlstick.povLeft().whileTrue(eleclaw.position_load());
+        controlstick.povUp().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::upper_alge)).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
+        controlstick.povDown().whileTrue(new InstantCommand(eleclaw::lower_alge).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
+        controlstick.povLeft().whileTrue(new InstantCommand(eleclaw::position_load).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
     
     
         // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
@@ -239,7 +239,7 @@ public class RobotContainer {
 
 
         //binds buttons to intake and outtake commands
-        // controlstick.leftBumper().onTrue(intake.outtake_coral_command());
+        controlstick.leftBumper().whileTrue(intake.continuous_outake());
         controlstick.rightBumper().whileTrue(intake.continuous_intake());
         
         // controlstick.rightTrigger(0.5).onTrue(intake.co_intake());
@@ -265,8 +265,8 @@ public class RobotContainer {
         // controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
 
         elevator.setDefaultCommand(elevator.set_position_command_angle(elevator.k_stowed));
-        // elevator.setDefaultCommand(new InstantCommand(elevator::configure_from_dash, elevator));
-        // SmartDashboard.putData("configure elevator", new InstantCommand(elevator::configure_from_dash));
+        // // elevator.setDefaultCommand(new InstantCommand(elevator::configure_from_dash, elevator));
+        // // SmartDashboard.putData("configure elevator", new InstantCommand(elevator::configure_from_dash));
         claw.setDefaultCommand(claw.set_position_command_mm(claw.k_stowed));
             
 
@@ -278,7 +278,7 @@ public class RobotContainer {
 
         // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
         // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
-        NamedCommands.registerCommand("ScoreCoral1", eleclaw.score_coral_1());
+        NamedCommands.registerCommand("ScoreCoral1",new RunCommand(()->eleclaw.score_coral_1()));
         NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
         
     }

@@ -294,6 +294,12 @@ public class Intake extends SubsystemBase {
         return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM)),this::stop_intake);
         
     }
+    public Command continuous_outake(){
+
+        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(-300, RPM)),this::stop_intake);
+        
+    }
+    
 
     public Command outtake_coral_command(){
 
