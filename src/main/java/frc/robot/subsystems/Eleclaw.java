@@ -58,7 +58,10 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Intake;
+import frc.robot.util.Constants.*;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+
+
 
 public class Eleclaw{
 
@@ -245,6 +248,7 @@ public class Eleclaw{
         CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid));
         
         }
+        intake.doing_coral();
         // if (operator.leftBumper().getAsBoolean() ){
         
         //     CommandScheduler.getInstance().schedule( intake.continuous_outake());
@@ -264,6 +268,7 @@ public class Eleclaw{
         CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid));
         
         }
+        intake.doing_coral();
         // if (operator.leftBumper().getAsBoolean() ){
         
         //     CommandScheduler.getInstance().schedule( intake.continuous_outake());
@@ -307,6 +312,7 @@ public class Eleclaw{
         CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_load));
         
         }
+        intake.doing_coral();
         // if (operator.rightBumper().getAsBoolean() && intake.getCurrentCommand()==null){
         //     CommandScheduler.getInstance().schedule(  intake.continuous_intake());
         // }
@@ -329,6 +335,7 @@ public class Eleclaw{
         CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_get_alge));
         
         }
+        intake.doing_alge();
         // if (operator.leftBumper().getAsBoolean() ){
         
         //     CommandScheduler.getInstance().schedule( intake.outtake_alge_command());
@@ -345,9 +352,10 @@ public class Eleclaw{
     public void upper_alge(){
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_get_alge));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_get_alge.plus(A_adj())));
         
         }
+        intake.doing_alge();
         // if (operator.leftBumper().getAsBoolean() ){
         
         //     CommandScheduler.getInstance().schedule( intake.outtake_alge_command());
@@ -362,10 +370,47 @@ public class Eleclaw{
 
     }
 
+    public void score_alge(){
+        CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())));
+        if (elevator.at_position(0.05).getAsBoolean()){
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_shoot_alge));
+        
+        }
+        intake.doing_alge();
+        // if (operator.leftBumper().getAsBoolean() ){
+        
+        //     CommandScheduler.getInstance().schedule( intake.outtake_alge_command());
+        // }
+        // else if (operator.rightBumper().getAsBoolean()){
+        //     CommandScheduler.getInstance().schedule(  intake.intake_alge_command());
+        // }
+        // else {
+        //     CommandScheduler.getInstance().cancel(intake.outtake_alge_command());
+        //     CommandScheduler.getInstance().cancel(intake.intake_alge_command());
+        // }
+
+    }
+
+    public void stow_alge(){
+        CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed));
+        intake.doing_alge();
+    }
         
     public void stow(){
-        elevator.set_position_command_angle(elevator.k_stowed);
-        claw.set_position_command_mm(claw.k_stowed);
+        //does nothing lol
+        if(intake.coraling().getAsBoolean()){
+        
+            elevator.set_position_command_angle(elevator.k_stowed);
+            claw.set_position_command_mm(claw.k_stowed);
+        }
+        else{
+            claw.set_position_command_mm(k_claw.k_alge_stowed);
+            if (claw.at_position(0.05).getAsBoolean()){
+                elevator.set_position_command_angle(elevator.k_stowed);
+            }
+            
+        }   
         
     }
         
@@ -434,7 +479,7 @@ public class Eleclaw{
 
         value = value/10;
         
-        return Rotation.of(value);
+        return Rotation.of(-value);
 
 
     }

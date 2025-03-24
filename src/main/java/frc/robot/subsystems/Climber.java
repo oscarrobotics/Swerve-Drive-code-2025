@@ -73,7 +73,7 @@ public class Climber extends SubsystemBase {
     final MotionMagicExpoTorqueCurrentFOC m_climberFXOut_mm = new MotionMagicExpoTorqueCurrentFOC(0);
 
 
-    public final AngularVelocity k_max_wheel_speed = RevolutionsPerSecond.of(1000/60.0);
+ 
     
 
 
@@ -134,7 +134,7 @@ public class Climber extends SubsystemBase {
 
         m_climber_config.MotionMagic.MotionMagicExpo_kA = k_climber.kA;
         m_climber_config.MotionMagic.MotionMagicExpo_kV = k_climber.kV;
-        m_climber_config.MotionMagic.MotionMagicCruiseVelocity = k_climber.deploy_cruse_velocity;
+        m_climber_config.MotionMagic.MotionMagicCruiseVelocity = k_climber.deploy_cruse_velocity.in(RotationsPerSecond);
 
         // Peak output of 5 A
         m_climber_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_climber.climb_current_limit))
@@ -182,7 +182,7 @@ public class Climber extends SubsystemBase {
 
     // command to run the climber motor continously (need to change value 300)
     public Command climb_command(){
-        return run(() -> set_climber_speed(AngularVelocity.ofBaseUnits(80, RPM)));
+        return run(() -> set_climber_speed(AngularVelocity.ofBaseUnits(60, RPM)));
     }
 
 
@@ -200,7 +200,7 @@ public class Climber extends SubsystemBase {
     }
 
     public Command reset_climber(){
-        return run(() -> set_climber_speed(AngularVelocity.ofBaseUnits(-80, RPM))); 
+        return run(() -> set_climber_speed(AngularVelocity.ofBaseUnits(-60, RPM))); 
     }
 
 

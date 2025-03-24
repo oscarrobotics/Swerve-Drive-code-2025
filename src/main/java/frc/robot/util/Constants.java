@@ -109,34 +109,36 @@ public class Constants {
 
     public static class k_claw{
 
-        public final AngularVelocity k_max_wheel_speed = RevolutionsPerSecond.of(1000/60.0);
+        public static final AngularVelocity k_max_wheel_speed = RevolutionsPerSecond.of(1000/60.0);
     
 
     
-        public final AngularVelocity k_max_arm_speed = RevolutionsPerSecond.of(5/60.0);
+        public static  final AngularVelocity k_max_arm_speed = RevolutionsPerSecond.of(5/60.0);
 
 
 
         // physical dimentions of the robot
-        public final Distance k_intake_length = Inches.of(12);
-        public final Distance k_algehook_center_length = Inches.of(20);
+        public final static Distance k_intake_length = Inches.of(12);
+        public final static Distance k_algehook_center_length = Inches.of(20);
 
         //Mount/Claw wrist angles
-        public final Angle k_min_angle =  Rotation.of(-.15);
-        public final Angle k_max_angle = Degrees.of(0.3);
+        public  final static Angle k_min_angle =  Rotation.of(-.15);
+        public final static Angle k_max_angle = Degrees.of(0.3);
 
-        public final Angle k_load_coral_position = Degrees.of(0);
+        public final static Angle k_load_coral_position = Degrees.of(0);
 
-        public final Angle k_stowed = Rotation.of(0.25);
-        public final Angle k_load = Rotation.of(0.18);
+        public final static Angle k_stowed = Rotation.of(0.25);
+        public final static Angle k_alge_stowed = Rotation.of(0.0);   
+        
+        public final static Angle k_load = Rotation.of(0.18);
 
-        public Angle k_coral_position_1 = Rotation.of(0.27);
-        public Angle k_coral_position_mid = Rotation.of(0.12);//middle scoreing heights
-        public Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
-        public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
-        public Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
+        public final static Angle k_coral_position_1 = Rotation.of(0.27);
+        public final static Angle k_coral_position_mid = Rotation.of(0.12);//middle scoreing heights
+        public final static Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
+        public final static Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
+        public final static Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
     
-        public Angle k_coral_position_floor = Rotation.of(-0.07);
+        public final static Angle k_coral_position_floor = Rotation.of(-0.07);
 
         public final Angle k_alge_position_1 = Rotation.of(0);
         public final Angle k_alge_position_2 = Rotation.of(0);
@@ -161,8 +163,8 @@ public class Constants {
         public static final double deploy_current_limit = 20;  
         public static final double climb_current_limit = 120;
 
-        public static final double deploy_cruse_velocity = 0.4; 
-        public static final double climb_cruse_velocity = 0.4;
+        public static final AngularVelocity deploy_cruse_velocity = RPM.of(80); 
+        public static final AngularVelocity climb_cruse_velocity = RPM.of(80);
 
         public static final double acceleration = 10;
         public static final double jerk = 10;
@@ -199,19 +201,18 @@ public class Constants {
 
     public static class k_vision{
 
-        // fix values (like quaternions)
-        
+       
 
         public static final String k_orange_camera_name = "orange";
         public static final Transform3d k_orange_camera_offset = new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
-            new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))
+            new Rotation3d(Degree.of(0), Degree.of(-20), Degree.of(0))    
             );
 
         public static final String k_green_camera_name = "green";
         public static final Transform3d k_green_camera_offset =  new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
-            new Rotation3d(new Quaternion(0.349066 , 1, 0, 0))
+            new Rotation3d(Degree.of(0), Degree.of(20), Degree.of(0))
             );
         
 

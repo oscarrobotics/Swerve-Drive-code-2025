@@ -95,6 +95,7 @@ public class Intake extends SubsystemBase {
     public boolean m_has_coral = false;
     public boolean m_has_alge = false;
    
+    private boolean m_coraling_state = true; // weather the robot is supposed to be manpulating the coral or Algae
 
     private ShuffleboardTab  m_intake_tab = Shuffleboard.getTab("Intake Tuning");
 
@@ -197,8 +198,22 @@ public class Intake extends SubsystemBase {
 
 
     }
+    
 
+    public void doing_coral(){
 
+        m_coraling_state = true;
+    }
+
+    public void doing_alge(){
+
+        m_coraling_state = false;
+    }
+
+    public BooleanSupplier coraling(){
+
+        return ()-> m_coraling_state;
+    }
    
 
 
@@ -290,13 +305,13 @@ public class Intake extends SubsystemBase {
     }
 
     public Command continuous_intake(){
-
-        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(300, RPM)),this::stop_intake);
+        // i dont think this will properly flip the intake direction, need to test
+        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(m_coraling_state?300:-300, RPM)),this::stop_intake);
         
     }
     public Command continuous_outake(){
 
-        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(-300, RPM)),this::stop_intake);
+        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(m_coraling_state?-300:300, RPM)),this::stop_intake);
         
     }
     

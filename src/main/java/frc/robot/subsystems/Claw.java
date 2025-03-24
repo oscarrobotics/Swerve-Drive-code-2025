@@ -50,6 +50,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.util.Constants.k_claw;
 
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -246,18 +247,18 @@ public class Claw extends SubsystemBase {
     private void set_mount_angle_mm(Angle position){
 
         //    gt is greater than 
-        // if (position.gt( k_max_angle)){
+        if (position.gt( k_claw.k_max_angle)){
             
-        //     // logger.log(position + " requested is greater than the max position ");
-        //     position = k_max_angle;
+            // logger.log(position + " requested is greater than the max position ");
+            position = k_max_angle;
 
-        // }
-        // else if (position.lt(k_min_angle)){
+        }
+        else if (position.lt(k_claw.k_min_angle)){
 
-        //     //logger.log(position + " requested is less than the minimum position");
-        //     position = k_min_angle;
+            //logger.log(position + " requested is less than the minimum position");
+            position = k_min_angle;
 
-        // }
+        }
 
         m_mount.setControl(m_mountFXOut_mm.withPosition(position));
 
