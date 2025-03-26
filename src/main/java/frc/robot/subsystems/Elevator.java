@@ -353,7 +353,7 @@ public class Elevator extends SubsystemBase{
         BooleanSupplier position_trigger = ()->{
 
              return Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance &&
-             Math.abs(m_elevator_motor.getVelocity().getValueAsDouble())<tolerance;
+             Math.abs(m_elevator_motor.getVelocity().getValueAsDouble())<tolerance*10;
         }
         ;
         

@@ -401,13 +401,13 @@ public class Eleclaw{
         //does nothing lol
         if(intake.coraling().getAsBoolean()){
         
-            elevator.set_position_command_angle(elevator.k_stowed);
-            claw.set_position_command_mm(claw.k_stowed);
+            CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed));
         }
         else{
-            claw.set_position_command_mm(k_claw.k_alge_stowed);
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed));
             if (claw.at_position(0.05).getAsBoolean()){
-                elevator.set_position_command_angle(elevator.k_stowed);
+                CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
             }
             
         }   

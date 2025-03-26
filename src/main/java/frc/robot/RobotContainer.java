@@ -263,11 +263,11 @@ public class RobotContainer {
 
         
         // controlstick.leftBumper().onTrue(claw.position_command(claw.k_load_coral_position));
-
-        elevator.setDefaultCommand(elevator.set_position_command_angle(elevator.k_stowed));
+// 
+        // elevator.setDefaultCommand(elevator.set_position_command_angle(elevator.k_stowed));
         // // elevator.setDefaultCommand(new InstantCommand(elevator::configure_from_dash, elevator));
         // // SmartDashboard.putData("configure elevator", new InstantCommand(elevator::configure_from_dash));
-        claw.setDefaultCommand(claw.set_position_command_mm(claw.k_stowed));
+        // claw.setDefaultCommand(claw.set_position_command_mm(claw.k_stowed));
             
 
 

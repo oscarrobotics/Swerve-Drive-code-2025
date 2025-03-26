@@ -90,7 +90,7 @@ public class Claw extends SubsystemBase {
 
     //Mount/Claw wrist angles
     public final Angle k_min_angle =  Rotation.of(-.15);
-    public final Angle k_max_angle = Degrees.of(0.3);
+    public final Angle k_max_angle = Rotation.of(0.3);
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
@@ -190,7 +190,7 @@ public class Claw extends SubsystemBase {
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration(); // Class for CANcoder, a CAN based magnetic encoder that provides absolute and relative position along with filtered velocity. This handles the configurations for the com.ctre.phoenix6.hardware.CANcoder
         m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6)); //The positive discontinuity point of the absolute sensor in rotations. This determines the point at which the absolute sensor wraps around, keeping the absolute position in the range [x-1, x).
-        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.271240); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
+        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.306396); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
         m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //Direction of the sensor to determine positive rotation, as seen facing the LED side of the CANcoder. Counterclockwise motion also = positive motion
         
         

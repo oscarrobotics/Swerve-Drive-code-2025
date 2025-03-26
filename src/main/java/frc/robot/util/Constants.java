@@ -163,25 +163,25 @@ public class Constants {
         public static final double deploy_current_limit = 20;  
         public static final double climb_current_limit = 120;
 
-        public static final AngularVelocity deploy_cruse_velocity = RPM.of(80); 
-        public static final AngularVelocity climb_cruse_velocity = RPM.of(80);
+        public static final AngularVelocity deploy_cruse_velocity = RPM.of(100); 
+        public static final AngularVelocity climb_cruse_velocity = RPM.of(100);
 
-        public static final double acceleration = 10;
+        public static final double acceleration = 1;
         public static final double jerk = 10;
-        public static final double kV = 0.5;
-        public static final double kA = 0.5;
+        public static final double kV = 10;
+        public static final double kA = 6;
 
 
         // PID gains for deploy velocity
-        public static final double k_deploy_velocity_ks = 2;
-        public static final double k_deploy_velocity_kp = 8;
-        public static final double k_deploy_velocity_ki = 0;
-        public static final double k_deploy_velocity_kd = 1;
+        public static final double k_deploy_velocity_ks = 1;
+        public static final double k_deploy_velocity_kp = 10;
+        public static final double k_deploy_velocity_ki = 2;
+        public static final double k_deploy_velocity_kd = 0.003;
         // PID gains for climbing velocity
-        public static final double k_climb_velocity_ks = 2;
-        public static final double k_climb_velocity_kp = 4;
+        public static final double k_climb_velocity_ks = 1;
+        public static final double k_climb_velocity_kp = 1;
         public static final double k_climb_velocity_ki = 0;
-        public static final double k_climb_velocity_kd = 1;
+        public static final double k_climb_velocity_kd = 0.05;
 
         // PID gains for deploy position
         public static final double k_deploy_position_kp = 4;
@@ -206,13 +206,13 @@ public class Constants {
         public static final String k_orange_camera_name = "orange";
         public static final Transform3d k_orange_camera_offset = new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
-            new Rotation3d(Degree.of(0), Degree.of(-20), Degree.of(0))    
+            new Rotation3d(Degree.of(0), Degree.of(20), Degree.of(0))    
             );
 
         public static final String k_green_camera_name = "green";
         public static final Transform3d k_green_camera_offset =  new Transform3d(
             new Translation3d(Inches.of(0.25), Inches.of(13), Inches.of(32.87)), 
-            new Rotation3d(Degree.of(0), Degree.of(20), Degree.of(0))
+            new Rotation3d(Degree.of(0), Degree.of(-20), Degree.of(0))
             );
         
 

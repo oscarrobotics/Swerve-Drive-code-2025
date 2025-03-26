@@ -158,8 +158,6 @@ public class Intake extends SubsystemBase {
 
         
 
-        register();
-
     }
 
 
