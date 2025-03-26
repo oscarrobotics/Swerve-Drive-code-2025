@@ -289,6 +289,7 @@ public class Eleclaw{
         CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_high));
         
         }
+        intake.doing_coral();
         // if (operator.leftBumper().getAsBoolean() ){
         
         //     CommandScheduler.getInstance().schedule( intake.continuous_outake());

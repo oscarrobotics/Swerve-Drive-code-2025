@@ -123,12 +123,12 @@ public class Constants {
 
         //Mount/Claw wrist angles
         public  final static Angle k_min_angle =  Rotation.of(-.15);
-        public final static Angle k_max_angle = Degrees.of(0.3);
+        public final static Angle k_max_angle = Rotation.of(0.3);
 
         public final static Angle k_load_coral_position = Degrees.of(0);
 
         public final static Angle k_stowed = Rotation.of(0.25);
-        public final static Angle k_alge_stowed = Rotation.of(0.0);   
+        public final static Angle k_alge_stowed = Rotation.of(0.10);   
         
         public final static Angle k_load = Rotation.of(0.18);
 
