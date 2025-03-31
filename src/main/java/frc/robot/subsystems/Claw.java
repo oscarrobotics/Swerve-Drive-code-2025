@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.units.measure.*;
 
@@ -98,7 +99,7 @@ public class Claw extends SubsystemBase {
     public final Angle k_load = Rotation.of(0.26);
 
     public Angle k_coral_position_1 = Rotation.of(0.27);
-    public Angle k_coral_position_mid = Rotation.of(0.16);//middle scoreing heights
+    public Angle k_coral_position_mid = k_claw.k_coral_position_mid;//middle scoreing heights
     public Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
     public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
     public Angle k_coral_position_high = Rotation.of(0.14);//top scoreing height OG is 0.04
@@ -356,6 +357,15 @@ public class Claw extends SubsystemBase {
 
 
     }
+
+    public void balance(Angle pitchSupplier){
+
+        m_mount.setControl(m_mountFXOut_mm.withPosition(m_mount.getPosition().getValue().plus(pitchSupplier)));
+
+
+    }
+
+
 
     @Override
     public void periodic() {

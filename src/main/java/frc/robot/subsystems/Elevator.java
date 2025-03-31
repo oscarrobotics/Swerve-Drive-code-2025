@@ -189,8 +189,8 @@ public class Elevator extends SubsystemBase{
         m_elevator_config.MotionMagic.MotionMagicCruiseVelocity = k_elevator.k_0_cruiseVel;
         m_elevator_config.MotionMagic.MotionMagicAcceleration = k_elevator.k_0_Acceleration;
         m_elevator_config.MotionMagic.MotionMagicJerk = k_elevator.k_0_jerk;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kV = k_elevator.k_0_kV;
-        m_elevator_config.MotionMagic.MotionMagicExpo_kA = k_elevator.k_0_kA;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kV = k_elevator.k_0_MM_kV;
+        m_elevator_config.MotionMagic.MotionMagicExpo_kA = k_elevator.k_0_MM_kA;
 
 
         // bind the remote encoder to the mount motor
@@ -330,7 +330,7 @@ public class Elevator extends SubsystemBase{
         // Angle output = k_elevator_max_rot.minus(k_elevator_min_rot).times(ratio).plus(k_elevator_min_rot);
 
         // output = output.gt(k_elevator_max_rot) ? output : k_elevator_max_rot; 
-        double ff_factor = posision.div(k_elevator_max_rot).magnitude();
+        double ff_factor = (posision.div(k_elevator_max_rot).magnitude())-0.5*2;
 
         Current ffCurrent = Amps.of(k_elevator.k_0_kff).times(ff_factor);
 
@@ -352,8 +352,8 @@ public class Elevator extends SubsystemBase{
         
         BooleanSupplier position_trigger = ()->{
 
-             return Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance &&
-             Math.abs(m_elevator_motor.getVelocity().getValueAsDouble())<tolerance*3;
+             return Math.abs(m_elevator_motor.getClosedLoopError().getValueAsDouble())<tolerance*2 &&
+             Math.abs(m_elevator_motor.getVelocity().getValueAsDouble())<tolerance*2;
         }
         ;
         

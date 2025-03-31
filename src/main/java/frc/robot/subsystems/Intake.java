@@ -116,8 +116,8 @@ public class Intake extends SubsystemBase {
         
         m_intake_config.Slot0.kA =10; // No output for error derivative
         m_intake_config.Slot0.kV = 10;        // Peak output of 5 A
-        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(30))
-        .withPeakReverseTorqueCurrent(Amps.of(-30));
+        m_intake_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(35))
+        .withPeakReverseTorqueCurrent(Amps.of(-35));
         //motion magic settings
         m_intake_config.MotionMagic.MotionMagicAcceleration = 300;
         m_intake_config.MotionMagic.MotionMagicJerk = 3000;

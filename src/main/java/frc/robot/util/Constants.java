@@ -86,15 +86,17 @@ public class Constants {
         public static final double k_current_limit = 70;
         // Slot 0 elevator pid gains
         public static final double k_0_ks = 0; // output to overcome static friction
-        public static final double k_0_kp = 180; // proportional
-        public static final double k_0_ki = 10; // integral
-        public static final double k_0_kd = 120; //derivative
-        public static final double k_0_kg = 7; //gravity; minimum ampage(?) for movement to account for opposing forces
-        public static double k_0_kff = 2.5;
+        public static final double k_0_kp = 70; // proportional
+        public static final double k_0_ki = 0; // integral
+        public static final double k_0_kV = 3; //current/torque based control does not require velocity feed forward
+        public static final double k_0_kA = 25; 
+        public static final double k_0_kd = 30; //derivative
+        public static final double k_0_kg = 22; //gravity; minimum ampage(?) for movement to account for opposing forces
+        public static double k_0_kff = 10;
         public static double k_0_kff_offset = 0;
-        //slot 0 motion magic expo gains
-        public static final double k_0_kV = 3.5; // voltage required to maintain a given velocity, in V/rps
-        public static final double k_0_kA = 0.6; // voltage required to apply a given acceleration, in V/(rps/s)
+        // public static final double k_0_MM_kV = Volts.per(Rotations.per(Second)).ofNative(0.12*k_sensor_to_mechanism);
+        public static final double k_0_MM_kV = 0.8; // voltage required to maintain a given velocity, in V/rps
+        public static final double k_0_MM_kA = 0.4; // voltage required to apply a given acceleration, in V/(rps/s)
         public static final double k_0_cruiseVel = 0.6; // used for both mm and mm_expo
         
         // slot 0 "normal" motion magic gains
@@ -133,7 +135,7 @@ public class Constants {
         public final static Angle k_load = Rotation.of(0.18);
 
         public final static Angle k_coral_position_1 = Rotation.of(0.27);
-        public final static Angle k_coral_position_mid = Rotation.of(0.12);//middle scoreing heights
+        public final static Angle k_coral_position_mid = Rotation.of(0.18);//middle scoreing heights
         public final static Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
         public final static Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
         public final static Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
@@ -158,7 +160,7 @@ public class Constants {
     public static class k_climber{
         
         public static final Angle k_max_travel = Rotations.of(5); // todo
-        public static final Angle k_deploy_position = Rotations.of(21.1); // todo
+        public static final Angle k_deploy_position = Rotations.of(	22.914062 ); // todo
 
         public static final double deploy_current_limit = 20;  
         public static final double climb_current_limit = 120;

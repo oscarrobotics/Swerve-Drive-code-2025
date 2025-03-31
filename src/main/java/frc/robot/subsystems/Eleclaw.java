@@ -240,12 +240,34 @@ public class Eleclaw{
       
     }
 
+    public void position_coral_1(){
+        // System.out.println("pcoral2");
+        CommandScheduler.getInstance().schedule( elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1.plus(H_adj())));
+        if (elevator.at_position(0.05).getAsBoolean()){
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())));
+        
+        }
+        intake.doing_coral();
+        // if (operator.leftBumper().getAsBoolean() ){
+        
+        //     CommandScheduler.getInstance().schedule( intake.continuous_outake());
+        // }
+        // else if (operator.rightBumper().getAsBoolean()){
+        //     CommandScheduler.getInstance().schedule(  intake.continuous_intake());
+        // }
+        // else {
+        //     CommandScheduler.getInstance().cancel(intake.continuous_outake());
+        //     CommandScheduler.getInstance().cancel(intake.continuous_intake());
+        // }
+    }
+
 
     public void position_coral_2(){
         // System.out.println("pcoral2");
         CommandScheduler.getInstance().schedule( elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())));
+        
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_coral_position_mid.plus(A_adj())));
         
         }
         intake.doing_coral();
@@ -265,7 +287,7 @@ public class Eleclaw{
         // System.out.println("pcoral3");
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_3.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())));
         
         }
         intake.doing_coral();
@@ -286,7 +308,7 @@ public class Eleclaw{
         // System.out.println("pcoral4");
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_high));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_high.plus(A_adj())));
         
         }
         intake.doing_coral();
@@ -310,7 +332,7 @@ public class Eleclaw{
 
         CommandScheduler.getInstance().schedule(  elevator.set_position_command_angle(elevator.k_load.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_load));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_load.plus(A_adj())));
         
         }
         intake.doing_coral();
@@ -333,7 +355,7 @@ public class Eleclaw{
         // System.out.println("lower alge");
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_get_alge));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_get_alge.plus(A_adj())));
         
         }
         intake.doing_alge();
@@ -374,7 +396,7 @@ public class Eleclaw{
     public void score_alge(){
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_shoot_alge));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_shoot_alge.plus(A_adj())));
         
         }
         intake.doing_alge();
@@ -394,7 +416,7 @@ public class Eleclaw{
 
     public void stow_alge(){
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())));
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj())));
         intake.doing_alge();
     }
         
@@ -403,10 +425,10 @@ public class Eleclaw{
         if(intake.coraling().getAsBoolean()){
         
             CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
-            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed.plus(A_adj().times(2))));
         }
         else{
-            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj().times(2))));
             if (claw.at_position(0.05).getAsBoolean()){
                 CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
             }
@@ -462,7 +484,7 @@ public class Eleclaw{
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
 
-        value = value/10;
+        value = value/7;
 
         return Rotation.of(-value);
 
@@ -478,7 +500,7 @@ public class Eleclaw{
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
 
-        value = value/10;
+        value = value/7;
         
         return Rotation.of(-value);
 

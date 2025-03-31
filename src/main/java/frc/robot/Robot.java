@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.FollowPathCommand;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -21,13 +22,15 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     FollowPathCommand.warmupCommand().schedule();
     enableLiveWindowInTest(true);
+    CameraServer.startAutomaticCapture();
   }
 
   @Override
   public void robotPeriodic() {
     CommandScheduler.getInstance().run();
 
-    m_robotContainer.vision.updatePoseEstimate();
+    if (m_robotContainer.vision != null)
+     m_robotContainer.vision.updatePoseEstimate();
     
 
     /*

@@ -49,6 +49,7 @@ public class Telemetry {
     /* Robot pose for field positioning */
     private final NetworkTable table = inst.getTable("Pose");
     private final DoubleArrayPublisher fieldPub = table.getDoubleArrayTopic("robotPose").publish();
+    // private final StructPublisher<Pose2d> fieldPub = table.getStructTopic("robotPose", Pose2d.struct).publish();
     private final StringPublisher fieldTypePub = table.getStringTopic(".type").publish();
 
     /* Mechanisms to represent the swerve module states */
@@ -111,6 +112,7 @@ public class Telemetry {
         /* Telemeterize the pose to a Field2d */
         fieldTypePub.set("Field2d");
         fieldPub.set(m_poseArray);
+        // fieldPub.set(state.Pose);
 
         /* Telemeterize the module states to a Mechanism2d */
         for (int i = 0; i < 4; ++i) {

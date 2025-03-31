@@ -58,7 +58,7 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController joystick = new CommandXboxController(0);
+    private final CommandXboxController drivestick = new CommandXboxController(0);
     private final CommandXboxController controlstick = new CommandXboxController(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -68,7 +68,7 @@ public class RobotContainer {
     public final Intake intake = new Intake();
     public final Lighting lighting = new Lighting();
     public final Climber climber = new Climber();
-    public final VisionSubsystem vision = new VisionSubsystem(drivetrain);
+    public final VisionSubsystem vision = null ;
 
     public Eleclaw eleclaw;
 
@@ -110,7 +110,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Mode", autoChooser);
 
        
-
+        // vision = new VisionSubsystem(drivetrain);
         //code used for both intake and outake of coral from the claw during auto and teleop 
 
         configureBindings();
@@ -165,15 +165,15 @@ public class RobotContainer {
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
-        joystick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
-        joystick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
-        joystick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
-        joystick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !joystick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        drivestick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        drivestick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        drivestick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        drivestick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         // joystick.rightTrigger().
         
         // toggles the values of the forward and side direction variables that control the direction of the robot
-        joystick.x().onTrue(new InstantCommand(()->flip_for()));
-        joystick.y().onTrue(new InstantCommand(()->flip_side()));
+        drivestick.x().onTrue(new InstantCommand(()->flip_for()));
+        drivestick.y().onTrue(new InstantCommand(()->flip_side()));
         
         
         // todo potentially
@@ -201,7 +201,7 @@ public class RobotContainer {
         // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // reset the field-centric heading on left bumper press
-        joystick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        drivestick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -220,7 +220,7 @@ public class RobotContainer {
         // controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
 
         //TEMPORARILY COMMENTED OUT TO TEST DIFFERENT ANGLE
-    
+        controlstick.a().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_1))).onFalse(new InstantCommand(eleclaw::stow));
         controlstick.b().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_2))).onFalse(new InstantCommand(eleclaw::stow));
     
         controlstick.x().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_3))).onFalse(new InstantCommand(eleclaw::stow));
@@ -249,11 +249,17 @@ public class RobotContainer {
         
         System.out.println("bindings configured");
 
-        controlstick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
-        joystick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
+        // controlstick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
+        drivestick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
 
-        controlstick.leftTrigger().onTrue(climber.deploy_climber()).onFalse(climber.stop());
+        // controlstick.leftTrigger().onTrue(climber.deploy_climber()).onFalse(climber.stop());
+        controlstick.leftTrigger().whileTrue(new InstantCommand(eleclaw::stow).repeatedly());
         controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
+
+        
+        
+        controlstick.rightStick().whileTrue(new InstantCommand(()->claw.balance(drivetrain.getRotation3d().getMeasureY())).repeatedly());
+        
         // controlstick.leftTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
        // SmartDashboard.putData("ResetClimber:", climber.reset_climber());
         // SmartDashboard.putData("DeployClimber:", climber.deploy_climber());
@@ -296,9 +302,9 @@ public class RobotContainer {
 
     private SwerveRequest smooth_drive(){
 
-        double x_speed = joystick.getLeftY() * MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.start().getAsBoolean()) ? (joystick.back().getAsBoolean() ? 1:0.7):0.3);
-        double y_speed =joystick.getLeftX()  * MaxSpeed *side_dir* ((elevator.is_stowed()&& !joystick.start().getAsBoolean()) ? (joystick.back().getAsBoolean() ? 1:0.7):0.3);
-        double t_speed =-joystick.getRightX() * MaxAngularRate;
+        double x_speed = drivestick.getLeftY() * MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !drivestick.start().getAsBoolean()) ? (drivestick.back().getAsBoolean() ? 1:0.7):0.3);
+        double y_speed =drivestick.getLeftX()  * MaxSpeed *side_dir* ((elevator.is_stowed()&& !drivestick.start().getAsBoolean()) ? (drivestick.back().getAsBoolean() ? 1:0.7):0.3);
+        double t_speed =-drivestick.getRightX() * MaxAngularRate;
 
         xfilter = Math.abs(x_speed)>=Math.abs(xfilter)? x_speed*k_xfilt_positive+xfilter*(1-k_xfilt_positive): x_speed*k_xfilt_negative+xfilter*(1-k_xfilt_negative);
         yfilter = Math.abs(y_speed)>=Math.abs(yfilter)? y_speed*k_yfilt_positive+yfilter*(1-k_yfilt_positive): y_speed*k_yfilt_negative+yfilter*(1-k_yfilt_negative);
