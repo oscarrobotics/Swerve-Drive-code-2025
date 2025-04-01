@@ -165,10 +165,11 @@ public class RobotContainer {
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
-        drivestick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
-        drivestick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
-        drivestick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
-        drivestick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+       
+        drivestick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        drivestick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
+        drivestick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
+        drivestick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         // joystick.rightTrigger().
         
         // toggles the values of the forward and side direction variables that control the direction of the robot
@@ -241,6 +242,8 @@ public class RobotContainer {
         //binds buttons to intake and outtake commands
         controlstick.leftBumper().whileTrue(intake.continuous_outake());
         controlstick.rightBumper().whileTrue(intake.continuous_intake());
+        // controlstick.leftBumper().whileTrue(intake.continuous_outake());
+        drivestick.rightBumper().whileTrue(intake.continuous_intake());
         
         // controlstick.rightTrigger(0.5).onTrue(intake.co_intake());
 
