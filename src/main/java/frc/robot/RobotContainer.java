@@ -30,8 +30,12 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Lighting;
 import frc.robot.subsystems.Eleclaw;
+
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.VisionSubsystem;
+
+
+
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
@@ -67,6 +71,7 @@ public class RobotContainer {
     public final Claw claw = new Claw();
     public final Intake intake = new Intake();
     public final Lighting lighting = new Lighting();
+
     public final Climber climber = new Climber();
     public final VisionSubsystem vision = null ;
 
@@ -165,18 +170,20 @@ public class RobotContainer {
 
         // gives the driver the ability to strafe the robot in a robot centric manner to assit with lining up with field elements
         // may need to implement a way to adjust the speed of this to allow for more precise control
+
        
         drivestick.povUp().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
         drivestick.povLeft().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         drivestick.povDown().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityX(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityY(0)));
         drivestick.povRight().whileTrue(drivetrain.applyRequest(()->strafe.withVelocityY(-MaxSpeed*(elevator.is_stowed()&& !drivestick.start().getAsBoolean() ? 0.3:0.1)).withVelocityX(0)));
         // joystick.rightTrigger().
+
         
         // toggles the values of the forward and side direction variables that control the direction of the robot
         drivestick.x().onTrue(new InstantCommand(()->flip_for()));
         drivestick.y().onTrue(new InstantCommand(()->flip_side()));
         
-        
+
         // todo potentially
         // joystick.povDownLeft(). 
         // joystick.povDownRight().
