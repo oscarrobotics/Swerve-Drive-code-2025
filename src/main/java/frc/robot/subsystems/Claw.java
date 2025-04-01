@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import static edu.wpi.first.units.Units.*;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.units.measure.*;
 
@@ -50,6 +51,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.util.Constants.k_claw;
 
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -89,18 +91,18 @@ public class Claw extends SubsystemBase {
 
     //Mount/Claw wrist angles
     public final Angle k_min_angle =  Rotation.of(-.15);
-    public final Angle k_max_angle = Degrees.of(0.3);
+    public final Angle k_max_angle = Rotation.of(0.3);
 
     public final Angle k_load_coral_position = Degrees.of(0);
 
     public final Angle k_stowed = Rotation.of(0.25);
-    public final Angle k_load = Rotation.of(0.18);
+    public final Angle k_load = Rotation.of(0.26);
 
     public Angle k_coral_position_1 = Rotation.of(0.27);
-    public Angle k_coral_position_mid = Rotation.of(0.12);//middle scoreing heights
+    public Angle k_coral_position_mid = k_claw.k_coral_position_mid;//middle scoreing heights
     public Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
     public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
-    public Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
+    public Angle k_coral_position_high = Rotation.of(0.14);//top scoreing height OG is 0.04
    
     public Angle k_coral_position_floor = Rotation.of(-0.07);
 
@@ -123,7 +125,7 @@ public class Claw extends SubsystemBase {
     private final double k_default_mount_kp = 130; //proportional
     private final double k_default_mount_ki = 0; //integral
     private final double k_default_mount_kd = 30; //derivative
-    private final double k_default_mount_kg = 2; // gravity; minimum ampage(?) for movement to account for opposing forces
+    private final double k_default_mount_kg = 8; // gravity; minimum ampage(?) for movement to account for opposing forces
     private final double k_default_mount_kff = 0;
     // mm_expo gains
     private final double k_default_mount_kV = 10; // voltage required to maintain a given velocity, in V/rps
@@ -189,7 +191,7 @@ public class Claw extends SubsystemBase {
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration(); // Class for CANcoder, a CAN based magnetic encoder that provides absolute and relative position along with filtered velocity. This handles the configurations for the com.ctre.phoenix6.hardware.CANcoder
         m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6)); //The positive discontinuity point of the absolute sensor in rotations. This determines the point at which the absolute sensor wraps around, keeping the absolute position in the range [x-1, x).
-        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.339844); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
+        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.306396); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
         m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //Direction of the sensor to determine positive rotation, as seen facing the LED side of the CANcoder. Counterclockwise motion also = positive motion
         
         
@@ -246,18 +248,18 @@ public class Claw extends SubsystemBase {
     private void set_mount_angle_mm(Angle position){
 
         //    gt is greater than 
-        // if (position.gt( k_max_angle)){
+        if (position.gt( k_claw.k_max_angle)){
             
-        //     // logger.log(position + " requested is greater than the max position ");
-        //     position = k_max_angle;
+            // logger.log(position + " requested is greater than the max position ");
+            position = k_max_angle;
 
-        // }
-        // else if (position.lt(k_min_angle)){
+        }
+        else if (position.lt(k_claw.k_min_angle)){
 
-        //     //logger.log(position + " requested is less than the minimum position");
-        //     position = k_min_angle;
+            //logger.log(position + " requested is less than the minimum position");
+            position = k_min_angle;
 
-        // }
+        }
 
         m_mount.setControl(m_mountFXOut_mm.withPosition(position));
 
@@ -304,7 +306,7 @@ public class Claw extends SubsystemBase {
     public Command set_position_command_mm(Angle position){
 
         //  \/ run command template returns a run command that does the thing insided      
-        return run(()-> set_mount_angle_mm(position));
+        return runOnce(()-> set_mount_angle_mm(position));
 
     }
 
@@ -355,6 +357,15 @@ public class Claw extends SubsystemBase {
 
 
     }
+
+    public void balance(Angle pitchSupplier){
+
+        m_mount.setControl(m_mountFXOut_mm.withPosition(m_mount.getPosition().getValue().plus(pitchSupplier)));
+
+
+    }
+
+
 
     @Override
     public void periodic() {
