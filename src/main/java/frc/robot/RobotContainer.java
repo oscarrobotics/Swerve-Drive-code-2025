@@ -53,9 +53,9 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-
+            .withDeadband(MaxSpeed * 0.07).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
+            // .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors/
+            .withDriveRequestType(DriveRequestType.Velocity);
     private final SwerveRequest.RobotCentric strafe = new SwerveRequest.RobotCentric();
     private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -145,12 +145,12 @@ public class RobotContainer {
         //     drivetrain.setDefaultCommand(   
         //         // Drivetrain will execute this command periodically
         //         drivetrain.applyRequest(() ->
-        //             drive.withVelocityX(joystick.getLeftY()* MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !joystick.start().getAsBoolean()) ? (joystick.back().getAsBoolean() ? 1:0.7):0.3)) // Drive forward with negative Y (forward)
-        //                 .withVelocityY(joystick.getLeftX() * MaxSpeed *side_dir* ((elevator.is_stowed()&& !joystick.start().getAsBoolean()) ? (joystick.back().getAsBoolean() ? 1:0.7):0.3)) // Drive left with negative X (left)
-        //                 .withRotationalRate(-joystick.getRightX() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
-        //         )
-        //     )
-        // );
+        //             drive.withVelocityX(drivestick.getLeftY()* MaxSpeed*forward_dir *  ((elevator.is_stowed()&& !drivestick.start().getAsBoolean()) ? (drivestick.back().getAsBoolean() ? 1:0.7):0.3)) // Drive forward with negative Y (forward)
+        //                 .withVelocityY(drivestick.getLeftX() * MaxSpeed *side_dir* ((elevator.is_stowed()&& !drivestick.start().getAsBoolean()) ? (drivestick.back().getAsBoolean() ? 1:0.7):0.3)) // Drive left with negative X (left)
+        //                 .withRotationalRate(-drivestick.getRightX() * MaxAngularRate)) // Drive counterclockwise with negative X (left)
+        //         );
+            
+        // // );
         // joystick.leftStick().onTrue(new InstantCommand(()->
             drivetrain.setDefaultCommand(
                 drivetrain.applyRequest(()->smooth_drive())
@@ -160,11 +160,11 @@ public class RobotContainer {
         
 
         // joystick.leftStick().toggleOnTrue( 
-        //     drivetrain.applyRequest(
-        //         smooth_drive()
-        //         // Drive counterclockwise with negative X (left)
+            // drivetrain.applyRequest(
+            //     smooth_drive()
+               
     
-        //     )
+            // );
             
         // );
 
@@ -250,7 +250,7 @@ public class RobotContainer {
         controlstick.leftBumper().whileTrue(intake.continuous_outake());
         controlstick.rightBumper().whileTrue(intake.continuous_intake());
         // controlstick.leftBumper().whileTrue(intake.continuous_outake());
-        drivestick.rightBumper().whileTrue(intake.continuous_intake());
+        drivestick.rightBumper().whileTrue(intake.continuous_outake());
         
         // controlstick.rightTrigger(0.5).onTrue(intake.co_intake());
 
@@ -294,7 +294,7 @@ public class RobotContainer {
 
         // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
         // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
-        NamedCommands.registerCommand("ScoreCoral1",new RunCommand(()->eleclaw.score_coral_1()));
+        NamedCommands.registerCommand("ScoreCoral1",eleclaw.score_coral_1());
         NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
         
     }

@@ -20,7 +20,7 @@ public class Constants {
 
     public static class k_elevator {
 
-        public static final Angle k_mag_sensor_offset = Rotations.of(-0.241943);
+        public static final Angle k_mag_sensor_offset = Rotations.of(-0.278076);
         public static final double k_sensor_to_mechanism =1/1.486486; // sensor rotations to mechanism travel ratio
         public static final double k_rotor_to_sensor = 11.71*5.5;
 
@@ -65,7 +65,7 @@ public class Constants {
         public static Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
         public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.4); // level 2
         public static Angle k_coral_level_sense_postion_3 = Rotations.of(0.6); // level 3
-        public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.98); // level 4
+        public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.95); // level 4
 
 
         // elevator goal leghts
@@ -92,7 +92,7 @@ public class Constants {
         public static final double k_0_kA = 25; 
         public static final double k_0_kd = 30; //derivative
         public static final double k_0_kg = 22; //gravity; minimum ampage(?) for movement to account for opposing forces
-        public static double k_0_kff = 10;
+        public static double k_0_kff = 8;
         public static double k_0_kff_offset = 0;
         // public static final double k_0_MM_kV = Volts.per(Rotations.per(Second)).ofNative(0.12*k_sensor_to_mechanism);
         public static final double k_0_MM_kV = 0.8; // voltage required to maintain a given velocity, in V/rps
@@ -135,7 +135,7 @@ public class Constants {
         public final static Angle k_load = Rotation.of(0.18);
 
         public final static Angle k_coral_position_1 = Rotation.of(0.27);
-        public final static Angle k_coral_position_mid = Rotation.of(0.18);//middle scoreing heights
+        public final static Angle k_coral_position_mid = Rotation.of(0.22);//middle scoreing heights
         public final static Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
         public final static Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
         public final static Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04

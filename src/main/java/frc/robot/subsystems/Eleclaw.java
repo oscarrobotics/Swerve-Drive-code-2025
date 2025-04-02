@@ -147,11 +147,11 @@ public class Eleclaw{
     }
 
 
-    public void score_coral_1(){
+    public Command score_coral_1(){
 
         
 
-        Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1).withTimeout(2),
+        return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1).withTimeout(2),
         claw.set_position_command_mm(claw.k_coral_position_mid).withTimeout(2)
 
 
