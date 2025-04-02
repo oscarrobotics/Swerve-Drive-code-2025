@@ -294,7 +294,7 @@ public class RobotContainer {
 
         // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
         // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
-        NamedCommands.registerCommand("ScoreCoral1",eleclaw.score_coral_1());
+        NamedCommands.registerCommand("ScoreCoral1",eleclaw.score_coral_1());//jsut position no score
         NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
         
     }

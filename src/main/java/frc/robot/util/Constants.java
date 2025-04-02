@@ -62,7 +62,7 @@ public class Constants {
         public static final Angle k_stowed =  Rotation.of(0.01);//0.08
         public static final Angle k_load =  Rotation.of(0.28);//0.08
 
-        public static Angle k_coral_level_sense_postion_1 = Rotations.of(0.04); //trought
+        public static Angle k_coral_level_sense_postion_1 = Rotations.of(0.24); //trought
         public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.4); // level 2
         public static Angle k_coral_level_sense_postion_3 = Rotations.of(0.6); // level 3
         public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.95); // level 4
@@ -134,8 +134,8 @@ public class Constants {
         
         public final static Angle k_load = Rotation.of(0.18);
 
-        public final static Angle k_coral_position_1 = Rotation.of(0.27);
-        public final static Angle k_coral_position_mid = Rotation.of(0.22);//middle scoreing heights
+        public final static Angle k_coral_position_1 = Rotation.of(0.29);
+        public final static Angle k_coral_position_mid = Rotation.of(0.20);//middle scoreing heights
         public final static Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
         public final static Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
         public final static Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04

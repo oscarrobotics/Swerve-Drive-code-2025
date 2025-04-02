@@ -152,11 +152,9 @@ public class Eleclaw{
         
 
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1).withTimeout(2),
-        claw.set_position_command_mm(claw.k_coral_position_mid).withTimeout(2)
+        claw.set_position_command_mm(k_claw.k_coral_position_1).withTimeout(2)
 
 
-        ).andThen(
-            intake.auto_outtake_coral_command()
         )
         ;
         
