@@ -439,10 +439,10 @@ public class Eleclaw{
         if(intake.coraling().getAsBoolean()){
         
             CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
-            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed.plus(A_adj().times(2.2))));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed));
         }
         else{
-            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj().times(1.5))));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed));
             if (claw.at_position(0.05).getAsBoolean()){
                 CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
             

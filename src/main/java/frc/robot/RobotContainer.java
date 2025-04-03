@@ -245,7 +245,7 @@ public class RobotContainer {
         //binds buttons to intake and outtake commands
         controlstick.leftBumper().whileTrue(intake.continuous_outake());
         controlstick.rightBumper().whileTrue(intake.continuous_intake());
-        controlstick.rightStick().whileTrue(new InstantCommand(eleclaw::stow).repeatedly());
+        controlstick.rightStick().whileTrue(new InstantCommand(eleclaw::active_stow).repeatedly());
         // controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
         // controlstick.rightStick().whileTrue(new InstantCommand(()->claw.balance(drivetrain.getRotation3d().getMeasureY())).repeatedly());
         // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
