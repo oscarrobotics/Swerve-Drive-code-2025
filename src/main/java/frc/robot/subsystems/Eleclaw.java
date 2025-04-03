@@ -203,7 +203,7 @@ public class Eleclaw{
     public Command position_coral_4_old(){
 
         return Commands.parallel(new RepeatCommand(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4)),
-      new WaitCommand(1).andThen( new WaitCommand(10)).until(elevator.at_position(0.05)).andThen(new RepeatCommand(claw.set_position_command_mm(claw.k_coral_position_high))),
+      new WaitCommand(1).andThen( new WaitCommand(10)).until(elevator.at_position(0.05)).andThen(new RepeatCommand(claw.set_position_command_mm(k_claw.k_coral_position_high))),
       new WaitCommand(100).until(()->operator.leftBumper().getAsBoolean()).andThen(intake.continuous_outake())
 
       );
@@ -313,7 +313,7 @@ public class Eleclaw{
         // System.out.println("pcoral4");
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_high.plus(A_adj())));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_coral_position_high.plus(A_adj())));
         
         }
         intake.doing_coral();
@@ -330,14 +330,22 @@ public class Eleclaw{
         // }
     }
 
+    public void pre_position_4(){
+        CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_4.plus(H_adj())));
+        if (elevator.at_position(0.05).getAsBoolean()){
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_coral_position_high.plus(A_adj())));
+        
+        }
+        intake.doing_coral();
 
+    }
     public void position_load(){
       
 
 
         CommandScheduler.getInstance().schedule(  elevator.set_position_command_angle(elevator.k_load.plus(H_adj())));
         if (elevator.at_position(0.05).getAsBoolean()){
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_load.plus(A_adj())));
+        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_load.plus(A_adj())));
         
         }
         intake.doing_coral();
@@ -420,27 +428,38 @@ public class Eleclaw{
 
     }
 
-    public void stow_alge(){
-        CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())));
-        CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj())));
-        intake.doing_alge();
-    }
+    // public void stow_alge(){
+    //     CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2.plus(H_adj())));
+    //     CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj())));
+    //     intake.doing_alge();
+    // }
         
     public void stow(){
-        //does nothing lol
+       
         if(intake.coraling().getAsBoolean()){
         
             CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
-            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed.plus(A_adj().times(2))));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_stowed.plus(A_adj().times(2.2))));
         }
         else{
-            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj().times(2))));
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj().times(1.5))));
             if (claw.at_position(0.05).getAsBoolean()){
                 CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
-            }
             
+            }
         }   
         
+    }
+
+    public void active_stow(){
+        
+            CommandScheduler.getInstance().schedule(claw.set_position_command_mm(k_claw.k_alge_stowed.plus(A_adj().times(1.5).plus(Rotation.of(0.03)))));
+            if (claw.at_position(0.05).getAsBoolean()){
+                CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(k_elevator.k_stowed));
+            
+            }
+        
+
     }
         
     

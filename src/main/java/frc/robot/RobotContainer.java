@@ -210,6 +210,8 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         drivestick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        drivestick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
+        drivestick.rightBumper().whileTrue(intake.continuous_outake());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -237,8 +239,15 @@ public class RobotContainer {
         controlstick.povUp().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::upper_alge)).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
         controlstick.povDown().whileTrue(new InstantCommand(eleclaw::lower_alge).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
         controlstick.povLeft().whileTrue(new InstantCommand(eleclaw::position_load).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
-    
-    
+        controlstick.leftTrigger().whileTrue(new InstantCommand(eleclaw::score_alge).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
+        // controlstick.rightTrigger().onTrue(climber.deploy_climber()).onFalse(climber.stop());
+
+        //binds buttons to intake and outtake commands
+        controlstick.leftBumper().whileTrue(intake.continuous_outake());
+        controlstick.rightBumper().whileTrue(intake.continuous_intake());
+        controlstick.rightStick().whileTrue(new InstantCommand(eleclaw::stow).repeatedly());
+        // controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
+        // controlstick.rightStick().whileTrue(new InstantCommand(()->claw.balance(drivetrain.getRotation3d().getMeasureY())).repeatedly());
         // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
         // controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
         //controlstick.povDown().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
@@ -246,11 +255,9 @@ public class RobotContainer {
         // controlstick.povRight().whileTrue(claw.set_position_command_mm(claw.k_coral_position_high));
 
 
-        //binds buttons to intake and outtake commands
-        controlstick.leftBumper().whileTrue(intake.continuous_outake());
-        controlstick.rightBumper().whileTrue(intake.continuous_intake());
+        
         // controlstick.leftBumper().whileTrue(intake.continuous_outake());
-        drivestick.rightBumper().whileTrue(intake.continuous_outake());
+        
         
         // controlstick.rightTrigger(0.5).onTrue(intake.co_intake());
 
@@ -260,15 +267,14 @@ public class RobotContainer {
         System.out.println("bindings configured");
 
         // controlstick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
-        drivestick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
-
-        // controlstick.leftTrigger().onTrue(climber.deploy_climber()).onFalse(climber.stop());
-        controlstick.leftTrigger().whileTrue(new InstantCommand(eleclaw::stow).repeatedly());
-        controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
+        
+        // 
+      
+        
 
         
         
-        controlstick.rightStick().whileTrue(new InstantCommand(()->claw.balance(drivetrain.getRotation3d().getMeasureY())).repeatedly());
+        
         
         // controlstick.leftTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
        // SmartDashboard.putData("ResetClimber:", climber.reset_climber());

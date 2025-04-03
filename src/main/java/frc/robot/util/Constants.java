@@ -63,9 +63,9 @@ public class Constants {
         public static final Angle k_load =  Rotation.of(0.28);//0.08
 
         public static Angle k_coral_level_sense_postion_1 = Rotations.of(0.24); //trought
-        public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.4); // level 2
-        public static Angle k_coral_level_sense_postion_3 = Rotations.of(0.6); // level 3
-        public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.95); // level 4
+        public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.28); // level 2
+        public static Angle k_coral_level_sense_postion_3 = Rotations.of(0.46); // level 3
+        public static Angle k_coral_level_sense_postion_4 = Rotations.of(0.93); // level 4
 
 
         // elevator goal leghts
@@ -124,21 +124,21 @@ public class Constants {
         public final static Distance k_algehook_center_length = Inches.of(20);
 
         //Mount/Claw wrist angles
-        public  final static Angle k_min_angle =  Rotation.of(-.15);
-        public final static Angle k_max_angle = Rotation.of(0.3);
+        public  final static Angle k_min_angle =  Rotation.of(-.12);
+        public final static Angle k_max_angle = Rotation.of(0.36);
 
         public final static Angle k_load_coral_position = Degrees.of(0);
 
-        public final static Angle k_stowed = Rotation.of(0.25);
+        public final static Angle k_stowed = Rotation.of(0.35);
         public final static Angle k_alge_stowed = Rotation.of(0.10);   
         
-        public final static Angle k_load = Rotation.of(0.18);
+        public final static Angle k_load = Rotation.of(0.32);
 
         public final static Angle k_coral_position_1 = Rotation.of(0.29);
-        public final static Angle k_coral_position_mid = Rotation.of(0.20);//middle scoreing heights
+        public final static Angle k_coral_position_mid = Rotation.of(0.28);//middle scoreing heights
         public final static Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
         public final static Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
-        public final static Angle k_coral_position_high = Rotation.of(0.125);//top scoreing height OG is 0.04
+        public final static Angle k_coral_position_high = Rotation.of(0.21);//top scoreing height OG is 0.04
     
         public final static Angle k_coral_position_floor = Rotation.of(-0.07);
 
@@ -163,7 +163,7 @@ public class Constants {
         public static final Angle k_deploy_position = Rotations.of(	22.914062 ); // todo
 
         public static final double deploy_current_limit = 20;  
-        public static final double climb_current_limit = 120;
+        public static final double climb_current_limit = 150;
 
         public static final AngularVelocity deploy_cruse_velocity = RPM.of(100); 
         public static final AngularVelocity climb_cruse_velocity = RPM.of(100);
@@ -176,16 +176,18 @@ public class Constants {
 
         // PID gains for deploy velocity
         public static final double k_deploy_velocity_ks = 1;
-        public static final double k_deploy_velocity_kp = 10;
+        public static final double k_deploy_velocity_kp = 6;
+        public static final double k_deploy_kV = 12;
         public static final double k_deploy_velocity_ki = 2;
         public static final double k_deploy_velocity_kd = 0.003;
-        // PID gains for climbing velocity
-        public static final double k_climb_velocity_ks = 1;
-        public static final double k_climb_velocity_kp = 1;
-        public static final double k_climb_velocity_ki = 0;
-        public static final double k_climb_velocity_kd = 0.05;
+        // // PID gains for climbing velocity
+        // public static final double k_climb_velocity_ks = 1;
+        // public static final double k_climb_velocity_kp = 1;
+        // public static final double k_climb_velocity_ki = 0;
+        // public static final double k_climb_velocity_kd = 0.05;
 
         // PID gains for deploy position
+        public static final double k_deploy_position_kV = 5 ; 
         public static final double k_deploy_position_kp = 4;
         public static final double k_deploy_position_ki = 0;
         public static final double k_deploy_position_kd = 0;

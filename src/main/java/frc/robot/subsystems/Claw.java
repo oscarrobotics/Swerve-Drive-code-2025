@@ -102,7 +102,7 @@ public class Claw extends SubsystemBase {
     public Angle k_coral_position_mid = k_claw.k_coral_position_mid;//middle scoreing heights
     public Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
     public Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
-    public Angle k_coral_position_high = Rotation.of(0.14);//top scoreing height OG is 0.04
+    // public Angle k_coral_position_high = Rotation.of(0.18);//top scoreing height OG is 0.04
    
     public Angle k_coral_position_floor = Rotation.of(-0.07);
 
@@ -152,10 +152,10 @@ public class Claw extends SubsystemBase {
     // private GenericEntry sh_mount_kv = m_mount_tab.add("Mount kV", k_default_mount_kV).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
     // private GenericEntry sh_mount_ka = m_mount_tab.add("Mount kA", k_default_mount_kA).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",20)).getEntry();
 
-    private GenericEntry sh_coral_position_1 = m_mount_tab.addPersistent("coral_position_1", k_coral_position_1.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry(); 
-    private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_mid.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
-    private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_high.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
-    private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_floor.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    // private GenericEntry sh_coral_position_1 = m_mount_tab.addPersistent("coral_position_1", k_coral_position_1.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry(); 
+    // private GenericEntry sh_coral_position_2 = m_mount_tab.addPersistent("coral_position_2", k_coral_position_mid.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    // private GenericEntry sh_coral_position_3 = m_mount_tab.addPersistent("coral_position_3", k_coral_position_high.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
+    // private GenericEntry sh_coral_position_4 = m_mount_tab.addPersistent("coral_position_4", k_coral_position_floor.magnitude()).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",k_min_angle.magnitude(),"max",k_max_angle.magnitude())).getEntry();
     // private GenericEntry sh_mount_kff = m_mount_tab.add("Mount kff", k_default_mount_kff).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",40)).getEntry();
     // private GenericEntry sh_mount_kff_offset = m_mount_tab.add("Mount kff offset", k_default_mount_kff_offset).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",-10,"max",10)).getEntry();
     // private GenericEntry sh_mount_current_limit = m_mount_tab.add("Mount Current Limit", k_mount_current_limit).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",150)).getEntry();
@@ -191,7 +191,7 @@ public class Claw extends SubsystemBase {
 
         CANcoderConfiguration m_mount_encoder_config = new CANcoderConfiguration(); // Class for CANcoder, a CAN based magnetic encoder that provides absolute and relative position along with filtered velocity. This handles the configurations for the com.ctre.phoenix6.hardware.CANcoder
         m_mount_encoder_config.MagnetSensor.withAbsoluteSensorDiscontinuityPoint(Rotations.of(0.6)); //The positive discontinuity point of the absolute sensor in rotations. This determines the point at which the absolute sensor wraps around, keeping the absolute position in the range [x-1, x).
-        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.306396); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
+        m_mount_encoder_config.MagnetSensor.withMagnetOffset(-0.231689); // This offset is added to the reported position, allowing the application to trim the zero position. When set to the default value of zero, position reports zero when magnet north pole aligns with the LED.
         m_mount_encoder_config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive; //Direction of the sensor to determine positive rotation, as seen facing the LED side of the CANcoder. Counterclockwise motion also = positive motion
         
         
@@ -381,10 +381,10 @@ public class Claw extends SubsystemBase {
 
     public void update_locations(){
        
-        k_coral_position_1 = Rotation.of(sh_coral_position_1.getDouble(k_coral_position_1.magnitude()));
-        k_coral_position_mid = Rotation.of(sh_coral_position_2.getDouble(k_coral_position_mid.magnitude()));
-        k_coral_position_high = Rotation.of(sh_coral_position_3.getDouble(k_coral_position_high.magnitude()));
-        k_coral_position_floor = Rotation.of(sh_coral_position_4.getDouble(k_coral_position_floor.magnitude()));
+        // k_coral_position_1 = Rotation.of(sh_coral_position_1.getDouble(k_coral_position_1.magnitude()));
+        // k_coral_position_mid = Rotation.of(sh_coral_position_2.getDouble(k_coral_position_mid.magnitude()));
+        // k_coral_position_high = Rotation.of(sh_coral_position_3.getDouble(k_coral_position_high.magnitude()));
+        // k_coral_position_floor = Rotation.of(sh_coral_position_4.getDouble(k_coral_position_floor.magnitude()));
 
 
     }

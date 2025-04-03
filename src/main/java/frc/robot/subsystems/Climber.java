@@ -117,10 +117,10 @@ public class Climber extends SubsystemBase {
         m_climber_config.Slot0.kI = k_climber.k_deploy_velocity_ki;
         m_climber_config.Slot0.kD = k_climber.k_deploy_velocity_kd;
         //climb velocity slot 1
-        m_climber_config.Slot1.kS = k_climber.k_climb_velocity_ks;
-        m_climber_config.Slot1.kP = k_climber.k_climb_velocity_kp;
-        m_climber_config.Slot1.kI = k_climber.k_climb_velocity_ki;
-        m_climber_config.Slot1.kD = k_climber.k_climb_velocity_kd;
+        // m_climber_config.Slot1.kS = k_climber.k_climb_velocity_ks;
+        // m_climber_config.Slot1.kP = k_climber.k_climb_velocity_kp;
+        // m_climber_config.Slot1.kI = k_climber.k_climb_velocity_ki;
+        // m_climber_config.Slot1.kD = k_climber.k_climb_velocity_kd;
         //deploy position slot 2
         m_climber_config.Slot2.kP = k_climber.k_deploy_position_kp;
         m_climber_config.Slot2.kI = k_climber.k_deploy_position_ki;
@@ -138,10 +138,11 @@ public class Climber extends SubsystemBase {
 
         // Peak output of 5 A
         m_climber_config.TorqueCurrent.withPeakForwardTorqueCurrent(Amps.of(k_climber.climb_current_limit))
-        .withPeakReverseTorqueCurrent(Amps.of(-k_climber.climb_current_limit));
+        .withPeakReverseTorqueCurrent(Amps.of(0));
+        
 
         m_climber_config.MotorOutput.withInverted(InvertedValue.CounterClockwise_Positive);
-        m_climber_config.MotorOutput.NeutralMode=NeutralModeValue.Brake;
+        m_climber_config.MotorOutput.NeutralMode=NeutralModeValue.Coast;
 
 
 
@@ -167,6 +168,8 @@ public class Climber extends SubsystemBase {
         m_climber.setControl(m_climberFXOut_v_mm.withVelocity(speed).withSlot(0));
     
     }
+    
+   
 
 
 
@@ -182,7 +185,7 @@ public class Climber extends SubsystemBase {
 
     // command to run the climber motor continously (need to change value 300)
     public Command climb_command(){
-        return run(() -> set_climber_speed(AngularVelocity.ofBaseUnits(60, RPM)));
+        return run(() -> set_climber_speed(AngularVelocity.ofBaseUnits(90, RPM)));
     }
 
 

@@ -304,12 +304,12 @@ public class Intake extends SubsystemBase {
 
     public Command continuous_intake(){
         // i dont think this will properly flip the intake direction, need to test
-        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(m_coraling_state?300:-300, RPM)),this::stop_intake);
+        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(m_coraling_state?80:-300, RPM)),this::stop_intake);
         
     }
     public Command continuous_outake(){
 
-        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(m_coraling_state?-300:300, RPM)),this::stop_intake);
+        return  runEnd(()->set_intake_speed(AngularVelocity.ofBaseUnits(m_coraling_state?-80:300, RPM)),this::stop_intake);
         
     }
     
