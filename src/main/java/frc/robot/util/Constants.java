@@ -60,7 +60,7 @@ public class Constants {
         //elevator goal sensor positions, legacy fall back
 
         public static final Angle k_stowed =  Rotation.of(0.01);//0.08
-        public static final Angle k_load =  Rotation.of(0.28);//0.08
+        public static final Angle k_load =  Rotation.of(0.25);//0.08
 
         public static Angle k_coral_level_sense_postion_1 = Rotations.of(0.24); //trought
         public static Angle k_coral_level_sense_postion_2 = Rotations.of(0.28); // level 2
@@ -132,13 +132,13 @@ public class Constants {
         public final static Angle k_stowed = Rotation.of(0.35);
         public final static Angle k_alge_stowed = Rotation.of(0.10);   
         
-        public final static Angle k_load = Rotation.of(0.32);
+        public final static Angle k_load = Rotation.of(0.24);
 
         public final static Angle k_coral_position_1 = Rotation.of(0.29);
-        public final static Angle k_coral_position_mid = Rotation.of(0.28);//middle scoreing heights
-        public final static Angle k_coral_position_shoot_alge = Rotation.of(0.16);//middle scoreing heights
+        public final static Angle k_coral_position_mid = Rotation.of(0.18);//middle scoreing heights
+        public final static Angle k_coral_position_shoot_alge = Rotation.of(0.20);//middle scoreing heights
         public final static Angle k_coral_position_get_alge = Rotation.of(0.05);//middle scoreing heights
-        public final static Angle k_coral_position_high = Rotation.of(0.21);//top scoreing height OG is 0.04
+        public final static Angle k_coral_position_high = Rotation.of(0.16);//top scoreing height OG is 0.04
     
         public final static Angle k_coral_position_floor = Rotation.of(-0.07);
 

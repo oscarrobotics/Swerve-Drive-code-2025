@@ -40,6 +40,7 @@ import frc.robot.subsystems.VisionSubsystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class RobotContainer {
     
@@ -234,7 +235,17 @@ public class RobotContainer {
         controlstick.b().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_2))).onFalse(new InstantCommand(eleclaw::stow));
     
         controlstick.x().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_3))).onFalse(new InstantCommand(eleclaw::stow));
-        controlstick.y().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_4))).onFalse(new InstantCommand(eleclaw::stow));
+        
+        //controlstick.y().onTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_4))).onFalse(new InstantCommand(eleclaw::stow));
+        controlstick.y()
+                .whileTrue(
+                new InstantCommand(eleclaw::pre_position_4)
+                .andThen(new WaitCommand(0.55))
+                .andThen(new RepeatCommand(new InstantCommand(eleclaw::position_coral_4)))
+                )       
+                .onFalse(new InstantCommand(eleclaw::pre_position_4)
+                .andThen(new WaitCommand(0.4))
+                .andThen(new InstantCommand(eleclaw::stow)));
 
         controlstick.povUp().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::upper_alge)).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));
         controlstick.povDown().whileTrue(new InstantCommand(eleclaw::lower_alge).repeatedly()).onFalse(new InstantCommand(eleclaw::stow));

@@ -465,40 +465,7 @@ public class Eleclaw{
     
 
 
-    
 
-    
-
-
-
-    public Command reapply_elevator_position(){
-
-
-        return elevator.set_position_command_angle(Rotation.of(elevator.get_reference()));
-    }
-
-    public Command reapply_claw_position(){
-
-
-        return claw.set_position_command_mm(Rotation.of(claw.get_reference()));
-    }
-
-
-    // public void raise_height(){
-    //     hieght_adjust += 0.001;
-    // }
-
-    // public void lower_height(){
-    //     hieght_adjust += 0.001;
-    // }
-
-    // public void raise_angle(){
-    //     hieght_adjust += 0.001;
-    // }
-
-    // public void lower_angle(){
-    //     hieght_adjust += 0.001;
-    // }
 
     private Angle H_adj(){
 
@@ -508,8 +475,9 @@ public class Eleclaw{
 
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
+        value = Math.abs(value)>0.09? value:0;
 
-        value = value/7;
+        value = value/6;
 
         return Rotation.of(-value);
 
@@ -524,8 +492,9 @@ public class Eleclaw{
 
         double value = Math.abs(right)>Math.abs(left)?right:left;
 
+        value = Math.abs(value)>0.09? value:0;
 
-        value = value/7;
+        value = value/6;
         
         return Rotation.of(-value);
 
