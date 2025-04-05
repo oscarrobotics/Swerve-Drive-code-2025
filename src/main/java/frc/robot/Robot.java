@@ -22,7 +22,8 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     FollowPathCommand.warmupCommand().schedule();
     enableLiveWindowInTest(true);
-    CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
   }
 
   @Override
