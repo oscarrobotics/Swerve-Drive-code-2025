@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ScoreCoral1"
+            "pathName": "5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Slow Side Coral"
+            "pathName": "55"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "side coral Straight"
+            "pathName": "555"
           }
         }
       ]
