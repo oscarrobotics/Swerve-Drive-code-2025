@@ -7,25 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1st auto eject"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "EjectCoral"
+            "pathName": "5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1st auto pick"
+            "pathName": "55"
           }
         },
         {
@@ -37,25 +25,13 @@
         {
           "type": "named",
           "data": {
-            "name": "PickCoral"
+            "name": "EjectCoral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1st auto eject 2"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "EjectCoral"
+            "pathName": "555"
           }
         }
       ]

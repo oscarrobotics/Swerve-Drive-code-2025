@@ -3,15 +3,21 @@
   "robotLength": 0.8128,
   "holonomicMode": true,
   "pathFolders": [
-    "auto align",
-    "StraigtCoral",
     "1st auto position",
     "2nd auto position",
     "3rd auto position ",
+    "red 3",
+    "StraigtCoral",
+    "blue 1",
+    "blue 3",
+    "red 1",
+    "red 2",
     "sidecoral",
     "straight"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "wip"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

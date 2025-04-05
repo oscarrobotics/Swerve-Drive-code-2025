@@ -7,13 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "straight "
+            "pathName": "3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "33"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "333"
           }
         }
       ]

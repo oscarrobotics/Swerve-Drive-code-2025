@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3rd coral eject"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
+            "pathName": "1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3rd coral pick "
+            "pathName": "11"
           }
         },
         {
@@ -29,21 +23,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "3rd coral eject 2 "
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
+            "name": "EjectCoral"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "3rd coral finish"
+            "pathName": "111"
           }
         }
       ]
