@@ -211,8 +211,11 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         drivestick.leftBumper().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+        
+
+        //climber control bindings 
         drivestick.rightTrigger().onTrue(climber.climb_command()).onFalse(climber.stop());
-        drivestick.rightBumper().whileTrue(intake.continuous_outake());
+        //controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
 
         drivetrain.registerTelemetry(logger::telemeterize);
 
@@ -257,7 +260,7 @@ public class RobotContainer {
         controlstick.leftBumper().whileTrue(intake.continuous_outake());
         controlstick.rightBumper().whileTrue(intake.continuous_intake());
         controlstick.rightStick().whileTrue(new InstantCommand(eleclaw::active_stow).repeatedly());
-        // controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
+        //controlstick.leftStick().onTrue(climber.reset_climber()).onFalse(climber.stop());
         // controlstick.rightStick().whileTrue(new InstantCommand(()->claw.balance(drivetrain.getRotation3d().getMeasureY())).repeatedly());
         // controlstick.povUp().whileTrue(claw.set_position_command_mm(claw.k_coral_position_1));
         // controlstick.povLeft().whileTrue(claw.set_position_command_mm(claw.k_coral_position_2));
