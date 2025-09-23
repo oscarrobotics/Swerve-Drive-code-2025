@@ -3,17 +3,10 @@
   "robotLength": 0.8128,
   "holonomicMode": true,
   "pathFolders": [
-    "1st auto position",
-    "2nd auto position",
-    "3rd auto position ",
-    "red 3",
+    "L4 RIGHT ",
+    "position command tests",
     "StraigtCoral",
-    "blue 1",
-    "blue 3",
-    "red 1",
-    "red 2",
-    "sidecoral",
-    "straight"
+    "sidecoral"
   ],
   "autoFolders": [
     "wip"

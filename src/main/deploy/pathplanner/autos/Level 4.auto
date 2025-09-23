@@ -7,31 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3"
+            "pathName": "L4 START"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "33"
+            "pathName": "L4 SCORE"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "EjectCoral"
+            "name": "PositionCoral4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "333"
+            "pathName": "L4 END"
           }
         }
       ]

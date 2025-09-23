@@ -7,31 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "11"
+            "pathName": "TEST 1"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "named",
           "data": {
             "name": "EjectCoral"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "111"
           }
         }
       ]
