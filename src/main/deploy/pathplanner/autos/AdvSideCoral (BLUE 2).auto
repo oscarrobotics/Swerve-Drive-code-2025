@@ -33,6 +33,12 @@
           "data": {
             "pathName": "side coral Straight"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": null
+          }
         }
       ]
     }
