@@ -7,13 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "straight "
+            "pathName": "BL START"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BL SCORE"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "BLUE ALLIANCE",
   "choreoAuto": false
 }
