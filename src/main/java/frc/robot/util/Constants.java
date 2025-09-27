@@ -24,7 +24,7 @@ public class Constants {
         public static final double k_sensor_to_mechanism =1/1.486486; // sensor rotations to mechanism travel ratio
         public static final double k_rotor_to_sensor = 11.71*5.5;
 
-
+        public static final Angle k_bottom = Rotations.of(-0.09);
         public static final Angle k_min_rot = Rotations.of(0);
         public static final Angle k_max_rot = Rotations.of(0.98);
 
