@@ -234,7 +234,6 @@ public class RobotContainer {
         // controlstick.y().whileTrue(new RunCommand(()->elevator.set_elevator_position_mm(elevator.k_coral_level_sense_postion_4), elevator));
 
         //TEMPORARILY COMMENTED OUT TO TEST DIFFERENT ANGLE
-        controlstick.povRight().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_0))).onFalse(new InstantCommand(eleclaw::stow)); //makes elevator go to lowest level via right d-pad controller 
         controlstick.a().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_1))).onFalse(new InstantCommand(eleclaw::stow));
         controlstick.b().whileTrue(new RepeatCommand(new InstantCommand(eleclaw::position_coral_2))).onFalse(new InstantCommand(eleclaw::stow));
     
@@ -310,15 +309,14 @@ public class RobotContainer {
 
     }
 
-    //autonomous commands on path planner 
     private void name_commands() {
-        NamedCommands.registerCommand("EjectCoral", intake.auto_outtake_coral_command()); //auto eject 
-        NamedCommands.registerCommand("IntakeCoral",intake.auto_intake_coral_command()); //auto intake 
-        NamedCommands.registerCommand("PositionCoral1",eleclaw.score_coral_1()); //just position to level 1 no score
-        NamedCommands.registerCommand("PositionCoral4",eleclaw.score_coral_4()); //just position to level 4 no score 
-        NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
+        NamedCommands.registerCommand("EjectCoral", intake.auto_outtake_coral_command());
+
         // NameCommands.registerCommand("TroughtEject", eleclaw.troft_eject());
         // NamedCommands.registerCommand("ScoreCoral1", intake.auto_outtake_coral_command());
+        NamedCommands.registerCommand("ScoreCoral1",eleclaw.score_coral_1());//jsut position no score
+        NamedCommands.registerCommand("PickCoral", intake.intake_coral_command());
+        
     }
 
     void flip_for(){
