@@ -5,21 +5,33 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "ScoreCoral1"
+            "pathName": "L4 RR START"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Slow Side Coral"
+            "pathName": "L4 RR SCORE"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PositionCoral4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         },
         {
@@ -29,21 +41,27 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "side coral Straight"
+            "waitTime": 2.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "PositionCoral1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "L4 RR END"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "RED ALLIANCE",
   "choreoAuto": false
 }

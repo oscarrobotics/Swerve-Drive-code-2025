@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "TEST 1"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
+            "pathName": "BM START + SCORE"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ScoreCoral1"
+            "name": "PositionCoral4"
           }
         },
         {
@@ -33,11 +27,35 @@
           "data": {
             "name": "EjectCoral"
           }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PositionCoral1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BM END 1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BM END 2"
+          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "BLUE ALLIANCE",
   "choreoAuto": false
 }

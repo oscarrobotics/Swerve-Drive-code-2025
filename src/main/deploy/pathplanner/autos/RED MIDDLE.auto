@@ -7,19 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "L4 START"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "L4 SCORE"
+            "pathName": " RM START + SCORE"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 3.0
           }
         },
         {
@@ -37,19 +31,43 @@
         {
           "type": "named",
           "data": {
-            "name": "ScoreCoral1"
+            "name": "EjectCoral"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "L4 END"
+            "pathName": " RM END 1"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "PositionCoral1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": " RM END 2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "RED ALLIANCE",
   "choreoAuto": false
 }
