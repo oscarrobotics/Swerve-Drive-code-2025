@@ -86,7 +86,7 @@ public class Elevator extends SubsystemBase{
 
 
 
-    public final Angle k_elevator_bottom = k_elevator.k_bottom;
+    public final Angle k_elevator_bottom = k_elevator.k_bottom; 
     public final Angle k_elevator_min_rot = k_elevator.k_min_rot;
     public final Angle k_elevator_max_rot = k_elevator.k_max_rot;
 

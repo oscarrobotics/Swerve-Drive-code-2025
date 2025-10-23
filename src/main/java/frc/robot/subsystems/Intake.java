@@ -323,14 +323,16 @@ public class Intake extends SubsystemBase {
 
         
     }
-    //auto intake + outtake commands (only referring to the auto intake and auto out take commands - first 2)
+
+    //auto intake + outtake commands (only referring to the auto intake and auto outtake commands - first 2)
     public Command auto_intake_coral_command(){
 
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(100, RPM));})
         .withTimeout(2)
         .andThen(this::stop_intake
         ).andThen(this::has_coral_false);
-}
+    }
+
     public Command auto_outtake_coral_command(){
 
         return run(()->{set_intake_speed(AngularVelocity.ofBaseUnits(-100, RPM));})

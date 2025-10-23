@@ -146,15 +146,17 @@ public class Eleclaw{
 
     }
 
-
-
-    //commands for path planner named commands position coral 1 and position coral 4
+    //commands for path planner named commands position coral 1 and 4 
     public Command score_coral_1(){
 
         
 
         return Commands.parallel(elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1).withTimeout(2),
-        claw.set_position_command_mm(k_claw.k_coral_position_1).withTimeout(2));
+        claw.set_position_command_mm(k_claw.k_coral_position_1).withTimeout(2)
+
+
+        )
+        ;
         
     }
 
@@ -163,10 +165,7 @@ public class Eleclaw{
         claw.set_position_command_mm(k_claw.k_coral_position_high).withTimeout(2));
     }
 
-
-
-
-    //old commands? im worried to remove them so leave them for now 
+    //old commands? im worried to remove them so leave them for now
     public Command position_coral_2_old(){
 
         return Commands.parallel(new RepeatCommand( elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_2)),
@@ -252,15 +251,14 @@ public class Eleclaw{
     }
 
     //command scheduler for making elevator go to lowest level via right d-pad controller on operator control - find in robot container 
-    public void position_coral_0(){
+        public void position_coral_0(){
         CommandScheduler.getInstance().schedule(elevator.set_position_command_angle(elevator.k_elevator_bottom.plus(H_adj())));
        // if (elevator.at_position(0.05).getAsBoolean()){
        // CommandScheduler.getInstance().schedule(claw.set_position_command_mm(claw.k_coral_position_mid.plus(A_adj())));    
         //}
     }
 
-
-
+    
     public void position_coral_1(){
         // System.out.println("pcoral2");
         CommandScheduler.getInstance().schedule( elevator.set_position_command_angle(elevator.k_coral_level_sense_postion_1.plus(H_adj())));
